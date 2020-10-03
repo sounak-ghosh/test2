@@ -156,7 +156,7 @@ def get_data():
                 TypeDescription = rec['TypeDescription'][:70].strip()
             
             ext_li = 'https://www.athimmo.be/fr/a-louer/'+replaceUnicode(rec['City'].lower())+'/'+replaceUnicode(TypeDescription.lower())+'/'+str(rec["ID"])
-            print (ext_li)
+            res = requests.get(ext_li).status_code
             l['external_link'] = ext_li
             l['external_id'] = str(rec['ID'])
             if l['property_type'] in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
