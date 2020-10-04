@@ -55,7 +55,7 @@ def get_data(my_property,scraped_data):
 	url = my_property
 	print(url)
 	
-	response = get_page_response(url,'get',None)	                 
+	response = get_page_response(url,'get',None)
 	ps = fromstring(response.text) 
 	soup = BeautifulSoup(response.text,'lxml')
 	
@@ -206,6 +206,7 @@ def main():
 		"landlord_phone": "",
 		"landlord_email": "",
 		"external_images_count": None,
+		"currency":"EUR"
 		}
 	global json_list	
 	json_list = []

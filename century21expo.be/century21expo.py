@@ -7,11 +7,12 @@ from multiprocessing import Process, Pool
 import random
 import json
 import os
-from geopy.geocoders import Nominatim
-# import pandas as pd
 from datetime import datetime
 import time 
+import geopy
+from geopy.geocoders import Nominatim
 
+locator = Nominatim(user_agent="myGeocoder")
 
 FILE_NAME = "direct-immo"
 
@@ -21,6 +22,12 @@ headers={
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36"
 
 }
+
+def getAddress(lat,lng):
+    coordinates = str(lat)+","+str(lng)
+    location = locator.reverse(coordinates)
+    return location
+
 
 def strToDate(text):
     if "/" in text:
@@ -49,34 +56,35 @@ def get_page_response(url,postmethod,data):
     return response
 
 
-def get_data(my_property,j_data,scraped_data):
+def get_data(my_property,j_data):
     print (my_property)
 
-    try:
+    scraped_data = {}
+    
+    if "reference" in j_data and j_data['reference']:
         scraped_data["external_id"] = j_data['reference']
-    except:
-        pass
-    try:
+
+    if "rooms" in j_data and "numberOfBedrooms" in j_data["rooms"]:
         if int(j_data['rooms']['numberOfBedrooms']):
             scraped_data["room_count"] = int(j_data['rooms']['numberOfBedrooms'])
-    except:
-        pass
+  
+    if "floorNumber" in j_data:
+        scraped_data["floor"] = j_data['floorNumber']
 
-    try:
-        floor = j_data['floorNumber']
-        scraped_data.update({'floor':floor})
-    except:
-        pass
     if int(j_data['price']['amount']):
         scraped_data["rent"] = int(j_data['price']['amount'])
-    try:
-        address = j_data['address']['number']+' '+j_data['address']['street'] +', '+j_data['address']['city']+', '+j_data['address']['postalCode']+', '+j_data['address']['countryCode']
-    except:
-        pass
-    try:
+
+    if "location" in j_data:
         scraped_data["latitude"],scraped_data["longitude"] = str(j_data['location']['latitude']),str(j_data['location']['longitude'])
-    except:
-        pass
+
+        location = getAddress(scraped_data["latitude"],scraped_data["longitude"])
+        scraped_data["address"] = location.address
+    
+    if "address" not in scraped_data:
+        try:
+            scraped_data["address"] = j_data['address']['number']+' '+j_data['address']['street'] +', '+j_data['address']['city']+', '+j_data['address']['postalCode']+', '+j_data['address']['countryCode']
+        except:
+            pass
 
     scraped_data["external_link"] = my_property
     scraped_data["external_source"] = 'century21.be'
@@ -101,32 +109,29 @@ def get_data(my_property,j_data,scraped_data):
             pass
 
 
-    try:
+    if "address" in j_data and "city" in j_data['address']:
         scraped_data["city"] = j_data['address']['city']
-    except:
-        pass
-    try:
+    
+    
+    if "address" in j_data and "postalCode" in j_data['address']:
         scraped_data["zipcode"] = j_data['address']['postalCode']
-    except:
-        pass
+
     
     agency_url = 'https://api.prd.cloud.century21.be'+j_data['_links']['agency']['href']
     resp = get_page_response(agency_url,'get',None)
 
     js_d = json.loads(resp.text)
     
-    try:
+    if "data" in js_d and "name" in js_d['data']:
         scraped_data["landlord_name"] = js_d['data']['name']
-    except:
-        pass
-    try:        
+    
+    if "data" in js_d and "email" in js_d['data']:        
         scraped_data["landlord_email"] = js_d['data']['email']
-    except:
-        pass
-    try:    
+    
+    if "data" in js_d and "phoneNumber" in js_d['data']:        
         scraped_data["landlord_phone"] = js_d['data']['phoneNumber']
-    except:
-        pass
+
+
     try:
         lift = j_data['amenities']['elevator']
         if lift:
@@ -186,10 +191,12 @@ def get_data(my_property,j_data,scraped_data):
         except:
             continue        
         
-    scraped_data["images"] = image_list
-    scraped_data["external_images_count"] = len(scraped_data["images"])
+    if image_list:
+        scraped_data["images"] = image_list
+        scraped_data["external_images_count"] = len(scraped_data["images"])
 
-    property_types = j_data['type'].lower()
+    scraped_data["property_type"] = j_data['type'].lower()
+    scraped_data["currency"] = "EUR"
     try:
         a_d = j_data['availableFrom']
         date_time_obj = strToDate(a_d)
@@ -199,7 +206,7 @@ def get_data(my_property,j_data,scraped_data):
     return scraped_data
     
 
-def get_all_property_links(scraped_data_all):
+def get_all_property_links():
     # scraping property links and addresses
     global json_list    
     json_list = []
@@ -212,9 +219,10 @@ def get_all_property_links(scraped_data_all):
     j_data = json.loads(response.text)
     properties = j_data['data']
     for p in properties[:]:
-        scraped_data = scraped_data_all.copy()
         properties_id = p['id']
+        p_city = p['address']['city'].lower().replace(' ','-')
         p_type = p['type']
+
 
         if ("student" in p_type.lower() or "étudiant" in p_type.lower() or  "studenten" in p_type.lower()) and ("apartment" in p_type.lower() or "appartement" in p_type.lower()):
             p_type = "student_apartment"
@@ -224,22 +232,21 @@ def get_all_property_links(scraped_data_all):
             p_type = "house"
         elif "chambre" in p_type.lower() or "kamer" in p_type.lower() or "room" in p_type.lower():
             p_type = "room"
-        # elif "commerciale" in p_type.lower() or "reclame" in p_type.lower() or "commercial" in p_type.lower():
-        #     p_type = "property_for_sale"
         elif "studio" in p_type.lower():
             p_type = "studio"
         else:
             p_type = "NA"
 
+        if p['type'] in ["APARTMENT","HOUSE"]:
 
-        p_city = p['address']['city'].lower().replace(' ','-')
+            if p['type'] == "APARTMENT":
+                type_txt = "appartement"
+            else:
+                type_txt = "maison"
 
-        prop_link = 'https://www.century21.be/nl/pand/te-huur/'+p_type+'/'+ p_city + '/'+properties_id
-        json_object = get_data(prop_link,p,scraped_data)
-
-        if p_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
-            print (True)
-            json_list.append(json_object)   
+            prop_link = 'https://www.century21.be/fr/properiete/a-louer/'+type_txt+'/'+ p_city + '/'+properties_id
+            json_object = get_data(prop_link,p)
+            json_list.append(json_object)
   
     json_object = json.dumps(json_list,indent=4, sort_keys=True, default=str)
     with open("century21expo.json", "w") as outfile: 
@@ -252,22 +259,8 @@ def get_all_property_links(scraped_data_all):
 
 
 def main():
-    # required dictionary
-    scraped_data_all = {
-        "external_link": "",
-        "external_source": "",
-        "title": "",
-        "description": "",
-        "images": "",
-        "landlord_name": "",
-        "landlord_phone": "",
-        "landlord_email": "",
-        "external_images_count": None,
-        }
-    
-
     # calling get_all_property_links function first to scrape all required property links
-    get_all_property_links(scraped_data_all)
+    get_all_property_links()
 
 
 if __name__ == "__main__":
