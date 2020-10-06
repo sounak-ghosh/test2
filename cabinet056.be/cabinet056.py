@@ -32,6 +32,9 @@ def getLatLng(city,country):
 	loc = locator.geocode(city+','+ country)
 	return loc.latitude,loc.longitude
 
+def num_there(s):
+    return any(i.isdigit() for i in s)
+
 #============================================================================================================
 
 def basicInfo(soup):
@@ -84,12 +87,10 @@ def basicInfo(soup):
 def numfromStr(text):
 	list_text = re.findall(r'\d+',text)
 
-	if len(list_text)==2:
-		output = list_text[0]+"."+list_text[1]
-	elif len(list_text)==1:
-		output = list_text[0]
+	if len(list_text)>0:
+		output = int(list_text[0])
 	else:
-		output=text
+		output=0
 
 	return output
 
@@ -108,6 +109,24 @@ def scrapDetail2(soup):
 	descrp2 = soup.find("p",align="justify").text.strip()
 
 	tot_descrp = title+".\n"+descrp2
+
+
+
+	if "Charges :" in tot_descrp:
+		temp_ults = numfromStr(tot_descrp.split("Charges :")[-1])
+		if temp_ults:
+			pydash.set_(dic,"utilities",temp_ults)
+
+
+
+	if soup.find("div",class_="bg-white padding-40 box-shadow-with-hover border-radius"):
+		consumption_data = soup.find("div",class_="bg-white padding-40 box-shadow-with-hover border-radius").text
+
+		if "Conso Spécifique" in consumption_data:
+			egry = consumption_data.split(":")[1].strip().split("  ")[0].strip()
+			if egry:
+				pydash.set_(dic,"energy_label",egry)
+
 
 	if "lift" in tot_descrp.lower():
 		pydash.set_(dic,"elevator",True)
@@ -170,12 +189,13 @@ def scrapDetail2(soup):
 	if len(title.split(".")) > 1:
 		for ech_txt in title.split(".")[1:]:
 			if "libre" in ech_txt.lower():
-				pydash.set_(dic,"available_date",strToDate(ech_txt.strip()))
-
-		if "available_date" not in dic:
-			for ech_txt in title.split(";"):
-				if "libre" in ech_txt.lower():
+				if num_there(strToDate(ech_txt.strip())):
 					pydash.set_(dic,"available_date",strToDate(ech_txt.strip()))
+
+		# if "available_date" not in dic:
+		# 	for ech_txt in title.split(";"):
+		# 		if "libre" in ech_txt.lower() and num_there(ech_txt):
+		# 			pydash.set_(dic,"available_date",strToDate(ech_txt.strip()))
 
 
 
