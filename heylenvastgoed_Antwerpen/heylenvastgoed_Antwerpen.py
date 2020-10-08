@@ -11,12 +11,27 @@ def getAddress(lat,lng):
     location = geolocator.reverse(coordinates)
     return location
 
+def getSqureMtr(text):
+    list_text = re.findall(r'\d+',text)
+
+    if len(list_text) == 2:
+        output = int(list_text[0]+list_text[1])
+    elif len(list_text) == 1:
+        output = int(list_text[0])
+    else:
+        output=0
+
+    return output
+
 
 def cleanText(text):
     text = ''.join(text.split())
     text = re.sub(r'[^a-zA-Z0-9]', ' ', text).strip()
     return text.replace(" ","_").lower()
 
+
+def num_there(s):
+    return any(i.isdigit() for i in s)
 
 
 def cleanKey(data):
@@ -136,27 +151,44 @@ def get_data():
 
             temp_dic = cleanKey(temp_dic)
 
-            if "beschikbaarheid" in temp_dic:
+            if "beschikbaarheid" in temp_dic and num_there(temp_dic["beschikbaarheid"]):
                 rec["available_date"] = temp_dic["beschikbaarheid"]
+
             if "kosten" in temp_dic:
                 text_list = re.findall('\d+',temp_dic["kosten"])
                 if int(text_list[0]):
                     rec["utilities"]=int(text_list[0])
+
             if "gemeubeld" in temp_dic and temp_dic["gemeubeld"] == "ja":
                 rec["furnished"]=True
+            elif "gemeubeld" in temp_dic and temp_dic["gemeubeld"] == "nee":
+                rec["furnished"]=False
+
             if "lift" in temp_dic and temp_dic["lift"] == "ja":
                 rec["elevator"]=True
+            elif "lift" in temp_dic and temp_dic["lift"] == "nee":
+                rec["elevator"]=False
+
             if "verdieping" in temp_dic:
                 rec["floor"]=temp_dic["verdieping"]
+
             if "balkon" in temp_dic and temp_dic["balkon"] == "ja":
                 rec["balcony"]=True
+            elif "balkon" in temp_dic and temp_dic["balkon"] == "nee":
+                rec["balcony"]=False
+
+            if "epc" in temp_dic:
+                rec["energy_label"]=temp_dic["epc"]
+
+            if "badkamers" in temp_dic and getSqureMtr(temp_dic["badkamers"]):
+                rec["bathroom_count"]=getSqureMtr(temp_dic["badkamers"])   
+
+
 
             
             sq_mt = 0
             if soup2.find('i',class_='icon area-big'):
                 sq_mt = sq_mt = re.findall('\d+',soup2.find('i',class_='icon area-big').find_previous('li').text)[0]
-            else:
-                sq_mt = 0
 
             address = soup2.find('section',id='property__title').find('div',class_='address').text.replace('Adres:','')
 
@@ -168,6 +200,7 @@ def get_data():
                 ss = geolocator.geocode(city)
             except:
                 pass
+                
             if int(sq_mt):
                 rec['square_meters'] = int(sq_mt)
             rec['currency'] = 'EUR'

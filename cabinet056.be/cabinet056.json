@@ -55,6 +55,7 @@
         "room_count": 1,
         "square_meters": 36,
         "title": "Bel appartement 1 chambre. Libre le 1er novembre 2020",
+        "washing_machine": true,
         "zipcode": "7700"
     },
     {
@@ -240,6 +241,7 @@
         "room_count": 2,
         "square_meters": 79,
         "title": "Maison 2 chambres avec garage. Libre imm\u00e9diatement.",
+        "washing_machine": true,
         "zipcode": "7700"
     },
     {
@@ -275,6 +277,7 @@
         "terrace": true,
         "title": "Bel appartement avec 2 chambres, cave et garage. Libre le 1er novembre 2020",
         "utilities": 170,
+        "washing_machine": true,
         "zipcode": "7700"
     },
     {
@@ -366,6 +369,7 @@
         "room_count": 1,
         "square_meters": 110,
         "title": "Spacieux appartement 1 chambre. Libre de suite.",
+        "washing_machine": true,
         "zipcode": "7711"
     },
     {
@@ -397,6 +401,7 @@
         "room_count": 2,
         "square_meters": 76,
         "title": "Bel appartement avec 2 chambres, cour et garage. Libre le 1er d\u00e9cembre 2020.",
+        "washing_machine": true,
         "zipcode": "7700"
     },
     {
@@ -433,7 +438,7 @@
         "address": "Chaussee d`Aelbeke Mouscron",
         "city": "Mouscron",
         "currency": "EUR",
-        "description": "Appartement 2 chambres avec car-port. Libre imm\u00e9diatement. Plus d`infos sur www.cabinet056.be.\nHall d`entr\u00e9e,WC s\u00e9par\u00e9s,S\u00e9jour lumineux avec salon et salle \u00e0 manger,Cuisine avec \u00e9vier, hotte, nombreux rangements et plan de travail,2 belles chambres sur l`arri\u00e8re, au calme,Car-portCaract\u00e9ristiques :Ch\u00e2ssis en alu double vitrage,\u00a0Chauffage central au gaz,Situation id\u00e9ale proche des commerces, des axes routiers,...Situ\u00e9 devant un square bois\u00e9 tr\u00e8s calme et tr\u00e8s agr\u00e9able.Charge :Provision mensuelle de 40\u20ac pour l`entretien, l`\u00e9lectricit\u00e9 et l`assurance des communs.\n 550\u20ac",
+        "description": "Appartement 2 chambres avec car-port. Libre imm\u00e9diatement. Plus d`infos sur www.cabinet056.be.\nHall d`entr\u00e9e,WC s\u00e9par\u00e9s,S\u00e9jour lumineux avec salon et salle \u00e0 manger,Cuisine avec \u00e9vier, hotte, nombreux rangements et plan de travail,Salle de bains avec baignoire et meuble lavabo,2 belles chambres sur l`arri\u00e8re, au calme,Car-portCaract\u00e9ristiques :Ch\u00e2ssis en alu double vitrage,\u00a0Chauffage central au gaz,Situation id\u00e9ale proche des commerces, des axes routiers,...Situ\u00e9 devant un square bois\u00e9 tr\u00e8s calme et tr\u00e8s agr\u00e9able.Charge :Provision mensuelle de 40\u20ac pour l`entretien, l`\u00e9lectricit\u00e9 et l`assurance des communs.\n 550\u20ac",
         "elevator": false,
         "energy_label": "384 KwH/m\u00b2.an",
         "external_images_count": 7,
@@ -456,6 +461,39 @@
         "rent": 550,
         "title": "Appartement 2 chambres avec car-port. Libre imm\u00e9diatement. Plus d`infos sur www.cabinet056.be",
         "zipcode": "7700"
+    },
+    {
+        "address": "Impasse Saint Maur HERSEAUX",
+        "available_date": "Libre le 1er janvier 2021",
+        "city": "Herseaux",
+        "currency": "EUR",
+        "description": "Jolie maison 2 chambres avec cour. Libre le 1er janvier 2021..\nHall d`entr\u00e9e\nLiving comprenant salon et salle \u00e0 manger avec chemin\u00e9e en brique, tr\u00e8s lumineux\nCuisine semi-\u00e9quip\u00e9e neuve avec taque, four, hotte et \u00e9vier inox\nSalle d`eau avec baignoire, lavabo et WC avec emplacement pour une machine \u00e0 laver\nPetite cour\u00a0\nPremier \u00e9tage:\n2 chambres avec parquet flottant\nCaract\u00e9ristiques:\nCh\u00e2ssis DV bois avec persienne en fa\u00e7ade\nChauffage par convecteur au gaz au rez-de-chauss\u00e9e\nRadiateurs \u00e9lectriques neufs \u00e0 l`\u00e9tage\nSpots et luminaires fournis au rez-de-chauss\u00e9e\n 550\u20ac",
+        "elevator": false,
+        "energy_label": "409 KwH/m\u00b2.an",
+        "external_images_count": 8,
+        "external_link": "http://www.cabinet056.be/fiche.php?id=4155476",
+        "external_source": "cabinet056.be",
+        "images": [
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4155476/1280/6b27649c5f8c4fd49b07f6f9d300ca06.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4155476/1280/10add90588414982ba64369511999d1a.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4155476/1280/3fb8c9573e004c7e9a4c746179c72628.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4155476/1280/270639dbd0aa482fb64ff0696b573ac7.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4155476/1280/1e1d630806e04f4ea027bfe6cc603ba3.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4155476/1280/2cbc4212f4514e8ca2163608c5676e4b.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4155476/1280/454359f32aa846b1b4044c41ac96efad.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4155476/1280/1ce9f29bb8f844f8bcb1b527b25cfbc4.jpg"
+        ],
+        "landlord_name": "Aller vers le site du DL Groupe",
+        "landlord_phone": "+32 56 34 00 04",
+        "latitude": "50.7227127",
+        "longitude": "3.2342044",
+        "property_type": "house",
+        "rent": 550,
+        "room_count": 2,
+        "square_meters": 110,
+        "title": "Jolie maison 2 chambres avec cour. Libre le 1er janvier 2021.",
+        "washing_machine": true,
+        "zipcode": "7712"
     },
     {
         "address": "Grand-Rue Mouscron",
@@ -552,6 +590,37 @@
         "zipcode": "7700"
     },
     {
+        "address": "Rue de Tourcoing MOUSCRON",
+        "available_date": "Libre le 1er novembre 2020",
+        "city": "Mouscron",
+        "currency": "EUR",
+        "description": "Belle maison 2 chambres au centre ville. Libre le 1er novembre 2020..\nHall d`entr\u00e9e avec escalier pour l`\u00e9tage cellier sousv la cage d`escalierS\u00e9jour avec salon et salle \u00e0 manger\u00a0Cuisine semi \u00e9quip\u00e9e avec double \u00e9vier inox, taques vitroc\u00e9ramiques, hotte, four, plan de travail en granit et coin barBuanderie avec toilette\u00a0et\u00a0 lave-mainsPetite courEtage:Hall de nuit avec parquetSalle de douche avec cabine douche et meuble lavabo, toilette et placards1 grande chambre \u00e0 l`arri\u00e8re et 1 petite \u00e0 l`avantGrenier\u00a0Caract\u00e9ristiques:Chauffage central au gazch\u00e2ssis PVC dbl vitrage avec persiennessitu\u00e9e au centre-ville\n 580\u20ac",
+        "elevator": false,
+        "energy_label": "243 KwH/m\u00b2.an",
+        "external_images_count": 7,
+        "external_link": "http://www.cabinet056.be/fiche.php?id=4140439",
+        "external_source": "cabinet056.be",
+        "images": [
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4140439/1280/d2381d7cf9f94bda8bd026b79fb7682e.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4140439/1280/38bb9e381c2d424cb0971a0d88c9fb42.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4140439/1280/183a6e157e9f472dac7b6370260b1e8a.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4140439/1280/218dbf9bb0fd494da9e2a3519c977eed.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4140439/1280/b5c38b1ac53c498c8dd7f296e2e8ff57.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4140439/1280/4dbfa14cbdec4f77bf88b8bac72ea279.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4140439/1280/cdd3b20231194b2dbce6e83b058841fe.jpg"
+        ],
+        "landlord_name": "Aller vers le site du DL Groupe",
+        "landlord_phone": "+32 56 34 00 04",
+        "latitude": "50.7433351",
+        "longitude": "3.2139093",
+        "property_type": "house",
+        "rent": 580,
+        "room_count": 2,
+        "square_meters": 105,
+        "title": "Belle maison 2 chambres au centre ville. Libre le 1er novembre 2020.",
+        "zipcode": "7700"
+    },
+    {
         "address": "Rue Curiale  LUINGNE",
         "available_date": "Libre le 1er novembre 2020",
         "city": "Luingne",
@@ -598,16 +667,16 @@
         "external_link": "http://www.cabinet056.be/fiche.php?id=4137745",
         "external_source": "cabinet056.be",
         "images": [
-            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4137745/1280/90d61cf063074275b1692242917d5b5a.jpg",
-            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4137745/1280/29ff3a955d9b4811b453ff0999d1d0d7.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4137745/1280/f563515302d54b2eafc3e412032a4841.jpg",
             "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4137745/1280/2a01be11359b4be8a66de9829b2777b7.jpg",
             "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4137745/1280/f05dc0c5f59345138cd1a49b37058405.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4137745/1280/90d61cf063074275b1692242917d5b5a.jpg",
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4137745/1280/29ff3a955d9b4811b453ff0999d1d0d7.jpg",
             "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4137745/1280/02036516f53941a9a5e029430796639a.jpg",
             "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4137745/1280/54d4585937df404bb6ffea93ddbc7c7b.jpg",
             "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4137745/1280/cd4f5b7d17424b678171a245478d29b2.jpg",
             "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4137745/1280/7086f6998c29456d8b168a8862f10112.jpg",
-            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4137745/1280/1df0cad177bd43ab944842b943133052.jpg",
-            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4137745/1280/f563515302d54b2eafc3e412032a4841.jpg"
+            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4137745/1280/1df0cad177bd43ab944842b943133052.jpg"
         ],
         "landlord_name": "Aller vers le site du DL Groupe",
         "landlord_phone": "+32 56 34 00 04",
@@ -626,6 +695,7 @@
         "city": "Spiere-helkijn",
         "currency": "EUR",
         "description": "Appartement de 150 m avec 2 chambres et emplacement de parking. Libre le 15 novembre 2020.\nHall d`entr\u00e9e,\nWC s\u00e9par\u00e9s avec lave-mains,\nS\u00e9jour tr\u00e8s lumineux avec salon et salle \u00e0 manger,\nCuisine \u00e9quip\u00e9e avec four, taque vitroc\u00e9ramique, hotte, lave-vaisselle, frigo, cong\u00e9lateur et emplacement pour un micro-ondes,\nSalle de bain avec douche, meuble double lavabos, baignoire, wc et espace laverie,\n2 chambres,\nEmplacement de parking priv\u00e9.Caract\u00e9ristiques :\nAppartement de 150 m\u00b2 au 1er \u00e9tage,\nChauffage central au gaz avec chaudi\u00e8re individuelle,\nCh\u00e2ssis double vitrage en PVC avec grille d`a\u00e9ration,\nAlarme et vid\u00e9ophonie,\nPAS DE CHARGES COMMUNES !!!\n 600\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "239 KwH/m\u00b2.an",
         "external_images_count": 8,
@@ -654,40 +724,11 @@
         "zipcode": "8587"
     },
     {
-        "address": "Rue Alfred Henno  Mouscron",
-        "available_date": "Libre le 5 octobre 2020",
-        "city": "Mouscron",
-        "currency": "EUR",
-        "description": "Belle maison d`angle avec 3 chambres. Libre le 5 octobre 2020.\nHall d`entr\u00e9e donnant sur le s\u00e9jour,\nSpacieux s\u00e9jour avec salon et salle \u00e0 manger,\nCuisine \u00e9quip\u00e9e ouverte sur le s\u00e9jour avec hotte, taques au gaz, four, double \u00e9vier inox, nombreux rangements, plusieurs prises et beau plan de travail,\nCave,Etage:\nWC s\u00e9par\u00e9 avec lavabo,\nDeux belles chambres lumineuses avec parquet,\nUne grande salle de bain avec meuble lavabo miroir avec nombreux rangements, cabine de douche multi-jets, et emplacement pour machine \u00e0 laver et s\u00e8che-linge,\nGrand grenier am\u00e9nag\u00e9 en troisi\u00e8me chambre,\nCaract\u00e9ristiques:\nCarrelage au rez de chauss\u00e9e et parquet \u00e0 l`\u00e9tage,\nChauffage central au gaz,\nCh\u00e2ssis double vitrage avec persiennes \u00e9lectriques en bas et manuelles en haut,\n 600\u20ac",
-        "elevator": false,
-        "energy_label": "178 KwH/m\u00b2.an",
-        "external_images_count": 7,
-        "external_link": "http://www.cabinet056.be/fiche.php?id=4086498",
-        "external_source": "cabinet056.be",
-        "images": [
-            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4086498/1280/2b31aab99bf84bd1aedd4925e2f5d6bb.jpg",
-            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4086498/1280/1a8a67f6114a46f38805e851dcf95b2a.jpg",
-            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4086498/1280/5d44a974215d49f9a44f9fe8aa9c7218.jpg",
-            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4086498/1280/9467467a514d42ab942d64857993db56.jpg",
-            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4086498/1280/586a7648a60344aba0cec93a5619059e.jpg",
-            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4086498/1280/5e7c14831a264835bf4c74cb90203815.jpg",
-            "https://whisestorageprod.blob.core.windows.net/public/cabinet056/Pictures/4086498/1280/9f2c42620cd14ea4b6a146394e550dfd.jpg"
-        ],
-        "landlord_name": "Aller vers le site du DL Groupe",
-        "landlord_phone": "+32 56 34 00 04",
-        "latitude": "50.7433351",
-        "longitude": "3.2139093",
-        "property_type": "house",
-        "rent": 600,
-        "room_count": 2,
-        "title": "Belle maison d`angle avec 3 chambres. Libre le 5 octobre 2020",
-        "zipcode": "7700"
-    },
-    {
         "address": "Rue de la Broche de Fer Herseaux",
         "city": "Herseaux",
         "currency": "EUR",
         "description": "Bel appartement duplex avec 3 chambres. Libre de suite.\nspacieux s\u00e9jour avec salon et salle \u00e0 manger cuisine \u00e9quip\u00e9e avec four, taques, hotte, lave-vaisselle et nombreux rangementssalle de bain avec baignoire, lavabo et wc3\u00a0belles chambres.Caract\u00e9ristiques :Ch\u00e2ssis double vitrage bois & PVC + persiennes parquet int\u00e9gralchauffage central au gaz + insert \u00e0 pelletsspots incorpor\u00e9sCharges:provision mensuelle de 20\u20ac pour l`eauprovision mesnuelle de 30\u20ac pour l`entretien de la chaudi\u00e8re (d\u00e9pannage compris)\n 620\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "739 KwH/m\u00b2.an",
         "external_images_count": 8,
@@ -719,6 +760,7 @@
         "city": "Estaimpuis",
         "currency": "EUR",
         "description": "Spacieux appartement avec 2 chambres et garage. Libre le 1er novembre 2020.\nGrand hall d`entr\u00e9e tr\u00e8s lumineux avec escalier apparent\nSpacieux s\u00e9jour avec salon et salle \u00e0 manger\nCuisine \u00e9quip\u00e9e ouverte avec four, taques \u00e9lectriques, hotte, frigo et emplacement lave-vaisselle\nBuanderie avec emplacement machine \u00e0 laver, arri\u00e8re cuisine\nSalle de bain enti\u00e8rement fa\u00efenc\u00e9e avec baignoire et lavabo\nWC s\u00e9par\u00e9\n2 grandes chambresgarage.\nCaract\u00e9ristiques:\nChauffage central au gaz,\nch\u00e2ssis bois Double vitrage,\nGroupe hydrophore raccord\u00e9 sur le wc et le robinet ext\u00e9rieur,\nLuminaires partout et stores dans le s\u00e9jour,\nPAS DE CHARGES COMMUNES!!!\n 645\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "352 KwH/m\u00b2.an",
         "external_images_count": 8,
@@ -743,6 +785,7 @@
         "rent": 645,
         "room_count": 2,
         "title": "Spacieux appartement avec 2 chambres et garage. Libre le 1er novembre 2020",
+        "washing_machine": true,
         "zipcode": "7730"
     },
     {
@@ -750,6 +793,7 @@
         "city": "Rekkem",
         "currency": "EUR",
         "description": "Bel appartement triplex avec 3 chambres. Libre de suite.\n1er \u00e9tage: Hall d`entr\u00e9e wc\u00a0avec lave mainsS\u00e9jour avec salon et salle \u00e0 mangercuisine \u00e9quip\u00e9e avec taques vitro, four, lave vaisselle, hotte, double \u00e9vier2\u00e8me \u00e9tage:Salle de bain enti\u00e8rement faienc\u00e9e avec baignoire, lavabo et wc2 grandes chambres carrel\u00e9es3\u00e8me \u00e9tage:1 chambre avec parquetCaract\u00e9ristiques: Chauffage central au gaz ParlophonePersiennes partoutpas de charges communes\n 650\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "213 KwH/m\u00b2.an",
         "external_images_count": 6,
@@ -779,6 +823,7 @@
         "city": "Mouscron",
         "currency": "EUR",
         "description": "Maison  avec 3 chambres et terrasse. Libre le 1er janvier 2021..\nHall d`entr\u00e9e spacieux living\u00a0 cuisine \u00e9quip\u00e9e avec hotte, plaque de cuisson au gaz, four, frigo, cong\u00e9lateur, lave-vaisselle, micro-ondes, nombreux rangements et coin repassalle de bain avec baignoire, lavabo et WCbuanderiecour de +/- 20m\u00b21er \u00e9tage : Hall de nuit 2 chambres\u00a02\u00e8me \u00e9tage : Grenier am\u00e9nag\u00e9 en une 3\u00e8me grande chambreCaract\u00e9ristiques : chauffage par insert au gaz dans le livingchauffage \u00e9lectrique dans SDB, ch\u00e2ssis en PVC double vitrage partout + persiennes au REZ,\u00a0spots incorpor\u00e9s, carrelage au REZ, parquet au 1er \u00e9tage, balatum dans le grenier + velux bois DV, bon rapport qualit\u00e9/Prix.\n 650\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "274 KwH/m\u00b2.an",
         "external_images_count": 6,
@@ -830,6 +875,7 @@
         "rent": 660,
         "room_count": 2,
         "title": "Bel appartement 2 chambres en plein centre-ville. Libre de suite.",
+        "washing_machine": true,
         "zipcode": "7700"
     },
     {
@@ -838,6 +884,7 @@
         "city": "Mouscron",
         "currency": "EUR",
         "description": "Appartement 2 chambres avec garage. Libre le 15 octobre 2020.\nHall d\u2019entr\u00e9e,\nS\u00e9jour spacieux et lumineux avec salon et salle \u00e0 manger,\nCuisine \u00e9quip\u00e9e avec taque vitro, hotte, lave-vaisselle, four, frigo/cong\u00e9lateur, \u00e9vier,\nSalle de bain fa\u00efenc\u00e9e avec douche \u00e0 l`italienne, meuble lavabo et branchement machine \u00e0 laver,\nWC s\u00e9par\u00e9s,\n2 chambres,\nGarage pour une voiture.\nCaract\u00e9ristiques :\nAppartement neuf,\nChauffage au sol, production d\u2019eau chaude via une chaudi\u00e8re \u00e0 condensation\nCh\u00e2ssis PVC double vitrage blancCharges:provision mensuelle de 18\u20ac pour les charges communes (nettoyage et \u00e9lectricit\u00e9 des communs)\u00a0\n 660\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "120 KwH/m\u00b2.an",
         "external_images_count": 6,
@@ -861,6 +908,7 @@
         "room_count": 2,
         "square_meters": 87,
         "title": "Appartement 2 chambres avec garage. Libre le 15 octobre 2020",
+        "washing_machine": true,
         "zipcode": "7700"
     },
     {
@@ -961,6 +1009,7 @@
         "city": "Dottignies",
         "currency": "EUR",
         "description": "Appartement 2 chambres avec emplacement de parking; Libre le 01 d\u00e9cembre 2020..\nHall d`entr\u00e9e avec placards,\nWC s\u00e9par\u00e9,\nS\u00e9jour lumineux de 34 m\u00b2 avec grande baie-vitr\u00e9e comprenant espace salon et salle \u00e0 manger,\nCuisine \u00e9quip\u00e9e de 9 m\u00b2 et ouverte sur la pi\u00e8ce de vie avec taque vitroc\u00e9ramique, frigo, lave-vaisselle, hotte, four, nombreux rangements et tr\u00e8s grand plan de travail,\nBuanderie avec d\u00e9vidoir et emplacement pour les machines,\nSalle de bain avec meuble double vasque et baignoire/douche.\n2 chambres sur l`arri\u00e8re avec vue sur les champs (une de 11 m\u00b2 et une de 7 m\u00b2),\nBureau ou dressing de 6 m\u00b2.\n\nCaract\u00e9ristiques:\nChauffage central au gaz,\nCh\u00e2ssis en PVC double vitrage,\nCarrelage partout,\nMat\u00e9riaux de qualit\u00e9,\nR\u00e9sidence de 4 appartements dans le quartier tr\u00e8s couru de la Cabocherie, au calme absolu avec une vue tr\u00e8s agr\u00e9able.\n\nCharges :\nProvision mensuelle de 45\u20ac pour l`entretien des communs et jardin.\n 690\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "98 KwH/m\u00b2.an",
         "external_images_count": 9,
@@ -996,6 +1045,7 @@
         "city": "Mouscron",
         "currency": "EUR",
         "description": "Belle maison 3 chambres avec jardin et garage. Libre le 1er d\u00e9cembre 2020.\nHall d`entr\u00e9e,\nBeau s\u00e9jour avec salon et salle \u00e0 manger,\nCuisine lumineuse & \u00e9quip\u00e9e avec four, four micro-ondes, taques au gaz, hotte, lave-vaisselle, frigo, nombreux rangements, beau plan de travail et coin repas,\nSalle de douche avec meuble lavabo,\nToilette s\u00e9par\u00e9e,\nBuanderie/cellier.\nJardin avec potager et rangements\nterrase\n1er Etage:\n2 chambres 2\u00e8me \u00e9tage:\u00a01 chambre\nCaract\u00e9ristiques:\nGarage \u00e0 100M.\nCh\u00e2ssis en bois double vitragechauffage par feu \u00e0 pellets\nProche des commerces\n 695\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "417 KwH/m\u00b2.an",
         "external_images_count": 10,
@@ -1065,6 +1115,7 @@
         "city": "Mouscron",
         "currency": "EUR",
         "description": "Magnifique appartement 2 chambres avec terrasse en plein centre-ville. Libre le 1er d\u00e9cembre 2020.\nHall d`entr\u00e9e\nS\u00e9jour avec salon et salle \u00e0 manger\nCuisine \u00e9quip\u00e9e avec taques vitroc\u00e9ramiques, hotte, four, double \u00e9vier en inox, emplacement pour le lave-vaisselle et nombreux rangements\nSalle de bain carrel\u00e9e avec douche fa\u00efenc\u00e9e et double meuble lavabo\nWC s\u00e9par\u00e9s\nD\u00e9barras\n2 belles chambres\n2 terrasses de +/- 46 m\u00b2\nEmplacement de parking n\u00b0 75\nCaract\u00e9ristiques:\nParlophone, ascenseur\nChauffage central au gaz avec chaudi\u00e8re murale mixte et thermostat programmable, production d`eau chaude via la chaudi\u00e8re et isolation thermique et acoustique (entre les niveaux et les appartements du m\u00eame niveau) de grande qualit\u00e9Ch\u00e2ssis PVC double vitrage blanc\nCompteurs individuels\nCharges\u00a0:\u00a050\u20ac de\u00a0provision mensuelle pour l`entretien des communs et l`ascenseur 60\u20ac de caution pour le bip de garage\n 700\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "236 KwH/m\u00b2.an",
         "external_images_count": 10,
@@ -1101,6 +1152,7 @@
         "city": "Herseaux",
         "currency": "EUR",
         "description": "Bel appartement avec 2 chambres et emplacement de parking. Libre le 1er d\u00e9cembre 2020.\nHall d`ent\u00e9e, toilette s\u00e9par\u00e9e avec lave-mainsbuanderie\ns\u00e9jour avec salon et salle \u00e0 manger donnant sur la terrasse et sur le jardin commun\nMezzanine avec acc\u00e8s via le s\u00e9jour pouvant servir de second salon ou de chambre suppl\u00e9mentaire\nCuisine \u00e9quip\u00e9e avec taque vitroc\u00e9ramique, four, hotte, double \u00e9vier inox, emplacement pour le lave-vaisselle et le frigo\nTerrasse\u00a0\n2\u00a0chambres\nSalle de bain avec baignoire, douche et meuble lavabo\nEmplacement de parking et cavette en sous sol\nCaract\u00e9ristiques:\nChauffage central au gaz\nChassis PVC DV\nAppartement situ\u00e9 \u00e0 l`arri\u00e9re au calme, tr\u00e9s lumineux, enti\u00e8rement repeint\nAscenseur\nParlophone\nCharges:\nProvision mensuelle de 50\u20ac pour l`entretien, l`\u00e9lectricit\u00e9, l`assurance, l`entretien du jardin et l`ascenseur des communs\n 720\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "139 KwH/m\u00b2.an",
         "external_images_count": 9,
@@ -1135,6 +1187,7 @@
         "city": "Mouscron",
         "currency": "EUR",
         "description": "Belle maison enti\u00e8rement r\u00e9nov\u00e9e avec 2 chambres et jardin. Libre de suite..\nHall d`entr\u00e9e,D\u00e9barras,Salon,Salle \u00e0 manger,Cuisine \u00e9quip\u00e9e avec four, taque vitroc\u00e9ramique et hotte, (emplacement frigo, machine \u00e0 laver, lave-vaisselle),Salle de bain avec douche italienne et meuble lavabo,WC s\u00e9par\u00e9,Terrasse & jardin.Etage:Hall de nuit,2 belles chambres avec parquet,Grenier.Caract\u00e9ristiques:Chauffage central au gaz (nouvelle chaudi\u00e8re)Ch\u00e2ssis double vitrage partoutPersienne \u00e9lectrique au rez-de-chauss\u00e9eMaison tr\u00e8s lumineuseSpots int\u00e9gr\u00e9s au rez-de- chauss\u00e9eVMC dans les toilettes et syst\u00e8me anti-bu\u00e9e dans la salle de bainnouvelle toiture avec isolationnouveau plancher dans le grenierLe PEB a \u00e9t\u00e9 r\u00e9alis\u00e9 avant la r\u00e9novation compl\u00e8te de la maisonAbandon de recours \u00e0 pr\u00e9voir (80\u20ac pour cette ann\u00e9e)\n 725\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "488 KwH/m\u00b2.an",
         "external_images_count": 8,
@@ -1160,6 +1213,7 @@
         "square_meters": 106,
         "terrace": true,
         "title": "Belle maison enti\u00e8rement r\u00e9nov\u00e9e avec 2 chambres et jardin. Libre de suite.",
+        "washing_machine": true,
         "zipcode": "7700"
     },
     {
@@ -1167,6 +1221,7 @@
         "city": "Mouscron",
         "currency": "EUR",
         "description": "Superbe appartement neuf au rez-de-chauss\u00e9e avec 2 chambres, terrasse et garage. Libre de suite..\nhall d`entr\u00e9ewc s\u00e9par\u00e9 avec lave-mainsbuanderiesalle de bain avec douche italienne, meuble lavabo avec double vasquespacieux s\u00e9jourcuisine \u00e9quip\u00e9e avec four, micro-ondes, taques, frigo, hotte et lave-vaisselled\u00e9barrasgrande terrasse avec espace vert autour de la terrasse2 chambresgrand garage avec porte sectionnelle motorise accessible par ascenseur \u00e0 voitures (80\u20ac/mois en + du loyer, obligatoire)Caract\u00e9ristiques:chauffage central au gaz par le solch\u00e2ssis alu double vitrage anti effraction et anti bruitvid\u00e9ophoneascenseurportes stratifi\u00e9esluminaires d\u00e9j\u00e0 install\u00e9smurs peintsmat\u00e9riaux de qualit\u00e9abandon de recours compris dans le loyerb\u00e2timent situ\u00e9 en plein coeur de la Coquiniecharges:forfait de 80\u20ac pour les charges communesabandon de recours compris dans le loyer\n 735\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "109 KwH/m\u00b2.an",
         "external_images_count": 7,
@@ -1199,6 +1254,7 @@
         "city": "Mouscron",
         "currency": "EUR",
         "description": "Superbe appartement avec 2 chambres, 2 salle de bains, terrasse et garage. Libre le 1er d\u00e9cembre 2020.\nHall d`entr\u00e9e avec rangements,\nS\u00e9jour comprenant salon et salle \u00e0 manger avec parquet en ch\u00eane massif,\nCuisine \u00e9quip\u00e9e avec taque vitroc\u00e9ramique, hotte, four, frigo avec cong\u00e9lateur, lave-vaisselle\n2 chambres avec dressing et d\u00e9barras,\nSalle de bain fa\u00efenc\u00e9e avec meuble lavabo et baignoire,\nSalle de douche avec meuble lavabo,\nDeux toilettes,\nTerrasse de +/- 25 m\u00b2 en c\u00e8dre rouge avec \u00e9clairage,\nGarage n\u00b04 avec porte motoris\u00e9e,\nCaract\u00e9ristiques :\n\nClimatisation,\nChauffage central au gaz avec radiateur partout (chaudi\u00e8re collective),\nCh\u00e2ssis double vitrage,\nCiterne d`eau de pluie avec groupe hydrophore pour les wc et la machine \u00e0 laver,\nR\u00e9sidence \u00e9quip\u00e9e de panneaux photovolta\u00efques.\nCharges :\nProvision mensuelle de 150\u20ac pour l`entretien des communs, le chauffage et l`eau.\n 750\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "232 KwH/m\u00b2.an",
         "external_images_count": 13,
@@ -1231,6 +1287,7 @@
         "terrace": true,
         "title": "Superbe appartement avec 2 chambres, 2 salle de bains, terrasse et garage. Libre le 1er d\u00e9cembre 2020",
         "utilities": 150,
+        "washing_machine": true,
         "zipcode": "7700"
     },
     {
@@ -1238,6 +1295,7 @@
         "city": "Mouscron",
         "currency": "EUR",
         "description": "Magnifique penthouse  avec 2 chambres, terrasse de 15m\u00b2 et garage. Libre de suite.\nS\u00e9jour tr\u00e8s lumineuxCuisine \u00e9quip\u00e9e avec four, frigo, lave-vaisselle, plaque de cuisson et hotte\u00a0WC s\u00e9par\u00e9 avec petit lave-mains\u00a0 espace de rangement sous l`escalier\u00a0garageA l`\u00e9tage: Hall de nuit2 grandes chambressalle de bains compl\u00e8te\u00a0 baignoire, douche, meuble lavabo et WC d\u00e9barras. Une des chambres donne sur une superbe terrasse de 15m\u00b2 orient\u00e9e plein sud!!Caract\u00e9ristiques: Appartement compl\u00e8tement peintcarrelage imitation parquet et parquet dans les chambresChauffage central au gaz avec chaudi\u00e8re \u00e0 condensation mixtech\u00e2ssis PVC DV partoutluminaires inclus\n 750\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "130 KwH/m\u00b2.an",
         "external_images_count": 8,
@@ -1271,6 +1329,7 @@
         "city": "Mouscron",
         "currency": "EUR",
         "description": "Superbe appartement neuf avec 3 chambres, terrasse et garage. Libre de suite..\nhall d`entr\u00e9ewc s\u00e9par\u00e9 avec lave-mainsbuanderiesalle de bain avec douche italienne, meuble lavabo avec double vasquespacieux s\u00e9jour tr\u00e8s lumineuxcuisine \u00e9quip\u00e9e avec four, micro-ondes, taques, frigo, hotte et lave-vaissellebelle terrasse3 chambresgrand garage avec porte sectionnelle motorise accessible par ascenseur \u00e0 voitures (80\u20ac/mois en + du loyer)Caract\u00e9ristiques:chauffage central au gaz par le solch\u00e2ssis alu double vitrage anti effraction et anti bruitvid\u00e9ophoneascenseurportes stratifi\u00e9esluminaires d\u00e9j\u00e0 install\u00e9smurs peintsmat\u00e9riaux de qualit\u00e9abandon de recours compris dans le loyerb\u00e2timent situ\u00e9 en plein coeur de la Coquiniecharges:forfait de 80\u20ac pour les charges communesabadon de recours compris dans le loyer\n 795\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "97 KwH/m\u00b2.an",
         "external_images_count": 8,
@@ -1304,6 +1363,7 @@
         "city": "Mouscron",
         "currency": "EUR",
         "description": "Appartement 2 chambres avec jardin et garage \u00e0 la Coquinie! Libre le 1er d\u00e9cembre 2020.\nHall d`entr\u00e9e avec vestiaire,\nS\u00e9jour avec salon et salle \u00e0 manger,\nCuisine full \u00e9quip\u00e9e avec frigo, four, micro-ondes, taque vitroc\u00e9ramique, lave-vaisselle, plan de travail en granit (\u00e9lectro SIEMENS),\nSalle de bain avec douche italienne, meuble double vasque,\nWC s\u00e9par\u00e9,\n2 chambres,\nTerrasse et jardin cl\u00f4tur\u00e9,\npossibilit\u00e9 de louer un garage en sous-sol pour 80\u20ac\nCaract\u00e9ristiques:\nChauffage central au gaz (au sol) avec chaudi\u00e8re haut rendement \u00e0 condensation,\nCh\u00e2ssis double vitrage haute performance,\nCompteurs s\u00e9par\u00e9s (bi-horaire pour l`\u00e9lectricit\u00e9),\nPortes stratifi\u00e9es,\nLivr\u00e9s peints avec spots et luminaires partout, \u00e9clairage par LED\nPoint d`eau sur la terrasse (eau de pluie)\nVid\u00e9ophonie,\nReli\u00e9 \u00e0 VOO et PROXIMUS,\nMat\u00e9riaux de grande qualit\u00e9,\nLes stores doivent \u00eatre uniformes pour toute la r\u00e9sidence. (achat \u00e0 pr\u00e9voir)\nAdoucisseur d`eau,\nTerrasse en granit 40/40,\nCharges:\nProvision mensuelle de 80\u20ac pour les charges communes,\nLes charges pour l`entretien du jardin doivent encore \u00eatre d\u00e9termin\u00e9es,\nCaution de 50\u20ac pour la t\u00e9l\u00e9commande du garage.\n 800\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "123 KwH/m\u00b2.an",
         "external_images_count": 8,
@@ -1338,6 +1398,7 @@
         "city": "Mouscron",
         "currency": "EUR",
         "description": "Belle maison avec 4 chambres, jardin et garage. Libre le 1er janvier 2021.\nhall d`entr\u00e9e avec escalier apparent vers l`\u00e9tagegarage en fa\u00e7adewc s\u00e9par\u00e9bureaus\u00e9jour avec salon et salle \u00e0 mangercuisine \u00e9quip\u00e9e avec four, taques au gaz, hotte et lave-vaisselleterrassejardinemplacement de parkinggrande cave1er \u00e9tage:salle de bain avec baignoire, lavabo et wc2 chambres avec lavabo2\u00e8me \u00e9tage:2 chambres avec lavaboCaract\u00e9ristiquesChauffage central gaz avec chaudi\u00e8re \u00e0 condensationfeu au bois dans le s\u00e9jourch\u00e2ssis bois double vitrage\u00a0maison tr\u00e8s lumineuseId\u00e9alement situ\u00e9e entre le centre-ville et les \u00e9colespanneaux solaires pour l`eau chaude\n 850\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "331 KwH/m\u00b2.an",
         "external_images_count": 10,
@@ -1407,6 +1468,7 @@
         "city": "Mouscron",
         "currency": "EUR",
         "description": "Appartement de 100 m\u00b2 avec 3 chambres, 2 sdb, terrasse, cave et garage. Libre de suite..\nHall d`entr\u00e9e avec vestiaire,\nS\u00e9jour spacieux et lumineux avec salon et salle \u00e0 manger,\nCuisine full-\u00e9quip\u00e9e avec taque vitro, frigo encastr\u00e9, lave-vaisselle, four, hotte, \u00e9vier inox,\nBuanderie/Cellier,\nSalle de bain avec baignoire et meuble lavabo,\n3 belles chambres dont une suite parentale avec une salle de douche et meuble lavabo,\nWC s\u00e9par\u00e9s avec lave-mains,\nBelle terrasse,\nCave,\nGarage.\nCaract\u00e9ristiques :\nSyst\u00e8me d`alarme et vitrage anti-effraction,\nChauffage central gaz par le sol,\nProche du CHM, du centre-ville, des commerces, des axes routiers, ...\nCharges :\nProvision mensuelle de 80\u20ac pour l`entretien, l`\u00e9lectricit\u00e9, l`ascenseur et l`assurance des communs,\n+10\u20ac pour l`assunce abandon de recours\nCaution de 60\u20ac pour la t\u00e9l\u00e9commande d`acc\u00e8s au garage.\n 890\u20ac",
+        "dishwasher": true,
         "elevator": false,
         "energy_label": "73 KwH/m\u00b2.an",
         "external_images_count": 11,

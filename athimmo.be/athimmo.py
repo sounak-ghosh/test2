@@ -17,6 +17,23 @@ unicode_dic = {
 }
 
 
+def cleanText(text):
+    text = ''.join(text.split())
+    text = re.sub(r'[^a-zA-Z0-9]', ' ', text).strip()
+    return text.replace(" ","_").lower()
+
+
+
+def cleanKey(data):
+    if isinstance(data,dict):
+        dic = {}
+        for k,v in data.items():
+            dic[cleanText(k)]=cleanKey(v)
+        return dic
+    else:
+        return data
+
+
 def replaceUnicode(text):
     for k,v in unicode_dic.items():
         if k in text:
@@ -79,6 +96,38 @@ def traverse( data):
         data = clean_value(data)
         return data
 
+def property_detail(url):
+
+    print (url)
+    try:
+        response = requests.get(url)
+
+        if response.status_code != 200:
+            raise Exception("Bad Response Please Check....")
+
+        soup = BeautifulSoup(response.content,"html.parser")
+        main_url = "https://www.athimmo.be/"+soup.find("link",crossorigin="use-credentials")["href"]
+        response = requests.get(main_url)
+        jsn_lod = json.loads(response.content.decode("utf-8"))["pageContext"]["data"]["contentRow"][0]["property"]
+
+        date = None
+        if "DateFree" in jsn_lod:
+            if ":" in jsn_lod["DateFree"]:
+                date = jsn_lod["DateFree"].split(" ")[0]
+
+        bathroom=0
+        if "NumberOfBathRooms" in jsn_lod:
+           bathroom = jsn_lod["NumberOfBathRooms"] 
+
+        elevator=False
+        if "HasLift" in jsn_lod and jsn_lod["HasLift"]:
+            elevator = jsn_lod["HasLift"]
+
+    except:
+        date,bathroom,elevator=None,0,False
+    return date,bathroom,elevator
+
+
 def get_data():
     resp = requests.get('https://www.athimmo.be/')
     soup = BeautifulSoup(resp.content)
@@ -101,6 +150,10 @@ def get_data():
     for rec in dic['pageContext']['data'][u'contentRow'][0]['data']['propertiesList']:
         if rec['language'] == 'fr':
             l = {}
+
+            if "EnergyPerformance" in rec and rec["EnergyPerformance"]:
+                l['energy_label'] = str(rec["EnergyPerformance"])+" kWh/m².an"
+
             l['title'] = rec['TypeDescription']
             l['external_source'] = 'Athimmo2000Spider'
             l['description'] = rec['DescriptionA']
@@ -138,7 +191,7 @@ def get_data():
                 l['property_type'] = "NA"
             #####################################################
 
-            if 'lift' in rec['DescriptionA'].lower() or 'elevator' in rec['DescriptionA'].lower():
+            if 'lift' in rec['DescriptionA'].lower() or 'elevator' in rec['DescriptionA'].lower() or "ascenseur" in rec['DescriptionA'].lower():
                 l.update({'elevator':True})
             if 'swimming' in rec['DescriptionA'].lower():
                 l.update({'swimming_pool':True})
@@ -160,6 +213,18 @@ def get_data():
             l['external_link'] = ext_li
             l['external_id'] = str(rec['ID'])
             if l['property_type'] in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
+
+                output = property_detail(l["external_link"])
+
+                if output[0]:
+                    l["available_date"] = output[0]
+
+                if output[1]:
+                    l["bathroom_count"] = output[1]
+
+                if output[2]:
+                    l["elevator"] = output[2]
+
                 result.append(l)
 
     return result

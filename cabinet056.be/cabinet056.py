@@ -142,10 +142,10 @@ def scrapDetail2(soup):
 		pydash.set_(dic,"swimming_pool",True)
 	if "gemeubileerd" in tot_descrp.lower() or "furnished" in tot_descrp.lower():
 		pydash.set_(dic,"furnished",True)
-	# if "machine à laver" in tot_descrp.lower():
-	# 	pydash.set_(dic,"washing_machine",True)
-	# if "lave" in tot_descrp.lower() and "vaisselle" in tot_descrp.lower():
-	# 	pydash.set_(dic,"dishwasher",True)
+	if "machine à laver" in tot_descrp.lower():
+		pydash.set_(dic,"washing_machine",True)
+	if "lave" in tot_descrp.lower() and "vaisselle" in tot_descrp.lower():
+		pydash.set_(dic,"dishwasher",True)
 
 
 	img_div = soup.find("div",class_="owl-carousel owl-nav-overlay owl-dots-overlay margin-bottom-30").findAll("img")

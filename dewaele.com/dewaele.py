@@ -45,7 +45,7 @@ def getSqureMtr(text):
 	list_text = re.findall(r'\d+',text)
 
 	if len(list_text) == 2:
-		output = int(list_text[0])
+		output = int(list_text[0]+list_text[1])
 	elif len(list_text) == 1:
 		output = int(list_text[0])
 	else:
@@ -53,6 +53,8 @@ def getSqureMtr(text):
 
 	return output
 
+def num_there(s):
+    return any(i.isdigit() for i in s)
 
 def scrapeSubInfo(soup):
 
@@ -70,9 +72,23 @@ def scrapeSubInfo(soup):
 				text_info = info.text.strip()
 				if ":" in text_info:
 					rec_dic.update({text_info.split(":")[0].strip():text_info.split(":")[1].strip()})
+				elif num_there(text_info):
+					rec_dic.update({"gem":getSqureMtr(text_info)})
 
 
 			rec_dic = cleanKey(rec_dic)
+
+			# print (rec_dic)
+			# print ("\n")
+
+			if "epc" in rec_dic:
+				if len(rec_dic["epc"]) > 2:
+					pydash.set_(dic,"energy_label",rec_dic["epc"])
+
+			if "gem" in rec_dic:
+				if rec_dic["gem"]:
+					pydash.set_(dic,"utilities",rec_dic["gem"])					
+
 			if "beschikbaarvanaf" in rec_dic:
 				if "-" in rec_dic["beschikbaarvanaf"]:
 					pydash.set_(dic,"available_date",strToDate(rec_dic["beschikbaarvanaf"]))
@@ -98,10 +114,10 @@ def scrapeSubInfo(soup):
 				pydash.set_(dic,"swimming_pool",True)
 			if "gemeubileerd" in description.lower() or "furnished" in description.lower():
 				pydash.set_(dic,"furnished",True)
-			# if "machine à laver" in description.lower():
-			# 	pydash.set_(dic,"washing_machine",True)
-			# if "lave" in description.lower() and "vaisselle" in description.lower():
-			# 	pydash.set_(dic,"dishwasher",True)
+			if "machine à laver" in description.lower():
+				pydash.set_(dic,"washing_machine",True)
+			if "lave" in description.lower() and "vaisselle" in description.lower():
+				pydash.set_(dic,"dishwasher",True)
 
 
 		landlord_name = soup.find("li",class_ = "media agent").find("div",class_="bd").find("h3").text.strip()

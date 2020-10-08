@@ -6,6 +6,38 @@ from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
 geolocator = Nominatim(user_agent="myGeocoder")
 
+
+def cleanText(text):
+    text = ''.join(text.split())
+    text = re.sub(r'[^a-zA-Z0-9]', ' ', text).strip()
+    return text.replace(" ","_").lower()
+
+
+
+def cleanKey(data):
+    if isinstance(data,dict):
+        dic = {}
+        for k,v in data.items():
+            dic[cleanText(k)]=cleanKey(v)
+        return dic
+    else:
+        return data
+
+
+
+def getSqureMtr(text):
+    list_text = re.findall(r'\d+',text)
+
+    if len(list_text) == 2:
+        output = int(list_text[0]+list_text[1])
+    elif len(list_text) == 1:
+        output = int(list_text[0])
+    else:
+        output=0
+
+    return output
+
+
 def clean_value(text):
     if text is None:
         text = ""
@@ -67,13 +99,20 @@ def get_records(soup):
             continue
         external_link = di.find('a',class_='ev-property-container')['href']
         title = di.find('div',class_='ev-teaser-title').text
-        print (external_link,title)
+        print (external_link)
         address = di.find('div',class_='ev-teaser-subtitle').text
         external_source = 'ENGEL & VOLKERS SABLON SPider'
         landlord_name = 'ENGEL & VOLKERS SABLON'
         room_count = '0'
+        bath_count = '0'
         if di.find('img',title='Bedrooms'):
             room_count = di.find('img',title='Bedrooms').find_next('span').text
+
+
+        if di.find('img',title='Bathrooms'):
+            bath_count = di.find('img',title='Bathrooms').find_next('span').text
+
+
         rent = di.find('div',class_='ev-teaser-price').find('div',class_='ev-value').text
         city = address.split(',')[-1].strip().replace('city','').replace(')','').replace('(','')
         rec['title']= title
@@ -81,10 +120,13 @@ def get_records(soup):
         rec['external_source']= external_source
         rec['landlord_name']= landlord_name
         rec['external_link']= external_link
-        if int(re.findall('\d+',room_count)[0]):
-            rec['room_count']= int(re.findall('\d+',room_count)[0])
-        if int(re.findall('\d+',rent)[0]):
-            rec['rent']= int(re.findall('\d+',rent)[0])
+        if getSqureMtr(room_count):
+            rec['room_count']= getSqureMtr(room_count)
+        if getSqureMtr(rent):
+            rec['rent']= getSqureMtr(rent)
+        if getSqureMtr(bath_count):
+            rec["bathroom_count"] = getSqureMtr(bath_count)
+
         rec['city']= city
         ss= None
         try:
@@ -92,8 +134,14 @@ def get_records(soup):
         except:
             pass
         resp1 = requests.get(external_link)
-        soup1 = BeautifulSoup(resp1.content)
+        soup1 = BeautifulSoup(resp1.content,"html.parser")
 
+        # open("home.html","wb").write(resp1.content)
+
+
+        # print (soup1.prettify())
+        # open("home.html","w").write(str(soup1.prettify()))
+        # exit()
 
         all_tags = soup1.findAll("span",class_="ev-exposee-detail-fact-value")
         if len(all_tags) >= 5:
@@ -104,6 +152,36 @@ def get_records(soup):
                         rec["utilities"] = int(list_text[0])
                 if "W-02" in ech_tg.text:
                     rec["external_id"] = ech_tg.text.strip()
+
+
+
+        floor_imges = []
+        if soup1.find("div",id="floorplans"):
+            print (True)
+            floorImgs = soup1.find("div",id="floorplans").find("div",class_="ev-image-gallery ev-no-scrolling ").findAll("a")
+            for img in floorImgs:
+                floor_imges.append(img["href"])
+        if floor_imges:
+            rec["floor_plan_images"] = floor_imges
+
+
+
+
+        ev_rec = {}
+        all_ev = soup1.find_all("div",class_="ev-exposee-detail")
+        for ev_ in all_ev:
+            if "Energy Information" in ev_.text:
+                ev_info = ev_.find("ul",class_="ev-exposee-content ev-exposee-detail-facts").findAll("li")
+                for ev in ev_info:
+                    if ev.find("label") and ev.find("span"):
+                        key = ev.find("label").text.strip()
+                        vals = ev.find("span").text.strip()
+                        ev_rec.update({key:vals})
+
+        ev_rec = cleanKey(ev_rec)
+        if "energyconsumptionvalue" in ev_rec:
+            rec["energy_label"] = ev_rec["energyconsumptionvalue"]
+
 
 
 
@@ -171,7 +249,7 @@ def get_records(soup):
 def get_data():
     resp = requests.get('https://www.engelvoelkers.com/en/search/?q=&startIndex=0&businessArea=residential&sortOrder=DESC&sortField=sortPrice&pageSize=18&facets=bsnssr%3Aresidential%3Bcntry%3Abelgium%3Brgn%3Abrussels_surroundings%3Btyp%3Arent%3B')
 
-    soup = BeautifulSoup(resp.content)
+    soup = BeautifulSoup(resp.content,"html.parser")
     
     res = get_records(soup)
     while True:
@@ -179,7 +257,7 @@ def get_data():
             break
         nex = soup.find('ul',class_='ev-pager-row').find('a',class_='ev-pager-next')['href']
         resp = requests.get(nex)
-        soup = BeautifulSoup(resp.content)
+        soup = BeautifulSoup(resp.content,"html.parser")
         res.extend(get_records(soup))
     return res
 
