@@ -67,11 +67,12 @@ def getSqureMtr(text):
 
     return output
 
+def num_there(s):
+    return any(i.isdigit() for i in s)
+
 def scrapDetail(soup):
 
-
     dic = {}
-
     strSoup = str(soup)
 
     descrpt1 = soup.find("div",class_="eleven columns alpha").find("section").find("h2").text.strip()
@@ -102,7 +103,12 @@ def scrapDetail(soup):
 
     temp_dic = cleanKey(temp_dic)
 
-    print (temp_dic)
+    if "epcindex" in temp_dic:
+        pydash.set_(dic,"energy_label",temp_dic["epcindex"])
+
+    if "badkamers" in temp_dic:
+        if getSqureMtr(temp_dic["badkamers"]):
+            pydash.set_(dic,"bathroom_count",getSqureMtr(temp_dic["badkamers"]))
 
     if "adres" in temp_dic:
         pydash.set_(dic,"address",temp_dic["adres"])
@@ -153,7 +159,8 @@ def scrapDetail(soup):
             pydash.set_(dic,"elevator",False)
 
     if "beschikbaarvanaf" in temp_dic:
-        pydash.set_(dic,"available_date",strToDate(temp_dic["beschikbaarvanaf"]))
+        if num_there(temp_dic["beschikbaarvanaf"]):
+            pydash.set_(dic,"available_date",strToDate(temp_dic["beschikbaarvanaf"]))
 
     if "huisdierentoegelaten" in temp_dic:
         if "Neen" == temp_dic["huisdierentoegelaten"]:
