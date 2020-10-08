@@ -11,6 +11,7 @@ import ast
 from pprint import pprint
 import base64
 import pydash
+from datetime import datetime
 
 def numfromStr(text):
     list_text = re.findall(r'\d+',text)
@@ -39,6 +40,30 @@ def getImgList(soup):
 
     return imgLst
 
+#============================================================================================================
+def strToDate(text):
+    if "/" in text:
+        date = datetime.strptime(text, '%d/%m/%Y').strftime('%Y-%m-%d')
+    elif "-" in text:
+        date = datetime.strptime(text, '%Y-%m-%d').strftime('%Y-%m-%d')
+    else:
+        date = text
+    return date
+
+#============================================================================================================
+def getEpcNdDate(text):
+    energy_lb = None
+    splt_text=text.lower().split(" epc ")
+    if len(splt_text) > 1:
+        energy_lb = re.findall(r'\d+',splt_text[-1])[0]+" kWh/m²"
+
+
+    date=None
+    m = re.findall(r'([0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4})',text)
+    if m:
+        date = strToDate(m[0])
+
+    return energy_lb,date
 
 #============================================================================================================
 
@@ -81,6 +106,12 @@ def scrapePropDetail(listPropty):
             property_type = "NA"
 
 
+        epc,date = getEpcNdDate(description)
+        if epc:
+            pydash.set_(dic,"energy_label",epc)
+        if date:
+            pydash.set_(dic,"available_date",date)
+
 
         rent = int(numfromStr(echData["Property_Price"]))
         if rent or rent!=0:
@@ -88,7 +119,7 @@ def scrapePropDetail(listPropty):
 
         bedCount = int(echData["bedrooms"])
         if bedCount or bedCount!=0:
-            pydash.set_(dic,"room_count",bedCount)          
+            pydash.set_(dic,"room_count",bedCount)
 
 
 
