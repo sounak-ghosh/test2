@@ -83,10 +83,10 @@ def scrapDetail(soup):
         pydash.set_(dic,"swimming_pool",True)
     if "gemeubileerd" in description.lower() or "furnished" in description.lower():
         pydash.set_(dic,"furnished",True)
-    # if "machine à laver" in description.lower():
-    #   pydash.set_(dic,"washing_machine",True)
-    # if "lave" in description.lower() and "vaisselle" in description.lower():
-    #   pydash.set_(dic,"dishwasher",True)
+    if "machine à laver" in description.lower():
+      pydash.set_(dic,"washing_machine",True)
+    if "lave" in description.lower() and "vaisselle" in description.lower():
+      pydash.set_(dic,"dishwasher",True)
 
 
     all_tables = soup.findAll("table",class_="kenmerken")
@@ -101,6 +101,8 @@ def scrapDetail(soup):
         temp_dic.update(dict(zip(keys, vals)))
 
     temp_dic = cleanKey(temp_dic)
+
+    print (temp_dic)
 
     if "adres" in temp_dic:
         pydash.set_(dic,"address",temp_dic["adres"])

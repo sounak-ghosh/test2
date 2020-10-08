@@ -136,10 +136,10 @@ def scrapePropDetail(listPropty):
             pydash.set_(dic,"swimming_pool",True)
         if "gemeubileerd" in description.lower() or "furnished" in description.lower():
             pydash.set_(dic,"furnished",True)
-        # if "lave" in description.lower() and "vaisselle" in description.lower():
-        #   pydash.set_(dic,"dishwasher",True)
-        # if "machine à laver" in description.lower():
-        #   pydash.set_(dic,"washing_machine",True)
+        if "lave" in description.lower() and "vaisselle" in description.lower():
+          pydash.set_(dic,"dishwasher",True)
+        if "machine à laver" in description.lower():
+          pydash.set_(dic,"washing_machine",True)
 
 
 
