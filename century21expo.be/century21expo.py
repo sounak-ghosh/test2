@@ -67,6 +67,15 @@ def get_data(my_property,j_data):
     if "rooms" in j_data and "numberOfBedrooms" in j_data["rooms"]:
         if int(j_data['rooms']['numberOfBedrooms']):
             scraped_data["room_count"] = int(j_data['rooms']['numberOfBedrooms'])
+
+    if "rooms" in j_data and "numberOfBathrooms" in j_data["rooms"]:
+        if int(j_data['rooms']['numberOfBathrooms']):
+            scraped_data["bathroom_count"] = int(j_data['rooms']['numberOfBathrooms'])
+
+
+    if "energySpecifications" in j_data and "energyScore" in j_data["energySpecifications"] and "value" in j_data["energySpecifications"]["energyScore"]:
+        scraped_data["energy_label"] = str(j_data["energySpecifications"]["energyScore"]["value"])+" kw/m²/année"
+        
   
     if "floorNumber" in j_data:
         scraped_data["floor"] = j_data['floorNumber']

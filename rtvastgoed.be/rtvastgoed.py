@@ -74,6 +74,9 @@ def getSqureMtr(text):
 	return output
 
 
+def num_there(s):
+    return any(i.isdigit() for i in s)
+
 
 def scrapDetail(soup):
 
@@ -81,6 +84,26 @@ def scrapDetail(soup):
 	imgLst = []
 
 	title = soup.find("div",class_="property__header-block").find("h1").text.strip()
+
+
+	if soup.find("div",class_="property__header-block__ref"):
+		id_ = soup.find("div",class_="property__header-block__ref").text.strip()
+		pydash.set_(dic,"external_id",id_)
+
+
+	if soup.find("i",class_="fa fa-shower"):
+		num = getSqureMtr(soup.find("i",class_="fa fa-shower").find_next_sibling("div").text)
+		if num:
+			pydash.set_(dic,"bathroom_count",num)			
+
+
+	if soup.find("i",class_="fa fa-leaf"):
+		vals = soup.find("i",class_="fa fa-shower").find_next_sibling("div").text.split(":")[-1].strip()
+		if vals:
+			pydash.set_(dic,"energy_label",vals)		
+
+
+
 
 	add = soup.find("div",class_="property__header-block__adress__street")
 	if add:
@@ -101,10 +124,10 @@ def scrapDetail(soup):
 		pydash.set_(dic,"swimming_pool",True)
 	if "gemeubileerd" in description.lower() or "furnished" in description.lower() or "ingericht" in soup.text.lower():
 		pydash.set_(dic,"furnished",True)
-	# if "machine à laver" in description.lower():
-	# 	pydash.set_(dic,"washing_machine",True)
-	# if "lave" in description.lower() and "vaisselle" in description.lower():
-	# 	pydash.set_(dic,"dishwasher",True)
+	if "machine à laver" in description.lower():
+		pydash.set_(dic,"washing_machine",True)
+	if "lave" in description.lower() and "vaisselle" in description.lower():
+		pydash.set_(dic,"dishwasher",True)
 	if "terras" in description.lower():
 		pydash.set_(dic,"terrace",True)
 	if "lift" in description.lower():
@@ -167,7 +190,7 @@ def scrapDetail(soup):
 
 	if "huurwaarborg" in rec_dic:
 		pydash.set_(dic,"deposit",extractPrice(rec_dic["huurwaarborg"]))
-	if "vrijop" in rec_dic:
+	if "vrijop" in rec_dic and num_there(rec_dicp["vrijop"]):
 		pydash.set_(dic,"available_date",strToDate(rec_dic["vrijop"]))	
 
 	if "woonoppervlakte" in rec_dic:
@@ -231,7 +254,6 @@ def getPropertyDetails(url):
 		proptyList = section.find("div",class_="row").findAll("div",class_="row")
 
 		for index,propty in enumerate(proptyList):
-			# print (index)
 			extrnlurl="https://www.rtvastgoed.be"+propty.find("a",class_="spotlight__content__moreinfo link")["href"]
 
 			count = 0
@@ -254,8 +276,6 @@ def getPropertyDetails(url):
 			    property_type = "house"
 			elif "chambre" in property_type.lower() or "kamer" in property_type.lower() or "room" in property_type.lower():
 			    property_type = "room"
-			# elif "commerciale" in property_type.lower() or "reclame" in property_type.lower() or "commercial" in property_type.lower():
-			#     property_type = "property_for_sale"
 			elif "studio" in property_type.lower():
 			    property_type = "studio"
 			else:

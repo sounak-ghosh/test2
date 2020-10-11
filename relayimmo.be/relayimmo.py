@@ -31,7 +31,7 @@ def numfromStr(text):
 	elif len(list_text)==1:
 		output = int(list_text[0])
 	else:
-		output=None
+		output=0
 
 	return output
 
@@ -50,11 +50,11 @@ def getSqureMtr(text):
 	list_text = re.findall(r'\d+',text)
 
 	if len(list_text) == 2:
-		output = float(list_text[0]+"."+list_text[1])
+		output = int(list_text[0])
 	elif len(list_text) == 1:
 		output = int(list_text[0])
 	else:
-		output=None
+		output=0
 
 	return output
 
@@ -69,10 +69,21 @@ def getSubInfo(soup):
 	description = soup.find("div",class_="col-12 col-lg-8").find("p").text.strip()
 
 
-	for ech_div in soup.findAll("div",class_="col-12 col-sm-6 col-md-3"):
-		if ech_div.find("i",class_ = "flaticon-select"):
-			square_meters = int(ech_div.find("h1").text.strip())
-			pydash.set_(dic,"square_meters",square_meters)
+	if soup.find("div",class_="price-features"):
+
+		for ech_text in soup.find("div",class_="price-features").text.split("  "):
+
+			if "habitation" in ech_text.lower() and getSqureMtr(ech_text):
+				pydash.set_(dic,"square_meters",getSqureMtr(ech_text))
+
+			if "etage" in ech_text.lower():
+				pydash.set_(dic,"floor",ech_text.lower().strip())
+
+			if "espec" in ech_text.lower():
+				pydash.set_(dic,"energy_label",ech_text.replace("Espec","").strip())
+
+			if "salle de bain" in ech_text.lower() and getSqureMtr(ech_text):
+				pydash.set_(dic,"bathroom_count",getSqureMtr(ech_text))				
 
 
 	priceBox = soup.find("div",class_ = "prices-box")
@@ -104,10 +115,10 @@ def getSubInfo(soup):
 		pydash.set_(dic,"swimming_pool",True)
 	if "gemeubileerd" in description.lower()or "aménagées" in description.lower() or "furnished" in description.lower():
 		pydash.set_(dic,"furnished",True)
-	# if "machine à laver" in description.lower():
-	# 	pydash.set_(dic,"washing_machine",True)
-	# if "lave" in description.lower() and "vaisselle" in description.lower():
-	# 	pydash.set_(dic,"dishwasher",True)
+	if "machine à laver" in description.lower():
+		pydash.set_(dic,"washing_machine",True)
+	if "lave" in description.lower() and "vaisselle" in description.lower():
+		pydash.set_(dic,"dishwasher",True)
 
 	pictures = soup.find("div" ,class_="owl-carousel owl-nav-right margin-bottom-30").findAll("img",alt="")
 	imgLst = []

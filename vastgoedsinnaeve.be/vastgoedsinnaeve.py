@@ -38,7 +38,7 @@ def numfromStr(text):
 	elif len(list_text)==1:
 		output = int(list_text[0])
 	else:
-		output=None
+		output=0
 
 	return output
 
@@ -59,6 +59,10 @@ def cleanKey(data):
 		return dic
 	else:
 		return data
+
+
+def num_there(s):
+    return any(i.isdigit() for i in s)
 
 #============================================================================================================
 
@@ -113,15 +117,20 @@ def getSubInfo(soup):
 
 	rec_dic = cleanKey(rec_dic)
 
+	# print (rec_dic)
 
-	if "beschikbaarvanaf" in rec_dic:
+	if "beschikbaarvanaf" in rec_dic and num_there(rec_dic["beschikbaarvanaf"]):
 		pydash.set_(dic,"available_date",strToDate(rec_dic["beschikbaarvanaf"]))
+	if "badkamers" in rec_dic and numfromStr(rec_dic["badkamers"]):
+		pydash.set_(dic,"bathroom_count",numfromStr(rec_dic["badkamers"]))
+	if "epcindex" in rec_dic:
+		pydash.set_(dic,"energy_label",rec_dic["epcindex"])
 	if "huisdierentoegelaten" in rec_dic:
 		if "Neen" in rec_dic["huisdierentoegelaten"]:
 			pydash.set_(dic,"pets_allowed",False)
 		else:
 			pydash.set_(dic,"pets_allowed",True)
-	if "slaapkamers" in rec_dic:
+	if "slaapkamers" in rec_dic and numfromStr(rec_dic["slaapkamers"]):
 		pydash.set_(dic,"room_count",int(rec_dic["slaapkamers"]))
 
 	dic.update({

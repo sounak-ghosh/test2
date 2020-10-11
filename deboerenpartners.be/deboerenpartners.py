@@ -22,6 +22,23 @@ headers={
 
 }
 
+def cleanText(text):
+    text = ''.join(text.split())
+    text = re.sub(r'[^a-zA-Z0-9]', ' ', text).strip()
+    return text.replace(" ","_").lower()
+
+
+
+def cleanKey(data):
+    if isinstance(data,dict):
+        dic = {}
+        for k,v in data.items():
+            dic[cleanText(k)]=cleanKey(v)
+        return dic
+    else:
+        return data
+
+
 def getAddress(lat,lng):
     coordinates = str(lat)+","+str(lng)
     location = locator.reverse(coordinates)
@@ -76,8 +93,19 @@ def get_data(my_property,scraped_data):
     
     response = get_page_response(url,'get',None)                     
     ps = fromstring(response.text) 
-    soup = BeautifulSoup(response.text,'lxml')
-    
+    soup = BeautifulSoup(response.content,'html.parser')
+
+
+    rec_info = {}
+    if soup.find("div",id="details"):
+        all_detail_line = soup.find("div",id="details").findAll("div",class_="detail-line")
+        for line in all_detail_line:
+            if line.find("div",class_="left") and line.find("div",class_="right"):
+                rec_info.update({line.find("div",class_="left").text:line.find("div",class_="right").text.strip()})
+
+    rec_info = cleanKey(rec_info)
+
+    print (">>>>>>>>>>>>> Here I AM",rec_info)    
     
     try:
         room_count = ps.xpath("//div[@class='bed']/following-sibling::div[1]//text()")
