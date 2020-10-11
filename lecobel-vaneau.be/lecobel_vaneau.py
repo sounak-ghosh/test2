@@ -81,7 +81,6 @@ def proptyDetail(soup):
 					rec_dic.update({text_[0].strip():text_[1].strip()})
 			rec_dic = cleanKey(rec_dic)
 
-
 			if "balcony" in description.lower():
 				pydash.set_(dic,"balcony",True)
 
@@ -114,6 +113,9 @@ def proptyDetail(soup):
 			if "parking_s" in rec_dic or "parking" in rec_dic:
 				pydash.set_(dic,"parking",True)
 
+			if "bathroom_s" in rec_dic and numfromStr(rec_dic["bathroom_s"]):
+				pydash.set_(dic,"bathroom_count",numfromStr(rec_dic["bathroom_s"]))
+
 
 		if soup.find("div",class_="informations__agent"):
 			landlord_name = soup.find("div",class_="informations__agent").find('div',class_="name").text.strip()
@@ -124,6 +126,12 @@ def proptyDetail(soup):
 
 		dic.update({"landlord_phone":landlord_phone,"landlord_email":landlord_email})
 
+	if soup.find("div",class_="slideshow__container"):
+		imgLst = []
+		for picture in soup.find("div",class_="slideshow__container").findAll("div",class_="container--saturate"):
+			imgLst.append("https://www.lecobel-vaneau.be"+picture.find("source",type="image/webp")["srcset"])
+
+		dic.update({"images":imgLst,"external_images_count":len(imgLst)})
 
 	return dic
 
@@ -161,11 +169,6 @@ def getPropertyDetails(all_proprty):
 		title = soup.find("a",class_="link__property full-link")["title"]
 
 		print (external_link)
-
-		imgLst = []
-		for picture in soup.findAll("source",type="image/webp"):
-			imgLst.append("https://www.lecobel-vaneau.be"+(picture["srcset"]))
-
 
 		price = soup.find("div",class_="property-price property-data--center").text.strip()
 		rent = numfromStr(price)
@@ -205,14 +208,13 @@ def getPropertyDetails(all_proprty):
 				print (e)
 			count +=1
 
-
 		soup2 = BeautifulSoup(response.content,"html.parser")
 
 		dic_detail =proptyDetail(soup2)
 
 		dic_detail.update({"address":address,"zipcode":zipcode,"external_link":external_link,"title":title,
-			"images":imgLst,"property_type":property_type,"latitude":latitude,"longitude":longitude,
-			"external_images_count":len(imgLst),"external_source":"lecobel-vaneau.be"})
+			"property_type":property_type,"latitude":latitude,"longitude":longitude
+			,"external_source":"lecobel-vaneau.be"})
 
 		if rent:
 			pydash.set_(dic_detail,"rent",rent)

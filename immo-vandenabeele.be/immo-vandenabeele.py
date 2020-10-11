@@ -27,6 +27,8 @@ def cleanText(text):
 	text = re.sub(r'[^a-zA-Z0-9]', ' ', text).strip()
 	return text.replace(" ","_").lower()
 
+def num_there(s):
+    return any(i.isdigit() for i in s)
 
 
 def cleanKey(data):
@@ -100,16 +102,18 @@ def scrapDetail(soup):
 		value = echRec.findAll("div")[1].text.strip()
 		rec.update({head:value})
 	cln_dic = cleanKey(rec)
-	
 
 	if "huisdieren" in cln_dic:
 		if cln_dic["huisdieren"] == "Niet toegelaten":
 			pydash.set_(dic,"pets_allowed",False)
 		else:
 			pydash.set_(dic,"pets_allowed",True)
-	if "beschikbaarheid" in cln_dic:
+
+	if "beschikbaarheid" in cln_dic and num_there(cln_dic["beschikbaarheid"]):
 		pydash.set_(dic,"available_date",strToDate(cln_dic["beschikbaarheid"]))
 
+	if "epc" in cln_dic:
+		pydash.set_(dic,"energy_label",cln_dic["epc"])
 
 	dic.update({
 			"currency":currency,

@@ -36,6 +36,36 @@ def clean_key(text):
     else:
         raise Exception("make_key :: Found invalid type, required str or unicode                                                                                        ")
 
+
+def cleanText(text):
+    text = ''.join(text.split())
+    text = re.sub(r'[^a-zA-Z0-9]', ' ', text).strip()
+    return text.replace(" ","_").lower()
+
+
+
+def cleanKey(data):
+    if isinstance(data,dict):
+        dic = {}
+        for k,v in data.items():
+            dic[cleanText(k)]=cleanKey(v)
+        return dic
+    else:
+        return data
+
+def getSqureMtr(text):
+    list_text = re.findall(r'\d+',text)
+
+    if len(list_text) == 2:
+        output = int(list_text[0]+list_text[1])
+    elif len(list_text) == 1:
+        output = int(list_text[0])
+    else:
+        output=0
+
+    return output
+
+
 def traverse( data):
     if isinstance(data, dict):
         n = {}
@@ -95,6 +125,22 @@ def get_data():
             img_resp = requests.get(external_link)
             img_soup = BeautifulSoup(img_resp.content)
 
+            temp_dic={}
+            if img_soup.find("div",class_="span4 panel-left"):
+                print (True)
+                fields = img_soup.find("div",class_="span4 panel-left").find_all("div",class_="field")
+                for fd in fields:
+                    if fd.find("div",class_="name") and fd.find("div",class_="value"):
+                        kys = fd.find("div",class_="name").text.strip()
+                        vals = fd.find("div",class_="value").text.strip()
+                        temp_dic.update({kys:vals})
+
+            cln_dic = cleanKey(temp_dic)
+
+            utilities = 0
+            if "algemeneonkosten" in cln_dic and getSqureMtr(cln_dic["algemeneonkosten"]):
+                utilities = getSqureMtr(cln_dic["algemeneonkosten"])
+
             imgs = set()
             if img_soup.find('div',class_='picswiper'):
                 for im in img_soup.find('div',class_='picswiper').find_all('img'):
@@ -138,8 +184,17 @@ def get_data():
             if int(re.findall('\d+',rent)[0]):
                 l['rent'] = int(re.findall('\d+',rent)[0])
 
-            l['images'] = images
-            l['external_images_count'] = external_images_count
+
+            if utilities:
+                l["utilities"] = utilities
+
+            if "NumberOfBathRooms" in dd and dd["NumberOfBathRooms"]:
+                l["bathroom_count"] = dd["NumberOfBathRooms"]
+
+            if images:
+                l['images'] = images
+                l['external_images_count'] = external_images_count
+
             l['city'] = city
             l['latitude'] = latitude
             l['longitude'] = longitude
