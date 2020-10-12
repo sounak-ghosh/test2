@@ -48,7 +48,8 @@ def get_geo_location(soup,address):
 		
 	print("Longitude:",lat,"Latitude:",lon)		
 	return lat,lon
-
+def num_there(s):
+    return any(i.isdigit() for i in s)
 
 def get_data(my_property,scraped_data):
 	# function for scraping all required data
@@ -73,7 +74,7 @@ def get_data(my_property,scraped_data):
 			scraped_data["square_meters"] = int(square_meters.replace(u'm²','').replace('.',''))
 		if 'Nombre de salle(s) de bain' in t.find('div',class_='name').get_text():	
 			bathroom_count = t.find('div',class_='value').get_text()
-			scraped_data["bathroom_count"] = int(bathroom_count))
+			scraped_data["bathroom_count"] = int(bathroom_count)
 	
 	# calling functions to get latitute and longitute data
 	try:
@@ -111,12 +112,27 @@ def get_data(my_property,scraped_data):
 		scraped_data["furnished"] = True	
 	if ' terrace' in soup.get_text().lower():	
 		scraped_data.update({'terrace':True})
-	if ' elevator' in soup.get_text().lower() or 'lift' in soup.get_text().lower():
-		scraped_data.update({'elevator':True})
-	if 	' swim' in soup.get_text().lower():
+	# if 'Ascenseur' in soup.get_text().lower() or 'lift' in soup.get_text().lower():
+	# 	scraped_data.update({'elevator':True})
+	if 	'swim' in soup.get_text().lower():
 		scraped_data.update({'swimming_pool':True})
 	
+	fields = soup.findAll('div',class_='name')
+	values = soup.findAll('div',class_='value')
+	specs ={}
+	for ind, f in enumerate(fields):
+		atr = f.get_text()
+		val = values[ind].get_text()
+		specs.update({atr:val})
+	print(specs)	
 
+	
+	if 'E spec' in specs:
+		if 'E spec' in specs and  num_there(specs['E spec']) :
+			scraped_data.update({'energy_label':specs['E spec']})	
+	if 'Ascenseur' in specs:
+		if 'Oui' in specs['Ascenseur']:
+			scraped_data.update({'elevator':True})	
 	description = ps.xpath("//div[@class='group-container span12']//div[@class='row-fluid']//div[@class='field']//text()")
 	description = [x.strip() for x in description if x.strip()]	
 	description = '\n'.join(description)
@@ -221,11 +237,11 @@ def main():
 	#calling get data function to scrape required data from each links
 	
 	print(len(all_properties))
-	for ind, each_property in enumerate(all_properties[0:5]):
+	for ind, each_property in enumerate(all_properties[0:]):
 		scraped_data = scraped_data_all.copy()
 		
 		json_object = get_data(each_property,scraped_data)
-		print(json_object)
+		# print(json_object)
 		if not json_object:
 			continue
 		json_list.append(json_object)	
