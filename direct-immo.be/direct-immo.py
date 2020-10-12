@@ -71,13 +71,15 @@ def get_data(my_property,scraped_data):
 		if 'Superficie totale' in t.find('div',class_='name').get_text():
 			square_meters = t.find('div',class_='value').get_text()
 			scraped_data["square_meters"] = int(square_meters.replace(u'm²','').replace('.',''))
-		
+		if 'Nombre de salle(s) de bain' in t.find('div',class_='name').get_text():	
+			bathroom_count = t.find('div',class_='value').get_text()
+			scraped_data["bathroom_count"] = int(bathroom_count))
 	
 	# calling functions to get latitute and longitute data
 	try:
 		scraped_data["latitude"],scraped_data["longitude"] = get_geo_location(soup,scraped_data["address"])
-	except:
-		pass
+	except Exception as e:
+		print(e)
 
 	scraped_data["external_link"] = url
 	scraped_data["external_source"] = 'direct-immo.be'
@@ -219,7 +221,7 @@ def main():
 	#calling get data function to scrape required data from each links
 	
 	print(len(all_properties))
-	for ind, each_property in enumerate(all_properties):
+	for ind, each_property in enumerate(all_properties[0:5]):
 		scraped_data = scraped_data_all.copy()
 		
 		json_object = get_data(each_property,scraped_data)

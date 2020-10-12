@@ -85,7 +85,17 @@ def strToDate(text):
     else:
         date = text
     return date
+def num_there(s):
+    return any(i.isdigit() for i in s)
+def numfromStr(text):
+	list_text = re.findall(r'\d+',text)
 
+	if len(list_text)>0:
+		output = int(list_text[0])
+	else:
+		output=0
+
+	return output
 def get_data(my_property,scraped_data):
     # function for scraping all required data
     url = my_property
@@ -106,7 +116,13 @@ def get_data(my_property,scraped_data):
     rec_info = cleanKey(rec_info)
 
     print (">>>>>>>>>>>>> Here I AM",rec_info)    
-    
+    if 'badkamers' in rec_info:
+        scraped_data.update({'bathroom_count':int(rec_info['badkamers'])})
+    if 'epc' in rec_info and  num_there(rec_info['epc']) :
+        scraped_data.update({'energy_label':rec_info['epc']})
+    if 'lasten_maand' in rec_info :
+        scraped_data.update({'utilities':numfromStr(rec_info['lasten_maand'])})    
+             
     try:
         room_count = ps.xpath("//div[@class='bed']/following-sibling::div[1]//text()")
         room_count = [x.strip() for x in room_count if x.strip()][0]
@@ -267,7 +283,7 @@ def get_data(my_property,scraped_data):
         else:
             im = 'https://www.deboerenpartners.be'+img
             image_list.append(im)   
-
+    image_list = list(set(image_list))
     scraped_data["images"] = image_list
     scraped_data["external_images_count"] = len(scraped_data["images"])
 
