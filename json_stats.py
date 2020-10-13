@@ -16,7 +16,7 @@ def getStats(iterator):
 	for data in iterator:
 		for key,value in data.items():
 
-			value_type = str(type(value)).replace("<class '","").replace("'>","")
+			value_type = str(type(value)).replace("<class '","").replace("'>","").replace("<type '","")
 
 			if key in dic_stats and  value_type in dic_stats[key][0]:
 				dic_stats[key] = [dic_stats[key][0],dic_stats[key][1]+1]
@@ -46,7 +46,7 @@ def errorType(iterator):
 			value_type = str(type(value)).replace("<class '","").replace("'>","")
 
 			if key in json_template and value_type != json_template[key]:
-				dic_data.update({key:"Wrong DataType"})
+				dic_data.update({key:"Data Type Error"})
 
 			elif key not in json_template:
 				dic_data.update({key:"Unkown Attribute"})
