@@ -125,7 +125,7 @@ class UpgradeimmoSpider(scrapy.Spider):
                                  callback=self.parse,
                                  meta={'property_type': urls.get('property_type')})
 
-            
+
 
 
     def parse(self, response, **kwargs):
@@ -295,4 +295,5 @@ class UpgradeimmoSpider(scrapy.Spider):
 
 
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
+            print (item)
             yield item

@@ -128,11 +128,11 @@ def traverse( data):
 
 class auditaSpider(scrapy.Spider):
     name = 'auditia_gestion'
-    allowed_domains = ['groupe-auditia.fr']
-    start_urls = ['www.groupe-auditia.fr']
+    allowed_domains = ['www.auditia-gestion.com']
+    start_urls = ['www.auditia-gestion.com']
     execution_type = 'testing'
-    country = 'dutch'
-    locale ='nl'
+    country = 'french'
+    locale ='fr'
 
     def start_requests(self):
         start_urls = [{"url":"http://www.auditia-gestion.com/fr/immobilier/louer/"}]
@@ -141,18 +141,11 @@ class auditaSpider(scrapy.Spider):
                                  callback=self.parse)
 
 
-    def parse(self, response, **kwargs):
+    def parse(self, response):
         print (">>>>>>>>>>>>>>>>>>>>HERE I AM0")
         soup = BeautifulSoup(response.body)
-        start_urls = []
         for urls in soup.find("div",class_="PaginationLinks").find_all("a"):
-            start_urls.append({"url":urls["href"]})
-
-        print (start_urls)
-
-        for urls in start_urls:
-            print (urls.get("url"))
-            yield scrapy.Request(url="http://www.auditia-gestion.com/fr/immobilier/louer/page-4",
+            yield scrapy.Request(url=urls["href"],
                 callback=self.parse2)
 
 
@@ -176,7 +169,7 @@ class auditaSpider(scrapy.Spider):
                     dic["external_link"] = ech_li.find("a",class_="enSavoirPlus")["href"]
                     dic["title"] = ech_li.find("h4").text.strip()
                     dic["external_id"] =  ech_li.find("span",class_="refAnnonce").text.strip()
-                    dic["property_type"] = ech_li.find("h3").text.strip()
+                    dic["property_type"] = property_type = ech_li.find("h3").text.strip()
 
                     if "tudiant" in property_type.lower() or  "studenten" in property_type.lower() and "appartement" in property_type.lower():
                         property_type = "student_apartment"
@@ -227,8 +220,9 @@ class auditaSpider(scrapy.Spider):
 
         if soup.find("p",class_="descriptif"):
             description = soup.find("p",class_="descriptif").text.strip()
-            if description.split("Disponible"):
-                strgDate = description.split("Disponible")[-1]
+            lst_text = description.lower().split("disponible")
+            if len(lst_text) > 1 :
+                strgDate = lst_text[-1]
                 if re.findall(r'\d{2}\/\d{2}\/\d{4}',strgDate):
                     item["available_date"] = strToDate(re.findall(r'\d{2}\/\d{2}\/\d{4}',strgDate)[0])
                 elif re.findall(r'\d{2}\/\d{2}\/\d{2}',strgDate):
@@ -237,6 +231,12 @@ class auditaSpider(scrapy.Spider):
                     item["available_date"] = "Disponible "+strgDate.strip()
                 else:
                     pass
+            else:
+                strgDate = lst_text[-1]
+                if re.findall(r'\d{2}\/\d{2}\/\d{4}',strgDate):
+                    item["available_date"] = strToDate(re.findall(r'\d{2}\/\d{2}\/\d{4}',strgDate)[0])
+                elif re.findall(r'\d{2}\/\d{2}\/\d{2}',strgDate):
+                    item["available_date"] = strToDate(re.findall(r'\d{2}\/\d{2}\/\d{2}',strgDate)[0]+"20")
 
             if description.split("DEPOT DE GARANTI"):
                 deposit = int(re.findall(r'\d+',description.split("DEPOT DE GARANTI")[-1])[0])
@@ -265,8 +265,6 @@ class auditaSpider(scrapy.Spider):
                 item["dishwasher"]=True
             if "lift" in description.lower():
                 item["elevator"]=True
-            elif "geen lift" not in description.lower():
-                item["elevator"]=False
 
 
                 
@@ -288,7 +286,7 @@ class auditaSpider(scrapy.Spider):
             energy_lable = soup.find("div",id="GraphConsommation").find("span",class_="graphArrowValue").text.strip()
 
             if num_there(energy_lable):
-                item["energy_lable"] = energy_lable+" KWHEP / M² AN"
+                item["energy_label"] = energy_lable+" KWHEP / M² AN"
 
 
         item["landlord_name"] = "Auditia - Gestion immobilière"
