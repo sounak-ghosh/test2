@@ -142,7 +142,6 @@ class auditaSpider(scrapy.Spider):
 
 
     def parse(self, response):
-        print (">>>>>>>>>>>>>>>>>>>>HERE I AM0")
         soup = BeautifulSoup(response.body)
         for urls in soup.find("div",class_="PaginationLinks").find_all("a"):
             yield scrapy.Request(url=urls["href"],
@@ -150,13 +149,11 @@ class auditaSpider(scrapy.Spider):
 
 
     def parse2(self,response,**kwargs):
-        print (">>>>>>>>>>>>>>>>>>>>HERE I AM")
         soup = BeautifulSoup(response.body)
         ul = soup.find("ul",class_="annonceList louer")
         if ul:
             all_li = ul.find_all("li",class_=True)
             for ech_li in all_li:
-                print (">>>>>>>>>>>>>>>>>>>>HERE I AM2")
                 if "".join(ech_li["class"]) in ["bigTitleannonce","annonce","lastOfLineannonce"]:
                     dic = {}
                     dic["rent"] = getRent(ech_li.find("span",class_="price").text)
@@ -198,7 +195,6 @@ class auditaSpider(scrapy.Spider):
 
 
     def get_property_details(self, response,**kwargs):
-        print (">>>>>>>>>>>>>>>>>>>>HERE I AM3")
         item = ListingItem()
 
         item["external_link"] = response.meta.get('external_link')
@@ -251,7 +247,7 @@ class auditaSpider(scrapy.Spider):
 
             if "garage" in description.lower() or "parking" in description.lower() or "autostaanplaat" in description.lower():
                 item["parking"]=True
-            if "terras" in description.lower():
+            if "terras" in description.lower() or "terrace" in description.lower():
                 item["terrace"]=True
             if "balcon" in description.lower() or "balcony" in description.lower():
                 item["balcony"]=True
