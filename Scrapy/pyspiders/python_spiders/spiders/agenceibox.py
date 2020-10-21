@@ -121,16 +121,16 @@ def traverse( data):
         data = clean_value(data)
         return data
 
-class laforet(scrapy.Spider):
-    name = 'tourdiat_immobilier'
-    allowed_domains = ['www.tourdiat-immobilier.com']
-    start_urls = ['www.tourdiat-immobilier.com']
+class QuotesSpider(scrapy.Spider):
+    name = 'agenceibox'
+    allowed_domains = ['www.agenceibox.com']
+    start_urls = ['www.agenceibox.com']
     execution_type = 'testing'
     country = 'french'
     locale ='fr'
 
     def start_requests(self):
-        start_urls = [{"url":"https://www.tourdiat-immobilier.com/a-louer/"}]
+        start_urls = [{"url":"http://www.agenceibox.com/a-louer/"}]
 
         for urls in start_urls:
             yield scrapy.Request(
@@ -150,18 +150,24 @@ class laforet(scrapy.Spider):
         for page in range(1,all_page+1):
             yield scrapy.Request(
                 url=url+str(page),
-                callback=self.get_page_details
+                callback=self.get_page_details,
+                meta = {"url":url+str(page)}
                 )
 
     def get_page_details(self, response, **kwargs):
         soup = BeautifulSoup(response.body)
-        
-        if soup.find("ul",class_="listingUL"):
-            all_prpty = soup.find("ul",class_="listingUL").find_all("article",class_="row panelBien")
-            for ech_p in all_prpty:
-                title = ech_p.find("h1",itemprop="name").text.strip()
-                external_id = ech_p.find("div",itemprop="productID").text.replace("Ref:","").strip()
-                prop_typ = ech_p.find("h2",itemprop="description").text.strip()
+        if soup.find("article", class_="row no-gutters"):
+            for ech_art in soup.find_all("article", class_="row no-gutters"):
+                title = ech_art.find("h1",itemprop="name").text.strip()
+                external_id = ech_art.find("div",class_="ref").find("span").text.strip()
+                price = getPrice(ech_art.find("div",class_="prix").text.strip())
+
+                if ech_art.find("span",itemprop="numberOfRooms"):
+                    room_count = getSqureMtr(ech_art.find("span",itemprop="numberOfRooms").text.strip())
+                if ech_art.find("span",itemprop="floorSize"):
+                    sqr_mtr = getSqureMtr(ech_art.find("span",itemprop="floorSize").text.strip())
+
+                prop_typ = ech_art.find("p",itemprop="description").text.strip()
 
                 if "tudiant" in prop_typ.lower() or  "studenten" in prop_typ.lower() and "appartement" in prop_typ.lower():
                     property_type = "student_apartment"
@@ -175,17 +181,16 @@ class laforet(scrapy.Spider):
                     property_type = "studio"
                 else:
                     property_type = "NA"
-
-                external_link = "https://www.tourdiat-immobilier.com"+ech_p.find("a",class_="block-link")["href"]
-
+                
+                external_link = "http://www.agenceibox.com"+ech_art.find("a")["href"]
+            
                 if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
-                    print (external_link)
                     yield scrapy.Request(
                         url = external_link,
                         callback =self.get_property_details,
-                        meta = {"title":title,"external_link":external_link,"external_id":external_id,"property_type":property_type}
+                        meta = {"title":title,"external_link":external_link,"external_id":external_id,"property_type":property_type,
+                        "square_meters":sqr_mtr,"room_count":room_count,"rent":price}
                         )
-
 
        
     def get_property_details(self, response, **kwargs):
@@ -194,54 +199,70 @@ class laforet(scrapy.Spider):
         str_soup = str(soup)
 
         title = response.meta.get("title")
+        rent = response.meta.get("rent")
         external_link = response.meta.get("external_link")
         external_id = response.meta.get("external_id")
         property_type = response.meta.get("property_type")
+        room_count = response.meta.get("room_count")
+        square_meters = response.meta.get("square_meters")
+        description = soup.find("p",itemprop="description").text.strip()
 
-        if soup.find("div",id="dataContent"):
+
+        extract_text = re.findall("center:(.+)},",str_soup)
+        lat_lon = extract_text[0].strip()+"}"
+        lat_lon = eval(lat_lon.replace("lat",'"latitude"').replace("lng",'"longitude"'))
+        location = getAddress(lat_lon["latitude"],lat_lon["longitude"])
+        address = location.address
+
+
+        if "city" in location.raw["address"]:
+            item["city"] = location.raw["address"]["city"]
+        elif "town" in location.raw["address"]:
+            item["city"] = location.raw["address"]["town"]
+
+        if soup.find("ul",class_="imageGallery notLoaded"):
+            all_img = soup.find("ul",class_="imageGallery notLoaded").find_all("li")
+            temp_lst = []
+            for pics in all_img:
+                temp_lst.append(pics["data-src"])
+
+            if temp_lst:
+                item["images"]=temp_lst
+                item["external_images_count"]=len(temp_lst)
+
+
+
+
+        if soup.find("div",id="myTabContent"):
             temp_dic = {}
-            all_p=soup.find("div",id="dataContent").find_all("p",class_="data")
+            all_tr=soup.find("div",id="myTabContent").find_all("tr")
 
-            for ech_p in all_p:
-                if ech_p.find("span",class_="termInfos") and ech_p.find("span",class_="valueInfos"):
-                    key = ech_p.find("span",class_="termInfos").text.strip()
-                    vals=ech_p.find("span",class_="valueInfos").text.strip()
+            for ech_tr in all_tr:
+                if ech_tr.find("th",class_="labelInfo") and ech_tr.find("th",class_="valueInfo text-right"):
+                    key = ech_tr.find("th",class_="labelInfo").text.strip()
+                    vals=ech_tr.find("th",class_="valueInfo text-right").text.strip()
                     temp_dic.update({key:vals})
 
 
             temp_dic = cleanKey(temp_dic)
 
-            if "surfacehabitable_m" in temp_dic:
-                item["square_meters"] = getSqureMtr(temp_dic["surfacehabitable_m"])
-
             if "etage" in temp_dic:
                 item["floor"] = temp_dic["etage"]
 
-            if "nombredepi_ces" in temp_dic:
-                item["room_count"] = getSqureMtr(temp_dic["nombredepi_ces"])
-
-            if "charges" in temp_dic:
-                item["utilities"] = getSqureMtr(temp_dic["charges"])
+            if "chargeslocatives_provisiondonnantlieu_r_gularisationannuelle" in temp_dic:
+                item["utilities"] = getSqureMtr(temp_dic["chargeslocatives_provisiondonnantlieu_r_gularisationannuelle"])
 
             if "codepostal" in temp_dic:
                 item["zipcode"] = temp_dic["codepostal"]
 
-            if "nbdesalledebains" in temp_dic:
-                item["bathroom_count"] = getSqureMtr(temp_dic["nbdesalledebains"])
-
-            if "loyercc__mois" in temp_dic:
-                item["rent"] = getPrice(temp_dic["loyercc__mois"])
+            if "nbdesalled_eau" in temp_dic:
+                item["bathroom_count"] = getSqureMtr(temp_dic["nbdesalled_eau"])
 
             if "d_p_tdegarantiettc" in temp_dic:
                 item["deposit"] = getPrice(temp_dic["d_p_tdegarantiettc"])
 
             if "nombredeparking" in temp_dic:
                 item["parking"]=True
-
-            if "meubl" in temp_dic and temp_dic["meubl"] == "NON":
-                item["furnished"] = False
-            elif "meubl" in temp_dic and temp_dic["meubl"] == "OUI":
-                item["furnished"] = True
 
             if "ascenseur" in temp_dic and temp_dic["ascenseur"] == "NON":
                 item["elevator"] = False
@@ -261,38 +282,32 @@ class laforet(scrapy.Spider):
                 item["terrace"] = True
 
 
-        extract_text = re.findall("center:(.+)},",str_soup)
-        lat_lon = extract_text[0].strip()+"}"
-        lat_lon = eval(lat_lon.replace("lat",'"latitude"').replace("lng",'"longitude"'))
-
-        location = getAddress(lat_lon["latitude"],lat_lon["longitude"])
-        address = location.address
-
-
-        if soup.find("ul",class_="imageGallery loading"):
-            img_lst = []
-            for img in soup.find("ul",class_="imageGallery loading").find_all("li"):
-                img_lst.append("http:"+img["data-src"])
-
-            if img_lst:
-                item["images"] = img_lst
-                item["external_images_count"] = len(img_lst)
+            if "meubl" in temp_dic and temp_dic["meubl"] == "NON":
+                item["furnished"] = False
+            elif "meubl" in temp_dic and temp_dic["meubl"] == "OUI":
+                item["furnished"] = True
 
 
 
+
+        item["title"] = title
+        item["rent"] = rent
+        item["room_count"] = room_count
+        item["property_type"] = property_type
+        item["square_meters"] = square_meters
+        item["description"] = description
+        item["external_id"] = external_id
         item["address"] = address
-        item["city"] = location.raw["address"]["city"]
         item["latitude"] = str(lat_lon["latitude"])
         item["longitude"] = str(lat_lon["longitude"])
         item["title"] = title
         item["external_link"] = external_link
         item["external_id"] = external_id
         item["property_type"] = property_type
-        item["landlord_name"] = "TOURDIAT MANAGEMENT"
-        item["landlord_phone"] = "04 66 04 82 04"
+        item["landlord_name"] = "IBOX Mourillon"
+        item["landlord_phone"] = "0498009210"
         item["currency"] = "EUR"
         item["external_source"] = "tourdiat-immobilier.com"
 
         print (item)
         yield item
-
