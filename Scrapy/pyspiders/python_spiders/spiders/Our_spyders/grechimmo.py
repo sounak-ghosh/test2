@@ -26,8 +26,6 @@ def getAddress(lat,lng):
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
 
-
-
     if len(list_text) == 3:
         output = float(list_text[0]+"."+list_text[1])
     elif len(list_text) == 2:
