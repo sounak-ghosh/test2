@@ -106,7 +106,7 @@ def traverse( data):
         return data
 
 class QuotesSpider(scrapy.Spider):
-    name = "citya"
+    name = "citya_com"
     allowed_domains = ['www.citya.com']
     start_urls = ['www.citya.com']
     execution_type = 'testing'

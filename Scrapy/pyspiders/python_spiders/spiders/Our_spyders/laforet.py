@@ -108,7 +108,7 @@ def traverse( data):
         return data
 
 class laforet(scrapy.Spider):
-    name = 'laforet'
+    name = 'laforet_com'
     allowed_domains = ['www.laforet.com']
     start_urls = ['www.laforet.com']
     execution_type = 'testing'
