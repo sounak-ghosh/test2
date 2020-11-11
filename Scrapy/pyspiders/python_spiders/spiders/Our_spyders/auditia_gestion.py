@@ -127,11 +127,11 @@ def traverse( data):
         return data
 
 class auditaSpider(scrapy.Spider):
-    name = 'auditia_gestion'
+    name = 'auditia_gestion_PySpider_france_fr'
     allowed_domains = ['www.auditia-gestion.com']
     start_urls = ['www.auditia-gestion.com']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
     def start_requests(self):
@@ -202,7 +202,7 @@ class auditaSpider(scrapy.Spider):
         item["property_type"] = response.meta.get('property_type')
         item["external_id"] = response.meta.get('external_id')
         item["title"] = response.meta.get('title')
-        item["external_source"] = "groupe-auditia.fr"
+        item["external_source"] = "auditia_gestion_PySpider_france_fr"
         item["currency"]='EUR'
 
         if "room_count" in response.meta:

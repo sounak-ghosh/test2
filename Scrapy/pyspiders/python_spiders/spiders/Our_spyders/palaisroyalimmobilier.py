@@ -66,11 +66,11 @@ def cleanKey(data):
 
 
 class laforet(scrapy.Spider):
-    name = 'palaisroyalimmobilier'
+    name = 'palaisroyalimmobilier_PySpider_france_fr'
     allowed_domains = ['www.palaisroyalimmobilier.com']
     start_urls = ['www.palaisroyalimmobilier.com']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
 
@@ -243,7 +243,7 @@ class laforet(scrapy.Spider):
                         item["available_date"]=date
 
         item["currency"] = "EUR"
-        item["external_source"] = "palaisroyalimmobilier.com"
+        item["external_source"] = "palaisroyalimmobilier_PySpider_france_fr"
         item["landlord_name"]='"A1" Palais - Royal immobilier'
         item["landlord_phone"]="0033(0).142.615.615"
         print (item)

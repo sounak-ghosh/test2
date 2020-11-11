@@ -69,11 +69,11 @@ def cleanKey(data):
 
 
 class QuotesSpider(scrapy.Spider):
-    name = 'cubixestateagents_co_uk'
+    name = 'cubixestateagents_co_uk_PySpider_unitedkingdom_en'
     allowed_domains = ['www.cubixestateagents.co.uk']
     start_urls = ['www.cubixestateagents.co.uk']
     execution_type = 'testing'
-    country = 'english'
+    country = 'unitedkingdom'
     locale ='en'
 
     def start_requests(self):
@@ -214,7 +214,7 @@ class QuotesSpider(scrapy.Spider):
             item["images"] = image_list
             item["external_images_count"] = len(image_list)
 
-        item["external_source"] = "cubixestateagents.co.uk"
+        item["external_source"] = "cubixestateagents_co_uk_PySpider_unitedkingdom_en"
         item["landlord_phone"] = "0203 582 8710"
         item["landlord_email"] = "info@cubixestateagents.co.uk"
         item["landlord_name"] = "Cubix Estate Agents"

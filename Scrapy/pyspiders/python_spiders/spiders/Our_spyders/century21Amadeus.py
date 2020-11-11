@@ -35,11 +35,11 @@ def strToDate(text):
 
 
 class UpgradeimmoSpider(scrapy.Spider):
-    name = 'century21_amadeus'
+    name = 'century21_amadeus_PySpider_belgium_nl'
     allowed_domains = ['century21.be']
     start_urls = ['www.century21.be']
     execution_type = 'testing'
-    country = 'dutch'
+    country = 'belgium'
     locale ='nl'
 
     def start_requests(self):
@@ -121,7 +121,7 @@ class UpgradeimmoSpider(scrapy.Spider):
                     except:
                         pass
 
-                item["external_source"] = 'century21.be'
+                item["external_source"] = 'century21_amadeus_PySpider_belgium_nl'
 
 
 

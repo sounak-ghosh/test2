@@ -81,11 +81,11 @@ def cleanKey(data):
 
 
 class QuotesSpider(scrapy.Spider):
-    name = 'provisionproperties_co_uk'
+    name = 'provisionproperties_co_uk_PySpider_unitedkingdom_en'
     allowed_domains = ['www.provisionproperties.co.uk']
     start_urls = ['www.provisionproperties.co.uk']
     execution_type = 'testing'
-    country = 'english'
+    country = 'unitedkingdom'
     locale ='en'
 
     def start_requests(self):
@@ -209,7 +209,7 @@ class QuotesSpider(scrapy.Spider):
         item["landlord_email"] = "info@provisionproperties.co.uk"
         item["landlord_name"] = "Provision Properties"
         item["landlord_phone"] = "0113 305 3344"
-        item["external_source"] = "provisionproperties.co.uk"
+        item["external_source"] = "provisionproperties_co_uk_PySpider_unitedkingdom_en"
         item["external_link"] = response.url
         item["currency"] = "GBP"
 

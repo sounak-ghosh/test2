@@ -68,11 +68,11 @@ def cleanKey(data):
 
 
 class laforet(scrapy.Spider):
-    name = 'groupe_appart_immo'
+    name = 'groupe_appart_immo_PySpider_france_fr'
     allowed_domains = ['www.groupe-appart-immo.com']
     start_urls = ['www.groupe-appart-immo.com']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
 
@@ -240,7 +240,7 @@ class laforet(scrapy.Spider):
         rent =getPrice(soup.find("div", class_="col-xs-12 col-sm-12 col-md-6 col-lg-6").find("div", class_="prix loyer").text)
         item["rent"]=rent
         item["currency"] = "EUR"
-        item["external_source"] = "groupe-appart-immo.com"
+        item["external_source"] = "groupe_appart_immo_PySpider_france_fr"
         item["external_link"] = response.url
         item["property_type"] = response.meta["property_type"]
 

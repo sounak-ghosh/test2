@@ -81,11 +81,11 @@ def cleanKey(data):
 
 
 class QuotesSpider(scrapy.Spider):
-    name = 'pastor_realestate'
+    name = 'pastor_realestate_PySpider_unitedkingdom_en'
     allowed_domains = ['www.pastor-realestate.com']
     start_urls = ['www.pastor-realestate.com']
     execution_type = 'testing'
-    country = 'english'
+    country = 'unitedkingdom'
     locale ='en'
 
     def start_requests(self):
@@ -227,7 +227,7 @@ class QuotesSpider(scrapy.Spider):
             item["landlord_phone"] = soup.find("div", class_="module-person__phone").text.strip()
 
         item["external_link"] =  response.url
-        item["external_source"] = "pastor-realestate.com"
+        item["external_source"] = "pastor_realestate_PySpider_unitedkingdom_en"
         item["currency"] = "GBP"
 
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:

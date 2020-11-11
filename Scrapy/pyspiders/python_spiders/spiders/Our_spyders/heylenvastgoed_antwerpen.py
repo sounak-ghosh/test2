@@ -102,11 +102,11 @@ def traverse( data):
         return data
 
 class UpgradeimmoSpider(scrapy.Spider):
-    name = 'heylenvastgoed_antwerpen'
+    name = 'heylenvastgoed_antwerpen_PySpider_belgium_nl'
     allowed_domains = ['heylenvastgoed.be']
     start_urls = ['www.heylenvastgoed.be']
     execution_type = 'testing'
-    country = 'dutch'
+    country = 'belgium'
     locale ='nl'
 
     def start_requests(self):
@@ -263,7 +263,7 @@ class UpgradeimmoSpider(scrapy.Spider):
             item["room_count"]=int(re.findall('\d+',room_count)[0])
 
     
-        item["external_source"]='Heylen Vastgoed antwerpen Spider'
+        item["external_source"]='heylenvastgoed_antwerpen_PySpider_belgium_nl'
 
         if ss:
             item["latitude"]= str(ss.latitude)

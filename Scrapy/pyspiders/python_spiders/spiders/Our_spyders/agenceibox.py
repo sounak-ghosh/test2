@@ -122,11 +122,11 @@ def traverse( data):
         return data
 
 class QuotesSpider(scrapy.Spider):
-    name = 'agenceibox'
+    name = 'agenceibox_PySpider_france_fr'
     allowed_domains = ['www.agenceibox.com']
     start_urls = ['www.agenceibox.com']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
     def start_requests(self):
@@ -307,7 +307,7 @@ class QuotesSpider(scrapy.Spider):
         item["landlord_name"] = "IBOX Mourillon"
         item["landlord_phone"] = "0498009210"
         item["currency"] = "EUR"
-        item["external_source"] = "tourdiat-immobilier.com"
+        item["external_source"] = "agenceibox_PySpider_france_fr"
 
         print (item)
         yield item

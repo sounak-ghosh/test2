@@ -106,12 +106,12 @@ def traverse( data):
         return data
 
 class QuotesSpider(scrapy.Spider):
-    name = "citya_com"
+    name = "citya_PySpider_france_fr"
     allowed_domains = ['www.citya.com']
     start_urls = ['www.citya.com']
     execution_type = 'testing'
-    country = 'dutch'
-    locale ='nl'
+    country = 'france'
+    locale ='fr'
 
     def start_requests(self):
         url = 'https://www.citya.com/annonces/agence/177/location?page=1'
@@ -278,7 +278,7 @@ class QuotesSpider(scrapy.Spider):
         item["landlord_name"] = "Citya Sogexfo"
         item["landlord_phone"] = "0549881861"
         item["currency"] = "EUR"
-        item["external_source"] = "citya.com"
+        item["external_source"] = "citya_PySpider_france_fr"
         item["external_link"] = external_link
         item["property_type"] = property_type
         item["title"] = title

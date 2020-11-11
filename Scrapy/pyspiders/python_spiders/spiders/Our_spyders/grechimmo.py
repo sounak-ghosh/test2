@@ -110,11 +110,11 @@ def traverse( data):
         return data
 
 class laforet(scrapy.Spider):
-    name = 'grechimmo'
+    name = 'grechimmo_PySpider_france_fr'
     allowed_domains = ['www.grechimmo.fr']
     start_urls = ['www.grechimmo.fr']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
     def start_requests(self):
@@ -139,7 +139,7 @@ class laforet(scrapy.Spider):
         property_type = response.meta.get("property_type")
 
         if num_there(all_page[-1].text.strip()):
-            pages = int(all_page[-1].text.strip())
+            pages = int(all_page[-1].text.urstrip())
         else:
             pages = int(all_page[-2].text.strip())
 
@@ -181,7 +181,7 @@ class laforet(scrapy.Spider):
         item["title"] = response.meta.get("title")
         item["property_type"] = response.meta.get("property_type")
         item["currency"] = "EUR"
-        item["external_source"] = "grechimmo.fr"
+        item["external_source"] = "grechimmo_PySpider_france_fr"
 
 
         extract_ref_id = re.findall("Ref. :(.+)<",str_soup)

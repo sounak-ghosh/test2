@@ -68,11 +68,11 @@ def cleanKey(data):
 
 
 class laforet(scrapy.Spider):
-    name = 'audras_delaunois'
+    name = 'audras_delaunois_PySpider_france_fr'
     allowed_domains = ['audras-delaunois.com']
     start_urls = ['audras-delaunois.com']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
     def start_requests(self):
@@ -253,7 +253,7 @@ class laforet(scrapy.Spider):
         item["landlord_name"] = "Grenette Agency"
         item["landlord_phone"] = "0476447628"
         item["landlord_email"] = "grenette@audras-delaunois.com"
-        item["external_source"] = "audras-delaunois.com"
+        item["external_source"] = "audras_delaunois_PySpider_france_fr"
         item["external_link"] = external_link
         item["property_type"] = property_type
 

@@ -122,11 +122,11 @@ def traverse( data):
         return data
 
 class laforet(scrapy.Spider):
-    name = 'tourdiat_immobilier'
+    name = 'tourdiat_immobilier_PySpider_france_fr'
     allowed_domains = ['www.tourdiat-immobilier.com']
     start_urls = ['www.tourdiat-immobilier.com']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
     def start_requests(self):
@@ -291,7 +291,7 @@ class laforet(scrapy.Spider):
         item["landlord_name"] = "TOURDIAT MANAGEMENT"
         item["landlord_phone"] = "04 66 04 82 04"
         item["currency"] = "EUR"
-        item["external_source"] = "tourdiat-immobilier.com"
+        item["external_source"] = "tourdiat_immobilier_PySpider_france_fr"
 
         print (item)
         yield item

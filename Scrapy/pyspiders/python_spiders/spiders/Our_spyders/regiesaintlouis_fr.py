@@ -120,11 +120,11 @@ def traverse( data):
         return data
 
 class QuotesSpider(scrapy.Spider):
-    name = 'regiesaintlouis_fr'
+    name = 'regiesaintlouis_fr_PySpider_france_fr'
     allowed_domains = ['www.regiesaintlouis.com']
     start_urls = ['www.regiesaintlouis.com']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
     def start_requests(self):
@@ -325,7 +325,7 @@ class QuotesSpider(scrapy.Spider):
                 item["external_images_count"] = len(images_list)
 
         item["landlord_name"] = "Régie Saint-Louis"
-        item["external_source"] = "regiesaintlouis.com"
+        item["external_source"] = "regiesaintlouis_fr_PySpider_france_fr"
         item["currency"] = "EUR"
         item["landlord_email"]="location@saintlouis.immo"
         item["landlord_phone"] ="+33472845205" 

@@ -108,11 +108,11 @@ def traverse( data):
 
 
 class QuotesSpider(scrapy.Spider):
-    name = "descampiaux"
+    name = "descampiaux_PySpider_france_fr"
     allowed_domains = ['www.descampiaux-dudicourt.fr']
     start_urls = ['www.descampiaux-dudicourt.fr']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
     def start_requests(self):
@@ -234,7 +234,7 @@ class QuotesSpider(scrapy.Spider):
             if "Tél" in tel:
                 item["landlord_phone"] = tel.replace("Tél :", "").strip()
 
-        item["external_source"] = 'descampiaux-dudicourt.fr'
+        item["external_source"] = 'descampiaux_PySpider_france_fr'
 
         item["city"] = soup2.find("span", class_="ville").text
 

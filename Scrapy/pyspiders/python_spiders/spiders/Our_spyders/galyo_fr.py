@@ -122,11 +122,11 @@ def traverse( data):
         return data
 
 class laforet(scrapy.Spider):
-    name = 'galyo_fr'
+    name = 'galyo_fr_PySpider_france_fr'
     allowed_domains = ['www.galyo.fr']
     start_urls = ['www.galyo.fr']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
     def start_requests(self):
@@ -263,7 +263,7 @@ class laforet(scrapy.Spider):
 
         item["landlord_phone"] = "04 72 77 15 77"
         item["landlord_name"] = "GALYO"
-        item["external_source"] = "galyo.fr"
+        item["external_source"] = "galyo_fr_PySpider_france_fr"
         item["currency"] = "EUR"
         item["property_type"] = "apartment"
         print (item)

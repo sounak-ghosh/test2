@@ -66,11 +66,11 @@ def cleanKey(data):
 
 
 class laforet(scrapy.Spider):
-    name = 'immobilier_net'
+    name = 'immobilier_net_PySpider_france_fr'
     allowed_domains = ['www.immobilier.net']
     start_urls = ['www.immobilier.net']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
 
@@ -114,7 +114,7 @@ class laforet(scrapy.Spider):
         item["landlord_name"] = "AFDI Martinique"
         item["landlord_phone"] = "0596 70 1000"
         item["landlord_email"] = "martinique@immobilier.net"
-        item["external_source"] = "www.immobilier.net"
+        item["external_source"] = "immobilier_net_PySpider_france_fr"
         item["currency"] = "EUR"
         item["external_link"] = response.url
         item["title"] = soup.find("h2",class_="page-header").text.split("\n")[0].strip()

@@ -109,12 +109,12 @@ def traverse( data):
 
 
 class QuotesSpider(scrapy.Spider):
-    name = "cjhole"
+    name = "cjhole_PySpider_unitedkingdom_en"
     allowed_domains = ['www.cjhole.co.uk']
     start_urls = ['www.cjhole.co.uk']
     execution_type = 'testing'
-    country = 'french'
-    locale ='fr'
+    country = 'unitedkingdom'
+    locale ='en'
 
     def start_requests(self):
         url ='https://www.cjhole.co.uk/property?location=&intent=rent&include-sold=rent'
@@ -209,7 +209,7 @@ class QuotesSpider(scrapy.Spider):
         except Exception as e:
             pass
 
-        item["external_source"] = 'cjhole.co.uk'
+        item["external_source"] = 'cjhole_PySpider_unitedkingdom_en'
 
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
             print(item)

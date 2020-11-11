@@ -108,11 +108,11 @@ def traverse( data):
         return data
 
 class laforet(scrapy.Spider):
-    name = 'gestrimmonia'
+    name = 'gestrimmonia_PySpider_france_fr'
     allowed_domains = ['www.gestrimmonia.com']
     start_urls = ['www.gestrimmonia.com']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
     def start_requests(self):
@@ -241,7 +241,7 @@ class laforet(scrapy.Spider):
         item["city"] = city
         item["address"] = address
         item["zipcode"] = zipcode
-        item["external_source"] = "gestrimmonia.com"
+        item["external_source"] = "gestrimmonia_PySpider_france_fr"
         item["property_type"] = property_type
         item["currency"] = "EUR"
 

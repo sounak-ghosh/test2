@@ -68,11 +68,11 @@ def cleanKey(data):
 
 
 class laforet(scrapy.Spider):
-    name = 'bonnabelle'
+    name = 'bonnabelle_PySpider_france_fr'
     allowed_domains = ['www.bonnabelle.fr']
     start_urls = ['www.bonnabelle.fr']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
 
@@ -284,7 +284,7 @@ class laforet(scrapy.Spider):
         item["landlord_name"] = "Marielle Peltier"
         item["landlord_phone"] = "0383175862"
         item["landlord_email"] = "mpeltier@bonnabelle.com"
-        item["external_source"] = "bonnabelle.fr"
+        item["external_source"] = "bonnabelle_PySpider_france_fr"
 
         print (item)
         yield item

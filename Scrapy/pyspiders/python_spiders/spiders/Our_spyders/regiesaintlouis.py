@@ -122,11 +122,11 @@ def traverse( data):
         return data
 
 class laforet(scrapy.Spider):
-    name = 'regiesaintlouis'
+    name = 'regiesaintlouis_PySpider_france_fr'
     allowed_domains = ['www.regiesaintlouis.com']
     start_urls = ['www.regiesaintlouis.com']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
     def start_requests(self):
@@ -272,7 +272,7 @@ class laforet(scrapy.Spider):
         item["landlord_phone"] = "+33 4 72 84 52 05"
         item["landlord_email"] = "location@saintlouis.immo"
         item["currency"] = "EUR"
-        item["external_source"] = "regiesaintlouis.com"
+        item["external_source"] = "regiesaintlouis_PySpider_france_fr"
         item["external_link"] = response.url
 
 

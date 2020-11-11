@@ -120,11 +120,11 @@ def traverse( data):
         return data
 
 class QuotesSpider(scrapy.Spider):
-    name = 'immosquare_fr'
+    name = 'immosquare_fr_PySpider_france_fr'
     allowed_domains = ['www.immosquare.fr']
     start_urls = ['www.immosquare.fr']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
     def start_requests(self):
@@ -270,7 +270,7 @@ class QuotesSpider(scrapy.Spider):
 
 
         item["currency"] = "EUR"
-        item["external_source"] = "immosquare.fr"
+        item["external_source"] = "immosquare_fr_PySpider_france_fr"
         item["external_link"] = response.url
         item["city"] = response.meta["city"]
         item["rent"] = response.meta["rent"]

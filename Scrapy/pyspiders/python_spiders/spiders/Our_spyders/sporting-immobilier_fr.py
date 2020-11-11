@@ -26,11 +26,11 @@ def getAddress(lat,lng):
     return location.address
 
 class HenroimmoSpider(scrapy.Spider):
-    name = 'sporting-immobilier_fr'
+    name = 'sporting-immobilier_fr_PySpider_france_fr'
     allowed_domains = ['sporting-immobilier.fr']
     start_urls = ['https://www.sporting-immobilier.fr/']
     execution_type = 'testing'
-    country = 'belgium'
+    country = 'france'
     locale ='fr'
 
     def start_requests(self):
@@ -53,7 +53,7 @@ class HenroimmoSpider(scrapy.Spider):
 
     def get_details(self, response):
         item = ListingItem()
-        item['external_source'] = "sporting-immobilier.fr"
+        item['external_source'] = "sporting-immobilier_fr_PySpider_france_fr"
         item['external_link'] = response.url
         property_tp = response.xpath("//h1[@class='entry-title']/text()").extract_first()
         if 'Appartement' in property_tp:

@@ -23,11 +23,11 @@ def getSqureMtr(text):
     return output
 
 class QuotesSpider(scrapy.Spider):
-    name = "immobilier"
+    name = "immobilier_PySpider_france_fr"
     allowed_domains = ['www.lg-immobilier.fr']
     start_urls = ['www.lg-immobilier.fr']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
     def start_requests(self):
@@ -137,7 +137,7 @@ class QuotesSpider(scrapy.Spider):
         
         item["external_id"] = sub_soup.find("div", {"class": "col-md-2"}).find("h1").text.split(' ')[-1].split('°')[-1]
         
-        item["external_source"] = 'lg-immobilier.fr'
+        item["external_source"] = 'immobilier_PySpider_france_fr'
 
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
             print(item)

@@ -107,11 +107,11 @@ def traverse( data):
         return data
 
 class QuotesSpider(scrapy.Spider):
-    name = "lepointimmobilier"
+    name = "lepointimmobilier_PySpider_france_fr"
     allowed_domains = ['www.lepointimmobilier-agence.fr']
     start_urls = ['www.lepointimmobilier-agence.fr']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
     def start_requests(self):
@@ -241,7 +241,7 @@ class QuotesSpider(scrapy.Spider):
 
         item["external_id"] = temp_dic["r_f_annonce"]
 
-        item["external_source"] = 'lepointimmobilier-agence.fr'
+        item["external_source"] = 'lepointimmobilier_PySpider_france_fr'
 
         item["landlord_name"] = sub_soup.find("p", {"class" : "nom-agence"}).text
         item["landlord_phone"] = sub_soup.find("span", {"class":"tel"}).text.split(':')[-1]

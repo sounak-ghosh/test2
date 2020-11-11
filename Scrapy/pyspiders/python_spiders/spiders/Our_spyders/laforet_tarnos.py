@@ -108,12 +108,12 @@ def traverse( data):
         return data
 
 class laforet(scrapy.Spider):
-    name = 'laforet_tarnos'
+    name = 'laforet_tarnos_PySpider_france_fr'
     allowed_domains = ['www.laforet.com']
     start_urls = ['www.laforet.com']
     execution_type = 'testing'
-    country = 'dutch'
-    locale ='nl'
+    country = 'france'
+    locale ='fr'
 
     def start_requests(self):
         start_urls = [{"url":"https://www.laforet.com/api/immo/properties?page=1&perPage=200"}]
@@ -157,7 +157,7 @@ class laforet(scrapy.Spider):
         item["property_type"] = property_detail["type"].lower()
         item["description"] = property_detail["description"]
         item["currency"] = "EUR"
-        item["external_source"] = "laforet.com"
+        item["external_source"] = "laforet_tarnos_PySpider_france_fr"
 
 
 
