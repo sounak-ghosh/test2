@@ -85,7 +85,7 @@ class QuotesSpider(scrapy.Spider):
     allowed_domains = ['www.pastor-realestate.com']
     start_urls = ['www.pastor-realestate.com']
     execution_type = 'testing'
-    country = 'unitedkingdom'
+    country = 'united_kingdom'
     locale ='en'
 
     def start_requests(self):
@@ -144,7 +144,7 @@ class QuotesSpider(scrapy.Spider):
                 item["city"] = location.raw["address"]["village"]
             item["zipcode"] = location.raw["address"]["postcode"]
 
-
+ 
         title = soup.find("div", class_="col-md-12").find("h1").text.strip()
         item["title"] = title
 
@@ -153,7 +153,8 @@ class QuotesSpider(scrapy.Spider):
 
         if soup.find("div", class_="col-md-12").find("p", class_="item-price"):
             rent = getPrice(soup.find("div", class_="col-md-12").find("p", class_="item-price").text)
-            item["rent"] = rent
+            # rent = (rent/7)*30
+            item["rent"] = rent * 4
 
         details = soup.find("div", class_="tab-content details").find("div", class_="property-overview-content")
 

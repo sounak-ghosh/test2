@@ -73,7 +73,7 @@ class QuotesSpider(scrapy.Spider):
     allowed_domains = ['www.cubixestateagents.co.uk']
     start_urls = ['www.cubixestateagents.co.uk']
     execution_type = 'testing'
-    country = 'unitedkingdom'
+    country = 'united_kingdom'
     locale ='en'
 
     def start_requests(self):
@@ -158,7 +158,7 @@ class QuotesSpider(scrapy.Spider):
             item["dishwasher"] = True
         if "lift" in desc.lower() or "ascenseur" in desc.lower() or "elevator" in desc.lower():
             item["elevator"] = True
-
+ 
         temp_dic = {}
         details = soup.find("div",id="property-details").find("div", class_="detail-wrap").find("ul").find_all("li")
         for ech_det in details:
@@ -170,6 +170,7 @@ class QuotesSpider(scrapy.Spider):
         
         if "price" in temp_dic:
             item["rent"] = getPrice(temp_dic["price"])
+            item["rent"] = item["rent"] * 4
 
         if "propertysize" in temp_dic:
             item["square_meters"] = getSqureMtr(temp_dic["propertysize"])
