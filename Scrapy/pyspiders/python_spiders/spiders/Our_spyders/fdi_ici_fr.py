@@ -107,7 +107,7 @@ def traverse( data):
         return data
 
 class QuotesSpider(scrapy.Spider):
-    name = "fdi_PySpider_france_fr"
+    name = "fdi_ici_fr_PySpider_france_fr"
     allowed_domains = ['www.fdi-ici.fr']
     start_urls = ['www.fdi-ici.fr']
     execution_type = 'testing'
@@ -198,7 +198,7 @@ class QuotesSpider(scrapy.Spider):
 
         item["currency"]='EUR'
 
-        item["external_source"] = 'fdi_PySpider_france_fr'
+        item["external_source"] = 'fdi_ici_fr_PySpider_france_fr'
 
         item["landlord_name"] = sub_soup.find("div", class_="agence").text
 

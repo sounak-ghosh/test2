@@ -106,7 +106,7 @@ def traverse( data):
         return data
 
 class QuotesSpider(scrapy.Spider):
-    name = "santoni_PySpider_france_fr"
+    name = "santoni_fr_PySpider_france_fr"
     allowed_domains = ['www.santoni.fr']
     start_urls = ['www.santoni.fr']
     execution_type = 'testing'
@@ -266,7 +266,7 @@ class QuotesSpider(scrapy.Spider):
         item["rent"] = int(re.findall(r'\d+', rent)[0])
         item["description"] = soup2.find("div",{"class":"detail-bien-desc-content clearfix"}).find("p").text.strip()
         item["square_meters"] = int(re.findall('\d+',temp_dic["habitable"])[0])
-        item["external_source"] = 'santoni_PySpider_france_fr'
+        item["external_source"] = 'santoni_fr_PySpider_france_fr'
         item["external_id"] = soup2.findAll("span",itemprop="productID")[1].text.strip()
         item["landlord_name"] = soup2.find("strong", itemprop="name").text.strip()
         item["landlord_phone"] = soup2.find("li", itemprop="telephone").find("a").text.strip()

@@ -135,7 +135,7 @@ class QuotesSpider(scrapy.Spider):
         if "sqm" in temp_dic and getSqureMtr(temp_dic["sqm"]):
             item["square_meters"] = getSqureMtr(temp_dic["sqm"])
 
-        item["rent"] = getSqureMtr(soup2.find("h1",class_="detail-price").text)
+        item["rent"] = getSqureMtr(soup2.find("h1",class_="detail-price").text)*4
 
         description = soup2.find("div",class_="details-description").text
         item["description"] = description

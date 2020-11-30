@@ -78,11 +78,11 @@ def cleanKey(data):
         return data
 
 class QuotesSpider(scrapy.Spider):
-    name = "acornproperties_PySpider_uk_en"
+    name = "acornproperties_co_uk_PySpider_unitedkindom_en"
     allowed_domains = ['www.acornproperties.co.uk']
     start_urls = ['www.acornproperties.co.uk']
     execution_type = 'testing'
-    country = 'uk'
+    country = 'United Kingdom'
     locale ='en'
 
     def __init__(self):
@@ -244,7 +244,7 @@ class QuotesSpider(scrapy.Spider):
 
             dic["landlord_name"] = "Acorn Properties(Jesmond)"
             dic["landlord_phone"] = "0191 212 2020"
-            dic["external_source"] = "acornproperties_PySpider_uk_en"
+            dic["external_source"] = "acornproperties_co_uk_PySpider_unitedkindom_en"
             dic["currency"] = "GBP"
 
             prop_id = soup.find("body")["class"][-1].split("-")[-1].strip()

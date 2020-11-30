@@ -114,7 +114,6 @@ class QuotesSpider(scrapy.Spider):
         all_prop = soup.find("div", class_="listing-view list-view card-deck").find_all("div", class_="item-wrap item-wrap-v1 item-wrap-no-frame h-100")
         for ech_prop in all_prop:
             external_link = ech_prop.find("div", class_="item-header").find("a",class_="hover-effect")["href"]
-            print (external_link)
             yield scrapy.Request(
                 url=external_link,
                 callback=self.get_property_details
@@ -164,6 +163,8 @@ class QuotesSpider(scrapy.Spider):
         for ech_det in details:
             temp_dic[ech_det.find("strong").text] = ech_det.find("span").text
         temp_dic = cleanKey(temp_dic)
+        # print(temp_dic)
+        # print ("\n")
         
         if "propertyid" in temp_dic:
             item["external_id"] = temp_dic["propertyid"]
@@ -177,8 +178,15 @@ class QuotesSpider(scrapy.Spider):
         if "bedrooms" in temp_dic:
             item["room_count"] = int(temp_dic["bedrooms"])
 
+        if "bedroom" in temp_dic:
+            item["room_count"] = int(temp_dic["bedroom"])
+
         if "bathroom" in temp_dic:
             item["bathroom_count"] = int(temp_dic["bathroom"])
+
+        if "bathrooms" in temp_dic:
+            item["bathroom_count"] = int(temp_dic["bathrooms"])
+
 
         property_type="NA"
         if "propertytype" in temp_dic:
@@ -191,6 +199,9 @@ class QuotesSpider(scrapy.Spider):
             else:
                 property_type = "NA"
 
+
+        if soup.find("address",class_="item-address"):
+            item["address"] = soup.find("address",class_="item-address").text.strip()
 
 
         temp_dic = {}

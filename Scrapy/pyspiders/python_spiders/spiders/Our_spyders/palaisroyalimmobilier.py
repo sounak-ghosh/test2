@@ -86,18 +86,6 @@ class laforet(scrapy.Spider):
                 meta = {"property_type":urls.get("property_type")}
                 )
 
-    # def parse(self, response, **kwargs):
-    #     soup = BeautifulSoup(response.body,"html.parser")
-    #     tot_prop = soup.find("ul",class_="pagination").find_all("li")[-2].text
-    #     tot_prop = int(tot_prop)
-
-    #     for i in range(1,tot_prop+1):
-    #         url = "http://www.immobilier.net/rechercher.asp?budgetmin=0&budgetmax=0&type=&type=&type=&type=&type=&genre=LOCATION&cp=&cp=&cp=&cp=&cp=&categorie=&categorie=&categorie=&categorie=&categorie=&lieu=&lieu=&lieu=&lieu=&lieu=&page={}".format(i)
-    #         yield scrapy.Request(
-    #             url = url,
-    #             callback=self.parse2
-    #             )
-
     def parse(self,response,**kwargs):
         url = response.url
         soup = BeautifulSoup(response.body,"html.parser")

@@ -80,11 +80,11 @@ def cleanKey(data):
         return data
 
 class QuotesSpider(scrapy.Spider):
-    name = "finders_PySpider_uk_en"
+    name = "finders_co_uk_PySpider_unitedkingdom_en"
     allowed_domains = ['www.finders.co.uk']
     start_urls = ['www.finders.co.uk']
     execution_type = 'testing'
-    country = 'uk'
+    country = 'United Kingdom'
     locale ='en'
 
 
@@ -162,8 +162,6 @@ class QuotesSpider(scrapy.Spider):
         item = ListingItem()
 
         soup = BeautifulSoup(response.body,"html.parser")
-        print (response.url)
-        print (response.meta)
 
         for  key,value in response.meta.items():
             try:
@@ -171,12 +169,10 @@ class QuotesSpider(scrapy.Spider):
             except:
                 pass
 
-        # #details from 1st property
-        # #property details
         dtls = soup.find("p",class_="location_details_introduction_full").text
 
         item["description"] = dtls
-        #property images
+        item["external_source"] = "finders_co_uk_PySpider_unitedkingdom_en"
         pic = soup.find("div",class_="image_block fleft")
         picture = pic.find_all("div",class_="item")
         list_img = []
@@ -197,42 +193,3 @@ class QuotesSpider(scrapy.Spider):
 
         print (item)
         yield item
-
-
-
-
-
-
-        #contact number of all properties
-        # information = soup.find("div",id="search_results")
-        # ll = information.find_all("div",class_="property")
-        # contact_list = []
-        # for items in ll:
-        #     cont = items.find("span",class_="office").text
-        #     contact = cont.replace("- ","")
-            
-        #     contact_list.append(contact)
-
-
-        # #landlord name of all properties
-        # name = soup.find("div",id="search_results")
-        # tag = name.find_all("div",class_="property")
-        # landlord_list = []
-        # for items in tag:
-        #     names = items.find("p",class_="none office").text
-        #     names = names.replace("Office: ","")
-        #     names = names.replace("   - "," ")
-        #     names = names.split(" ")
-            
-        #     landlord_name = names[0:-2]
-        #     landlords = ''.join(landlord_name)
-            
-            # landlord_list.append(landlords)
-
-
-
-
-
-
-
-

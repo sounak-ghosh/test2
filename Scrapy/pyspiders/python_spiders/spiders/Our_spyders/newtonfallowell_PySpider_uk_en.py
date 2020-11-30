@@ -77,7 +77,7 @@ def strToDate(text):
 
 
 class laforet(scrapy.Spider):
-    name = 'newtonfallowell_PySpider_uk_en'
+    name = 'newtonfallowell_co_uk_PySpider_uk_en'
     allowed_domains = ['www.newtonfallowell.co.uk']
     start_urls = ['www.newtonfallowell.co.uk']
     execution_type = 'testing'
@@ -241,7 +241,7 @@ class laforet(scrapy.Spider):
         title = soup.find("h1", class_="property-address").text.strip()
         item["title"] = title
         item["external_link"] = response.url
-        item["external_source"] = "newtonfallowell_PySpider_uk_en"
+        item["external_source"] = "newtonfallowell_co_uk_PySpider_uk_en"
         item["property_type"] = "apartment"
         item["currency"] = "GBT"
         print (item)

@@ -120,12 +120,12 @@ def traverse( data):
         return data
 
 class QuotesSpider(scrapy.Spider):
-    name = 'prestant_en_PySpider_france_fr'
+    name = 'prestant_en_PySpider_france_en'
     allowed_domains = ['www.prestant.com']
     start_urls = ['www.prestant.com']
     execution_type = 'testing'
     country = 'france'
-    locale ='fr'
+    locale ='en'
 
     def start_requests(self):
         url="https://www.prestant.com/en/module/moteur/ajax.php?switch1=on&loc=location&surfacemin=0&capacite=2&idmodule=280663&1604545293182"
@@ -267,7 +267,7 @@ class QuotesSpider(scrapy.Spider):
         landlord = landlord.split("-")
         item["landlord_name"] = landlord[0].strip()
         item["landlord_phone"] = landlord[1].strip()
-        item["external_source"] = "prestant_en_PySpider_france_fr"
+        item["external_source"] = "prestant_en_PySpider_france_en"
         item["currency"] = "GBP"
         item["external_link"] = response.url
 

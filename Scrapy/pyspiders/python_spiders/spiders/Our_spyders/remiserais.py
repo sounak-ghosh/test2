@@ -108,7 +108,7 @@ def traverse( data):
 
 
 class QuotesSpider1(scrapy.Spider):
-    name = "remiserais_PySpider_france_fr"
+    name = "remiserais_immobilier_fr_PySpider_france_fr"
     allowed_domains = ['www.remiserais-immobilier.fr']
     start_urls = ['www.remiserais-immobilier.fr']
     execution_type = 'testing'
@@ -258,7 +258,7 @@ class QuotesSpider1(scrapy.Spider):
         if "codepostal" in temp_dic:
             item["zipcode"] = temp_dic["codepostal"]
 
-        item["external_source"] = 'remiserais_PySpider_france_fr'
+        item["external_source"] = 'remiserais_immobilier_fr_PySpider_france_fr'
 
         if "meubl" in temp_dic:
             if temp_dic["meubl"] == "Oui":
