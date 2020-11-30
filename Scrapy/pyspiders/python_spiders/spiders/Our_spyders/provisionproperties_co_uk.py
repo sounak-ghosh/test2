@@ -85,7 +85,7 @@ class QuotesSpider(scrapy.Spider):
     allowed_domains = ['www.provisionproperties.co.uk']
     start_urls = ['www.provisionproperties.co.uk']
     execution_type = 'testing'
-    country = 'unitedkingdom'
+    country = 'united_kingdom'
     locale ='en'
 
     def start_requests(self):
@@ -141,7 +141,7 @@ class QuotesSpider(scrapy.Spider):
         except Exception as e:
             print (str(e))
             pass
-
+ 
         title = soup.find("h1", class_="the_font blk cntr").text.strip()
         item["title"] = title
 
@@ -151,7 +151,7 @@ class QuotesSpider(scrapy.Spider):
             item["available_date"] = strToDate(date)
 
         rent = getSqureMtr(soup.find("div", id="property-spec").find("h3").text.replace(temp_date,""))
-        item["rent"] = int(rent)
+        item["rent"] = int(rent) * 4
 
         rooms = soup.find("div", id="property-spec").find("ul", class_="property-card-spec spacer").find("li", class_="spec beds").text.strip()
         item["room_count"] = int(rooms)
