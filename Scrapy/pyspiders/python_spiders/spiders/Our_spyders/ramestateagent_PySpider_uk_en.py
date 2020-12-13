@@ -6,21 +6,21 @@ from python_spiders.helper import remove_unicode_char, extract_rent_currency, fo
 import re,json
 from bs4 import BeautifulSoup
 import requests,time
-from geopy.geocoders import Nominatim
-import timestring
+# from geopy.geocoders import Nominatim
+# import timestring
 from word2number import w2n
 
-geolocator = Nominatim(user_agent="myGeocoder")
+# geolocator = Nominatim(user_agent="myGeocoder")
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
     zipcode, city = zip_city.split(" ")
     return zipcode, city
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng)
-    location = geolocator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng)
+#     location = geolocator.reverse(coordinates)
+#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
@@ -71,8 +71,8 @@ def strToDate(text):
         date = datetime.strptime(text, '%d/%m/%Y').strftime('%Y-%m-%d')
     elif "-" in text:
         date = datetime.strptime(text, '%Y-%m-%d').strftime('%Y-%m-%d')
-    else:
-        date = str(timestring.Date(text)).replace("00:00:00","").strip()
+    # else:
+    #     date = str(timestring.Date(text)).replace("00:00:00","").strip()
     return date
 
 
@@ -225,18 +225,18 @@ class QuotesSpider(scrapy.Spider):
             item['latitude'] = lat
             item['longitude'] = lng
 
-            location=getAddress(lat,lng)
-            address = location.address
+            # location=getAddress(lat,lng)
+            # address = location.address
 
-            if "city" in location.raw["address"]:
-                item["city"] = location.raw["address"]["city"]
-            elif "town" in location.raw["address"]:
-                item["city"] = location.raw["address"]["town"]
-            elif "village" in location.raw["address"]:
-                item["city"] = location.raw["address"]["village"]
+            # if "city" in location.raw["address"]:
+            #     item["city"] = location.raw["address"]["city"]
+            # elif "town" in location.raw["address"]:
+            #     item["city"] = location.raw["address"]["town"]
+            # elif "village" in location.raw["address"]:
+            #     item["city"] = location.raw["address"]["village"]
 
-            item["address"] = address
-            item["zipcode"] = location.raw["address"]["postcode"]
+            # item["address"] = address
+            # item["zipcode"] = location.raw["address"]["postcode"]
 
         con = soup.find('i',class_='fas fa-phone')
 

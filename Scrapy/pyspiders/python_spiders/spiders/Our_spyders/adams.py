@@ -7,16 +7,16 @@ import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-import geopy
-from geopy.geocoders import Nominatim
-from geopy.extra.rate_limiter import RateLimiter
+# import geopy
+# from geopy.geocoders import Nominatim
+# from geopy.extra.rate_limiter import RateLimiter
 
-locator = Nominatim(user_agent="myGeocoder")
+# locator = Nominatim(user_agent="myGeocoder")
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng) # "52","76"
-    location = locator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng) # "52","76"
+#     location = locator.reverse(coordinates)
+#     return location
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
@@ -169,9 +169,9 @@ class QuotesSpider(scrapy.Spider):
         lng = soup2.find("div", id="tabStreetView").find("iframe")['src'].replace('https://maps.google.com/maps?q=&layer=c&cbll=', '').split('&')[0].split(',')[1]
         item["latitude"] = str(lat)
         item["longitude"] = str(lng)
-        location = getAddress(lat, lng)
-        item["address"] = location.address
-        item["zipcode"]= location.raw["address"]["postcode"]
+        # location = getAddress(lat, lng)
+        # item["address"] = location.address
+        # item["zipcode"]= location.raw["address"]["postcode"]
 
         item["external_id"] = soup2.find("span", id="ctl00_ContentPlaceHolderMain_lblPropertyID").text
         item["external_source"] = 'adams_PySpider_france_en'

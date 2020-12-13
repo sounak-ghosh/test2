@@ -2,16 +2,16 @@
 import scrapy
 from ..items import ListingItem
 from ..helper import currency_parser, extract_number_only, remove_white_spaces, remove_unicode_char
-import geopy
-from geopy.geocoders import Nominatim
-geolocator = Nominatim(user_agent="myGeocoder")
+# import geopy
+# from geopy.geocoders import Nominatim
+# geolocator = Nominatim(user_agent="myGeocoder")
 import json
 import sys
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng)
-    location = geolocator.reverse(coordinates)
-    return location.address
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng)
+#     location = geolocator.reverse(coordinates)
+#     return location.address
 
 class HenroimmoSpider(scrapy.Spider):
     name = 'eson2_co_uk_PySpider_unitedkingdom_en'
@@ -92,9 +92,9 @@ class HenroimmoSpider(scrapy.Spider):
         item['latitude'] = json_geo['gmaps_latitude']
         item['longitude'] = json_geo['gmaps_longitude']
         
-        item['address'] = getAddress(item['latitude'],item['longitude'])
-        print(item['address'])
-        item['city'] = item['address'].split(",")[-4]
-        item['zipcode'] = item['address'].split(",")[-2]
+        # item['address'] = getAddress(item['latitude'],item['longitude'])
+        # print(item['address'])
+        # item['city'] = item['address'].split(",")[-4]
+        # item['zipcode'] = item['address'].split(",")[-2]
   
         yield item

@@ -2,15 +2,15 @@
 import scrapy
 from ..items import ListingItem
 from ..helper import currency_parser, extract_number_only, remove_white_spaces, remove_unicode_char
-import geopy
-from geopy.geocoders import Nominatim
-geolocator = Nominatim(user_agent="myGeocoder")
 import json
+# import geopy
+# from geopy.geocoders import Nominatim
+# geolocator = Nominatim(user_agent="myGeocoder")
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng)
-    location = geolocator.reverse(coordinates)
-    return location.address
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng)
+#     location = geolocator.reverse(coordinates)
+#     return location.address
 
 class HenroimmoSpider(scrapy.Spider):
     name = 'winstoncrown_com_PySpider_unitedkingdom_en'

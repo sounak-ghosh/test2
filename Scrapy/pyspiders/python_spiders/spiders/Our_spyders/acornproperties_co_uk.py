@@ -6,16 +6,16 @@ import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-import geopy
-from geopy.geocoders import Nominatim
-from geopy.extra.rate_limiter import RateLimiter
+# import geopy
+# from geopy.geocoders import Nominatim
+# from geopy.extra.rate_limiter import RateLimiter
 
-locator = Nominatim(user_agent="myGeocoder")
+# locator = Nominatim(user_agent="myGeocoder")
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng) # "52","76"
-    location = locator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng) # "52","76"
+#     location = locator.reverse(coordinates)
+#     return location
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
@@ -159,20 +159,20 @@ class QuotesSpider(scrapy.Spider):
                 lat = extract_lat[0]
                 lon = extract_lng[0]
 
-                location = getAddress(lat,lon)
-                address = location.address
+                # location = getAddress(lat,lon)
+                # address = location.address
 
-                dic["address"] = address
+                # dic["address"] = address
                 dic["latitude"]=lat
                 dic["longitude"]=lon
 
-                if "city" in location.raw["address"]:
-                    dic["city"] = location.raw["address"]["city"]
-                elif "town" in location.raw["address"]:
-                    dic["city"] = location.raw["address"]["town"]
+                # if "city" in location.raw["address"]:
+                #     dic["city"] = location.raw["address"]["city"]
+                # elif "town" in location.raw["address"]:
+                #     dic["city"] = location.raw["address"]["town"]
 
-                postcode = location.raw["address"]["postcode"]
-                dic["zipcode"] = postcode
+                # postcode = location.raw["address"]["postcode"]
+                # dic["zipcode"] = postcode
 
             ref_no = getSqureMtr(soup.find("section",class_="row property-content clearfix").find("div", class_="info clearfix").find("p").text)
             dic["external_id"] = str(ref_no)

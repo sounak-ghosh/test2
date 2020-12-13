@@ -5,16 +5,16 @@ import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-import geopy
-from geopy.geocoders import Nominatim
-from geopy.extra.rate_limiter import RateLimiter
+# import geopy
+# from geopy.geocoders import Nominatim
+# from geopy.extra.rate_limiter import RateLimiter
 
-locator = Nominatim(user_agent="myGeocoder")
+# locator = Nominatim(user_agent="myGeocoder")
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng) 
-    location = locator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng) 
+#     location = locator.reverse(coordinates)
+#     return location
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
@@ -175,11 +175,11 @@ class QuotesSpider(scrapy.Spider):
             item["images"]= images
             item["external_images_count"]= len(images)
 
-        location = getAddress(soup2.find("li", {"class": "gg-map-marker-lat"}).text,soup2.find("li", {"class": "gg-map-marker-lng"}).text)
+        # location = getAddress(soup2.find("li", {"class": "gg-map-marker-lat"}).text,soup2.find("li", {"class": "gg-map-marker-lng"}).text)
         item["latitude"] = soup2.find("li", {"class": "gg-map-marker-lat"}).text.strip()
         item["longitude"] = soup2.find("li", {"class": "gg-map-marker-lng"}).text.strip()
-        item["zipcode"]= location.raw["address"]["postcode"]
-        item["address"] = location.address
+        # item["zipcode"]= location.raw["address"]["postcode"]
+        # item["address"] = location.address
 
 
         temp_dic = {}

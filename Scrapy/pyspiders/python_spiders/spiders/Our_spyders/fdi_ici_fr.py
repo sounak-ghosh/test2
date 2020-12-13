@@ -6,16 +6,16 @@ import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-import geopy
-from geopy.geocoders import Nominatim
-from geopy.extra.rate_limiter import RateLimiter
+# import geopy
+# from geopy.geocoders import Nominatim
+# from geopy.extra.rate_limiter import RateLimiter
 
-locator = Nominatim(user_agent="myGeocoder")
+# locator = Nominatim(user_agent="myGeocoder")
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng) # "52","76"
-    location = locator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng) # "52","76"
+#     location = locator.reverse(coordinates)
+#     return location
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
@@ -236,11 +236,11 @@ class QuotesSpider(scrapy.Spider):
         if sub_soup.find("div", id="map"):
             item["latitude"] = sub_soup.find("div", id="map")['data-latitude']
             item["longitude"] = sub_soup.find("div", id="map")['data-longitude']
-            location = getAddress(item["latitude"],item["longitude"])
-            item["city"]= location.raw["address"]["municipality"]
-            # print(location.raw)
-            item["zipcode"]= location.raw["address"]["postcode"]
-            item["address"] = location.address
+            # location = getAddress(item["latitude"],item["longitude"])
+            # item["city"]= location.raw["address"]["municipality"]
+            # # print(location.raw)
+            # item["zipcode"]= location.raw["address"]["postcode"]
+            # item["address"] = location.address
         else:
             item["city"] = str(sub_soup.find("small", class_="text-uppercase").text).split(' ')[0]
             item["zipcode"] = re.findall('\d+',sub_soup.find("small", class_="text-uppercase").text)[0]

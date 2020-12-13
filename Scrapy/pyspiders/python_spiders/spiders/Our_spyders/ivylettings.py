@@ -7,17 +7,17 @@ import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-import geopy
-from geopy.geocoders import Nominatim
-from geopy.extra.rate_limiter import RateLimiter
+# import geopy
+# from geopy.geocoders import Nominatim
+# from geopy.extra.rate_limiter import RateLimiter
 from scrapy.selector import Selector
 
-locator = Nominatim(user_agent="myGeocoder")
+# locator = Nominatim(user_agent="myGeocoder")
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng) # "52","76"
-    location = locator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng) # "52","76"
+#     location = locator.reverse(coordinates)
+#     return location
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
@@ -124,9 +124,9 @@ class QuotesSpider(scrapy.Spider):
 
         item["latitude"] = response.meta.get('lat')
         item["longitude"] = response.meta.get('lng')
-        location = getAddress(response.meta.get('lat'), response.meta.get('lng'))
-        item["address"] = location.address
-        item["zipcode"]= location.raw["address"]["postcode"]
+        # location = getAddress(response.meta.get('lat'), response.meta.get('lng'))
+        # item["address"] = location.address
+        # item["zipcode"]= location.raw["address"]["postcode"]
 
 
         if "apartment" in description.lower():

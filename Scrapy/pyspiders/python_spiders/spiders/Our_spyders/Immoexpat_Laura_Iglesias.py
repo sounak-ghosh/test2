@@ -7,9 +7,9 @@ import re
 from bs4 import BeautifulSoup
 import requests
 from datetime import datetime
-from geopy.geocoders import Nominatim
+# from geopy.geocoders import Nominatim
 
-geolocator = Nominatim(user_agent="test_app")
+# geolocator = Nominatim(user_agent="test_app")
 
 def strToDate(text):
     if "/" in text:
@@ -28,10 +28,10 @@ def extract_city_zipcode(_address):
     zipcode, city = zip_city.split(" ")
     return zipcode, city
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng)
-    location = geolocator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng)
+#     location = geolocator.reverse(coordinates)
+#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
@@ -280,20 +280,20 @@ class auditaSpider(scrapy.Spider):
         
         item["longitude"] = str(lat_lon[1])
 
-        location = getAddress(lat_lon[0],lat_lon[1])
+        # location = getAddress(lat_lon[0],lat_lon[1])
         # address = location.address
-        if "city" in location.raw["address"]:
-            city = location.raw["address"]["city"]
-            item["city"] = city
-        elif "town" in location.raw["address"]:
-            city = location.raw["address"]["town"]
-            item["city"] = city
-        elif "village" in location.raw["address"]:
-            city = location.raw["address"]["village"]
-            item["city"] = city
-        if "postcode" in location.raw["address"]:
-            postcode = location.raw["address"]["postcode"]
-            item["zipcode"] = postcode
+        # if "city" in location.raw["address"]:
+        #     city = location.raw["address"]["city"]
+        #     item["city"] = city
+        # elif "town" in location.raw["address"]:
+        #     city = location.raw["address"]["town"]
+        #     item["city"] = city
+        # elif "village" in location.raw["address"]:
+        #     city = location.raw["address"]["village"]
+        #     item["city"] = city
+        # if "postcode" in location.raw["address"]:
+        #     postcode = location.raw["address"]["postcode"]
+        #     item["zipcode"] = postcode
 
         image_list = []
         for ech_img in soup.find("div", class_="estate-detail-carousel__body").find_all("div", class_="item"):

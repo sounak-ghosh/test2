@@ -12,10 +12,10 @@ def extract_city_zipcode(_address):
     zipcode, city = zip_city.split(" ")
     return zipcode, city
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng)
-    location = geolocator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng)
+#     location = geolocator.reverse(coordinates)
+#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
@@ -265,8 +265,8 @@ class UpgradeimmoSpider(scrapy.Spider):
 
 
 
-            location = getAddress(rec["latitude"],rec["longitude"])
-            item["zipcode"]= location.raw["address"]["postcode"]
+            # location = getAddress(rec["latitude"],rec["longitude"])
+            # item["zipcode"]= location.raw["address"]["postcode"]
 
             
         item["landlord_phone"]= soup2.find('ul',id='sub__nav').find('a',class_=re.compile('mobile')).text

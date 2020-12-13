@@ -7,16 +7,16 @@ import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-import geopy
-from geopy.geocoders import Nominatim
-from geopy.extra.rate_limiter import RateLimiter
+# import geopy
+# from geopy.geocoders import Nominatim
+# from geopy.extra.rate_limiter import RateLimiter
 
-locator = Nominatim(user_agent="myGeocoder")
+# locator = Nominatim(user_agent="myGeocoder")
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng) # "52","76"
-    location = locator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng) # "52","76"
+#     location = locator.reverse(coordinates)
+#     return location
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
@@ -181,12 +181,12 @@ class QuotesSpider(scrapy.Spider):
         lng = (re.findall(".setView(.+)",str_soup)[0])[2:-7].split(',')[1].strip()
         item["latitude"] = lat
         item["longitude"] = lng
-        location = getAddress(lat, lng)
+        # location = getAddress(lat, lng)
         # print(location.raw['address'])
-        if "postcode" in location.raw['address']:
-            item["zipcode"]= location.raw["address"]["postcode"]
-        if "city" in location.raw['address']:
-            item["city"] = location.raw["address"]["city"]
+        # if "postcode" in location.raw['address']:
+        #     item["zipcode"]= location.raw["address"]["postcode"]
+        # if "city" in location.raw['address']:
+        #     item["city"] = location.raw["address"]["city"]
         item["landlord_name"] = soup2.find("h3", class_="text-secondary").text.replace('Contact', '').strip()
         item["landlord_phone"] = soup2.find("p", class_="m-0").text.strip().replace('Call', '').strip()
         

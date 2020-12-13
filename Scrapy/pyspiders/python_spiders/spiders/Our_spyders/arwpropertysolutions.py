@@ -7,16 +7,16 @@ import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-import geopy
-from geopy.geocoders import Nominatim
-from geopy.extra.rate_limiter import RateLimiter
+# import geopy
+# from geopy.geocoders import Nominatim
+# from geopy.extra.rate_limiter import RateLimiter
 
-locator = Nominatim(user_agent="myGeocoder")
+# locator = Nominatim(user_agent="myGeocoder")
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng) # "52","76"
-    location = locator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng) # "52","76"
+#     location = locator.reverse(coordinates)
+#     return location
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
@@ -156,11 +156,11 @@ class QuotesSpider(scrapy.Spider):
         if lat and lng:
             item["latitude"] = lat
             item["longitude"] = lng
-            location = getAddress(lat,lng)
-            item["zipcode"]= location.raw["address"]["postcode"]
-            item["address"] = location.address
-            if "city" in location.raw["address"]:
-                item["city"] = location.raw["address"]["city"]
+            # location = getAddress(lat,lng)
+            # item["zipcode"]= location.raw["address"]["postcode"]
+            # item["address"] = location.address
+            # if "city" in location.raw["address"]:
+            #     item["city"] = location.raw["address"]["city"]
 
         if "address" not in item and soup2.find("h5",class_="details-address1"):
             address = soup2.find("h5",class_="details-address1").text.strip()

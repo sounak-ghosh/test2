@@ -6,8 +6,8 @@ from python_spiders.helper import remove_unicode_char, extract_rent_currency, fo
 import re,json
 from bs4 import BeautifulSoup
 import requests,time
-from geopy.geocoders import Nominatim
-import timestring
+# from geopy.geocoders import Nominatim
+# import timestring
 from word2number import w2n
 
 geolocator = Nominatim(user_agent="myGeocoder")
@@ -17,10 +17,10 @@ def extract_city_zipcode(_address):
     zipcode, city = zip_city.split(" ")
     return zipcode, city
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng)
-    location = geolocator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng)
+#     location = geolocator.reverse(coordinates)
+#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
@@ -71,8 +71,8 @@ def strToDate(text):
         date = datetime.strptime(text, '%d/%m/%Y').strftime('%Y-%m-%d')
     elif "-" in text:
         date = datetime.strptime(text, '%Y-%m-%d').strftime('%Y-%m-%d')
-    else:
-        date = str(timestring.Date(text)).replace("00:00:00","").strip()
+    # else:
+    #     date = str(timestring.Date(text)).replace("00:00:00","").strip()
     return date
 
 
@@ -129,10 +129,10 @@ class laforet(scrapy.Spider):
         if rent:
             item["rent"] = rent
 
-        if num_there(soup.find("section",class_="background-default property-header").find("div",class_="property-price-availability flex-grow-1").find("div",class_="availability").text):
-            date = soup.find("section",class_="background-default property-header").find("div",class_="property-price-availability flex-grow-1").find("div",class_="availability").text.replace("Available from:","").strip()
-            date = strToDate(date)
-            item["available_date"] = date
+        # if num_there(soup.find("section",class_="background-default property-header").find("div",class_="property-price-availability flex-grow-1").find("div",class_="availability").text):
+        #     date = soup.find("section",class_="background-default property-header").find("div",class_="property-price-availability flex-grow-1").find("div",class_="availability").text.replace("Available from:","").strip()
+        #     date = strToDate(date)
+        #     item["available_date"] = date
 
         if soup.find("section",class_="background-default property-header").find("div",class_="property-meta").find("span",title="Bedrooms"):
             room = soup.find("section",class_="background-default property-header").find("div",class_="property-meta").find("span",title="Bedrooms").find("span").text
@@ -223,20 +223,20 @@ class laforet(scrapy.Spider):
         lat = soup.find("div", id="property-map")["data-lat"]
         lon = soup.find("div", id="property-map")["data-lng"]
 
-        location=getAddress(lat,lon)
-        address = location.address
-        item["address"] = address
+        # location=getAddress(lat,lon)
+        # address = location.address
+        # item["address"] = address
         item["latitude"] = lat
         item["longitude"] = lon
 
-        if "city" in location.raw["address"]:
-            item["city"] = location.raw["address"]["city"]
-        elif "town" in location.raw["address"]:
-            item["city"] = location.raw["address"]["town"]
-        elif "village" in location.raw["address"]:
-            item["city"] = location.raw["address"]["village"]
-        if "postcode" in location.raw["address"]:
-            item["zipcode"] = location.raw["address"]["postcode"]
+        # if "city" in location.raw["address"]:
+        #     item["city"] = location.raw["address"]["city"]
+        # elif "town" in location.raw["address"]:
+        #     item["city"] = location.raw["address"]["town"]
+        # elif "village" in location.raw["address"]:
+        #     item["city"] = location.raw["address"]["village"]
+        # if "postcode" in location.raw["address"]:
+        #     item["zipcode"] = location.raw["address"]["postcode"]
 
         title = soup.find("h1", class_="property-address").text.strip()
         item["title"] = title

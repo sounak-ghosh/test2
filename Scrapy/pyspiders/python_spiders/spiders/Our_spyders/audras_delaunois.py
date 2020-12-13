@@ -6,19 +6,19 @@ from python_spiders.helper import remove_unicode_char, extract_rent_currency, fo
 import re,json
 from bs4 import BeautifulSoup
 import requests,time
-from geopy.geocoders import Nominatim
+# from geopy.geocoders import Nominatim
 
-geolocator = Nominatim(user_agent="myGeocoder")
+# geolocator = Nominatim(user_agent="myGeocoder")
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
     zipcode, city = zip_city.split(" ")
     return zipcode, city
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng)
-    location = geolocator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng)
+#     location = geolocator.reverse(coordinates)
+#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
@@ -142,22 +142,22 @@ class laforet(scrapy.Spider):
             lat=str(lat_lon["latitude"])
             lon=str(lat_lon["longitude"])
 
-            location=getAddress(lat,lon)
+            # location=getAddress(lat,lon)
             item["latitude"] = lat
             item["longitude"] = lon
 
-            if "city" in location.raw["address"]:
-                city = location.raw["address"]["city"]
-                item["city"] = city
-            elif "town" in location.raw["address"]:
-                city = location.raw["address"]["town"]
-                item["city"] = city
-            elif "village" in location.raw["address"]:
-                city = location.raw["address"]["village"]
-                item["city"] = city
+            # if "city" in location.raw["address"]:
+            #     city = location.raw["address"]["city"]
+            #     item["city"] = city
+            # elif "town" in location.raw["address"]:
+            #     city = location.raw["address"]["town"]
+            #     item["city"] = city
+            # elif "village" in location.raw["address"]:
+            #     city = location.raw["address"]["village"]
+            #     item["city"] = city
 
-            postcode = location.raw["address"]["postcode"]
-            item["zipcode"] = postcode
+            # postcode = location.raw["address"]["postcode"]
+            # item["zipcode"] = postcode
 
 
         d = soup.find("div", class_="column col-md-12 col-8").find_all("h2")

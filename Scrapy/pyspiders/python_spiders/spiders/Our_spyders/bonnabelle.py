@@ -6,19 +6,19 @@ from python_spiders.helper import remove_unicode_char, extract_rent_currency, fo
 import re,json
 from bs4 import BeautifulSoup
 import requests,time
-from geopy.geocoders import Nominatim
+# from geopy.geocoders import Nominatim
 
-geolocator = Nominatim(user_agent="myGeocoder")
+# geolocator = Nominatim(user_agent="myGeocoder")
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
     zipcode, city = zip_city.split(" ")
     return zipcode, city
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng)
-    location = geolocator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng)
+#     location = geolocator.reverse(coordinates)
+#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
@@ -189,9 +189,9 @@ class laforet(scrapy.Spider):
             item["latitude"] = str(latitude)
             item["longitude"] = str(longitude)
 
-            location = getAddress(latitude,longitude)
-            postcode = location.raw["address"]["postcode"]
-            item["zipcode"] = postcode
+            # location = getAddress(latitude,longitude)
+            # postcode = location.raw["address"]["postcode"]
+            # item["zipcode"] = postcode
 
 
         img = soup1.find("div", class_="owlImg owl-carousel owl-theme").find_all("source")

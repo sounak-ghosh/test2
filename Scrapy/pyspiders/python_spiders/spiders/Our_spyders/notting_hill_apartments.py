@@ -7,9 +7,9 @@ import re
 from bs4 import BeautifulSoup
 import requests
 from datetime import datetime
-from geopy.geocoders import Nominatim
+# from geopy.geocoders import Nominatim
 
-geolocator = Nominatim(user_agent="test_app")
+# geolocator = Nominatim(user_agent="test_app")
 
 
 def num_there(s):
@@ -20,10 +20,10 @@ def extract_city_zipcode(_address):
     zipcode, city = zip_city.split(" ")
     return zipcode, city
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng)
-    location = geolocator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng)
+#     location = geolocator.reverse(coordinates)
+#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)

@@ -13,15 +13,15 @@ from multiprocessing import Process, Pool
 import random
 import os
 from datetime import datetime
-import geopy
-from geopy.geocoders import Nominatim
+# import geopy
+# from geopy.geocoders import Nominatim
 
-locator = Nominatim(user_agent="myGeocoder")
+# locator = Nominatim(user_agent="myGeocoder")
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng)
-    location = locator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng)
+#     location = locator.reverse(coordinates)
+#     return location
 
 def strToDate(text):
     if "/" in text:
@@ -112,8 +112,8 @@ class UpgradeimmoSpider(scrapy.Spider):
                 if "location" in j_data:
                     item["latitude"],item["longitude"] = str(j_data['location']['latitude']),str(j_data['location']['longitude'])
 
-                    location = getAddress(item["latitude"],item["longitude"])
-                    item["address"] = location.address
+                    # location = getAddress(item["latitude"],item["longitude"])
+                    # item["address"] = location.address
                 
                 if "address" not in item:
                     try:

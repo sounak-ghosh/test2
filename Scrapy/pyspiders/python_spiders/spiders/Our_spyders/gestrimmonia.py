@@ -6,22 +6,22 @@ from python_spiders.helper import remove_unicode_char, extract_rent_currency, fo
 import re,json
 from bs4 import BeautifulSoup
 import requests
-import geopy
-from geopy.geocoders import Nominatim
+# import geopy
+# from geopy.geocoders import Nominatim
 
 
 
-geolocator = Nominatim(user_agent="myGeocoder")
+# geolocator = Nominatim(user_agent="myGeocoder")
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
     zipcode, city = zip_city.split(" ")
     return zipcode, city
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng)
-    location = geolocator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng)
+#     location = geolocator.reverse(coordinates)
+#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
@@ -215,9 +215,9 @@ class laforet(scrapy.Spider):
                     item["energy_label"] = soup.find("div",class_="etiquette").text.strip()
 
 
-        location = getAddress(latitude,longitude)
-        address = location.address
-        zipcode = location.raw["address"]["postcode"]
+        # location = getAddress(latitude,longitude)
+        # address = location.address
+        # zipcode = location.raw["address"]["postcode"]
 
         if ("tudiant" in title.lower() or  "studenten" in title.lower()) and ("appartement" in title.lower() or "apartment" in title.lower()):
             property_type = "student_apartment"
@@ -239,8 +239,8 @@ class laforet(scrapy.Spider):
         item["longitude"] = longitude
         item["title"] = title
         item["city"] = city
-        item["address"] = address
-        item["zipcode"] = zipcode
+        # item["address"] = address
+        # item["zipcode"] = zipcode
         item["external_source"] = "gestrimmonia_PySpider_france_fr"
         item["property_type"] = property_type
         item["currency"] = "EUR"

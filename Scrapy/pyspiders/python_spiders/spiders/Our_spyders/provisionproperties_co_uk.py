@@ -6,32 +6,32 @@ from python_spiders.helper import remove_unicode_char, extract_rent_currency, fo
 import re,json
 from bs4 import BeautifulSoup
 import requests
-import geopy
-from geopy.geocoders import Nominatim
-import timestring
+# import geopy
+# from geopy.geocoders import Nominatim
+# import timestring
 from datetime import datetime
 
-geolocator = Nominatim(user_agent="myGeocoder")
+# geolocator = Nominatim(user_agent="myGeocoder")
 
 def strToDate(text):
     if "/" in text:
         date = datetime.strptime(text, '%d/%m/%Y').strftime('%Y-%m-%d')
     elif "-" in text:
         date = datetime.strptime(text, '%Y-%m-%d').strftime('%Y-%m-%d')
-    else:
-        date = str(timestring.Date(text)).replace("00:00:00","").strip()
+    # else:
+    #     date = str(timestring.Date(text)).replace("00:00:00","").strip()
     return date
 
 
-def get_lat_lon(_address):
-    location = geolocator.geocode(_address)
-    return location.latitude,location.longitude
+# def get_lat_lon(_address):
+#     location = geolocator.geocode(_address)
+#     return location.latitude,location.longitude
 
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng)
-    location = geolocator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng)
+#     location = geolocator.reverse(coordinates)
+#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
@@ -124,23 +124,23 @@ class QuotesSpider(scrapy.Spider):
         address = soup.find("h2", class_="the_font pnk").text.strip()
         item["address"] = address
 
-        try:
-            lat,lon = get_lat_lon(address)
-            item["latitude"] = str(lat)
-            item["longitude"] = str(lon)
-            location = getAddress(lat,lon)
-            if "city" in location.raw["address"]:
-                item["city"] = location.raw["address"]["city"]
-            if "town" in location.raw["address"]:
-                item["city"] = location.raw["address"]["town"]
-            elif "village" in location.raw["address"]:
-                item["city"] = location.raw["address"]["village"]
-            postcode = location.raw["address"]["postcode"]
-            item["zipcode"] = postcode
+        # try:
+        #     lat,lon = get_lat_lon(address)
+        #     item["latitude"] = str(lat)
+        #     item["longitude"] = str(lon)
+        #     location = getAddress(lat,lon)
+        #     if "city" in location.raw["address"]:
+        #         item["city"] = location.raw["address"]["city"]
+        #     if "town" in location.raw["address"]:
+        #         item["city"] = location.raw["address"]["town"]
+        #     elif "village" in location.raw["address"]:
+        #         item["city"] = location.raw["address"]["village"]
+        #     postcode = location.raw["address"]["postcode"]
+        #     item["zipcode"] = postcode
 
-        except Exception as e:
-            print (str(e))
-            pass
+        # except Exception as e:
+        #     print (str(e))
+        #     pass
  
         title = soup.find("h1", class_="the_font blk cntr").text.strip()
         item["title"] = title

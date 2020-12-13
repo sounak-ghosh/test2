@@ -6,20 +6,20 @@ from python_spiders.helper import remove_unicode_char, extract_rent_currency, fo
 import re,json
 from bs4 import BeautifulSoup
 import requests
-import geopy
-from geopy.geocoders import Nominatim
+# import geopy
+# from geopy.geocoders import Nominatim
 
-geolocator = Nominatim(user_agent="myGeocoder")
+# geolocator = Nominatim(user_agent="myGeocoder")
 
-def get_lat_lon(_address):
-    location = geolocator.geocode(_address)
-    return location.latitude,location.longitude
+# def get_lat_lon(_address):
+#     location = geolocator.geocode(_address)
+#     return location.latitude,location.longitude
 
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng)
-    location = geolocator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng)
+#     location = geolocator.reverse(coordinates)
+#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)

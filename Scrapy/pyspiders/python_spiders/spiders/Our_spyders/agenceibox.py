@@ -6,22 +6,22 @@ from python_spiders.helper import remove_unicode_char, extract_rent_currency, fo
 import re,json
 from bs4 import BeautifulSoup
 import requests
-import geopy
-from geopy.geocoders import Nominatim
+# import geopy
+# from geopy.geocoders import Nominatim
 
 
 
-geolocator = Nominatim(user_agent="myGeocoder")
+# geolocator = Nominatim(user_agent="myGeocoder")
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
     zipcode, city = zip_city.split(" ")
     return zipcode, city
 
-def getAddress(lat,lng):
-    coordinates = str(lat)+","+str(lng)
-    location = geolocator.reverse(coordinates)
-    return location
+# def getAddress(lat,lng):
+#     coordinates = str(lat)+","+str(lng)
+#     location = geolocator.reverse(coordinates)
+#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
@@ -211,14 +211,14 @@ class QuotesSpider(scrapy.Spider):
         extract_text = re.findall("center:(.+)},",str_soup)
         lat_lon = extract_text[0].strip()+"}"
         lat_lon = eval(lat_lon.replace("lat",'"latitude"').replace("lng",'"longitude"'))
-        location = getAddress(lat_lon["latitude"],lat_lon["longitude"])
-        address = location.address
+        # location = getAddress(lat_lon["latitude"],lat_lon["longitude"])
+        # address = location.address
 
 
-        if "city" in location.raw["address"]:
-            item["city"] = location.raw["address"]["city"]
-        elif "town" in location.raw["address"]:
-            item["city"] = location.raw["address"]["town"]
+        # if "city" in location.raw["address"]:
+        #     item["city"] = location.raw["address"]["city"]
+        # elif "town" in location.raw["address"]:
+        #     item["city"] = location.raw["address"]["town"]
 
         if soup.find("ul",class_="imageGallery notLoaded"):
             all_img = soup.find("ul",class_="imageGallery notLoaded").find_all("li")
@@ -297,7 +297,7 @@ class QuotesSpider(scrapy.Spider):
         item["square_meters"] = square_meters
         item["description"] = description
         item["external_id"] = external_id
-        item["address"] = address
+        # item["address"] = address
         item["latitude"] = str(lat_lon["latitude"])
         item["longitude"] = str(lat_lon["longitude"])
         item["title"] = title
