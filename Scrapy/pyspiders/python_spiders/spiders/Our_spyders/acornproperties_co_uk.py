@@ -208,7 +208,11 @@ class QuotesSpider(scrapy.Spider):
                     if "apartment" in ech_feat.text.lower() or "building" in ech_feat.text.lower():
                         dic["property_type"] = "apartment"
 
-
+            for ech_feat in all_features:
+                if 'parking' in ech_feat.text.lower():
+                    dic['parking'] = True
+                if 'floor' in ech_feat.text.lower():
+                    dic['floor'] = ech_feat.text   
 
             
             title = (soup.find("p",class_="property-sale").text)
