@@ -70,9 +70,19 @@ class HenroimmoSpider(scrapy.Spider):
                 item['terrace'] = True 
             if 'balcony' in f.lower():
                 item['balcony'] = True 
-        item['floor_plan_images'] =   response.xpath("//a[contains(text(),'Floor Plan')]/@href").extract()[0]
-        item['bathroom_count'] =   int(response.xpath("//div[@class='col-xs-3 col-md-2']/span/span/text()").extract()[1])
-    #     sq_met =  response.xpath("//label[contains(text(),'Surface habitable')]/following-sibling::text()").extract()[0]
+        try:        
+            item['floor_plan_images'] =   response.xpath("//a[contains(text(),'Floor Plan')]/@href").extract()[0]
+        except:
+            pass
+        try:    
+            item['bathroom_count'] =   int(response.xpath("//div[@class='col-xs-3 col-md-2']/span/span/text()").extract()[1])
+        except:
+            pass
+        sq_met =  response.xpath("//section[@id='description']//p/text()").extract()
+        for sq in sq_met:
+            if 'Total floor space:' in sq:
+                item['square_meters'] = int(sq.split(":")[1].split("m²")[0].strip())
+                break
     #     item['square_meters'] = extract_number_only(remove_unicode_char(sq_met))
     #     item['deposit'] = response.xpath("//label[contains(text(),'Dépôt de garantie')]/following-sibling::text()").extract_first()
     #     if item['deposit']:
