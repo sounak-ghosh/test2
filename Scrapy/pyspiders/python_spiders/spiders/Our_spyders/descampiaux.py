@@ -1,3 +1,4 @@
+# Author: Sounak Ghosh
 import scrapy
 import js2xml
 import re

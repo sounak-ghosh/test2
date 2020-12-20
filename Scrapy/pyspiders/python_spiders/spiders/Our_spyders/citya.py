@@ -1,3 +1,4 @@
+# Author: Sounak Ghosh
 import scrapy
 import re
 from bs4 import BeautifulSoup

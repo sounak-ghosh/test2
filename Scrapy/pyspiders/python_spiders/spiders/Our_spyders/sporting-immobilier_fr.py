@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# Author: Sounak Ghosh
 import scrapy,re
 from ..items import ListingItem
 from ..helper import currency_parser, extract_number_only, remove_white_spaces, remove_unicode_char

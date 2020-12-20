@@ -86,13 +86,15 @@ class QuotesSpider(scrapy.Spider):
     country = 'United Kingdom'
     locale ='en'
 
-    def __init__(self):
-        self.student_flag = False
-        self.apartment_flag = False
+    # def __init__(self):
+    #     self.student_flag = False
+    #     self.apartment_flag = False
 
 
 
     def start_requests(self):
+        self.student_flag = False
+        self.apartment_flag = False
 
         start_url =[{"property_type":"apartment","url":"https://www.acornproperties.co.uk/properties/?text-search=&radiusProf=&prof-min-price=&prof-max-price=&beds=&search-box-radio=prof&order=high&pag={}&view=grid"},
         {"property_type":"student_apartment","url":"https://www.acornproperties.co.uk/properties/?text-search=&radius=&stud-min-price=&stud-max-price=&beds=&search-box-radio=stud&order=high&pag={}&view=grid"}]
