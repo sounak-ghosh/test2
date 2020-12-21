@@ -158,7 +158,15 @@ class QuotesSpider(scrapy.Spider):
             item["dishwasher"] = True
         if "lift" in desc.lower() or "ascenseur" in desc.lower() or "elevator" in desc.lower():
             item["elevator"] = True
- 
+
+        features = soup.find('div',id='property-features-wrap').findAll('li')
+        for f in features:
+            if 'Parking' in f.get_text() or 'parking' in f.get_text():
+                item["parking"]=True 
+
+            if 'Lift' in f.get_text():
+                item["elevator"]=True     
+
         temp_dic = {}
         details = soup.find("div",id="property-details").find("div", class_="detail-wrap").find("ul").find_all("li")
         for ech_det in details:
@@ -172,7 +180,7 @@ class QuotesSpider(scrapy.Spider):
         
         if "price" in temp_dic:
             item["rent"] = getPrice(temp_dic["price"])
-            item["rent"] = item["rent"] * 4
+            # item["rent"] = item["rent"] * 4
 
         if "propertysize" in temp_dic:
             item["square_meters"] = getSqureMtr(temp_dic["propertysize"])

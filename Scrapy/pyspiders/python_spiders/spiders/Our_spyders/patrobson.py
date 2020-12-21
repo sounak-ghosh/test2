@@ -115,8 +115,11 @@ class QuotesSpider(scrapy.Spider):
 
         if "bedrooms" in temp_dic:
             item["room_count"] = getSqureMtr(temp_dic["bedrooms"])
+        elif "bedroom" in temp_dic:   
+                item["room_count"] = getSqureMtr(temp_dic["bedroom"])    
         if "bathrooms" in temp_dic:
             item["bathroom_count"] = getSqureMtr(temp_dic["bathrooms"])
+
         elif "bathroom" in temp_dic:
             item["bathroom_count"] = getSqureMtr(temp_dic["bathroom"])
         else:
@@ -164,8 +167,19 @@ class QuotesSpider(scrapy.Spider):
         if images or floor_image:
             item["external_images_count"]= len(images) + len(floor_image)
 
-        item["currency"]='EUR'
+        item["currency"]='GBP'
         item["external_source"] = 'patrobson_com_PySpider_unitedkingdom_en'
+        
+        item["landlord_phone"] = "01912090100"
+        # item["landlord_email"] = "info@cubixestateagents.co.uk"
+        item["landlord_name"] = "Pat Robson"
+
+        if 'city-centre' in item["external_link"]:
+            item["landlord_email"] = 'citycentre@patrobson.com'
+        if 'jesmond' in item["external_link"]:
+            item["landlord_email"] = 'jesmond@patrobson.com' 
+        if 'gosforth' in item["external_link"]:
+            item["landlord_email"] = 'gosforth@patrobson.com'        
 
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
             print(item)
