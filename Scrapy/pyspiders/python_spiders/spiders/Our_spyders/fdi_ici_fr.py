@@ -7,16 +7,6 @@ import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-# import geopy
-# from geopy.geocoders import Nominatim
-# from geopy.extra.rate_limiter import RateLimiter
-
-# locator = Nominatim(user_agent="myGeocoder")
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng) # "52","76"
-#     location = locator.reverse(coordinates)
-#     return location
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
@@ -180,6 +170,9 @@ class QuotesSpider(scrapy.Spider):
                 temp_dic[note.split(':')[0]] = note.split(':')[1]
         temp_dic = cleanKey(temp_dic)
 
+        print(temp_dic)
+        print("\n")
+
         if "lift" in temp_dic and temp_dic["lift"] == "ja":
             item["elevator"]=True
         elif "lift" in temp_dic and temp_dic["lift"] == "nee":
@@ -193,11 +186,20 @@ class QuotesSpider(scrapy.Spider):
         elif "balkon" in temp_dic and temp_dic["balkon"] == "nee":
             item["balcony"]=False
 
+
+        if "balcon" in temp_dic:
+            item["balcony"] = True
+
+        if "tage" in temp_dic:
+            item["floor"] = temp_dic["tage"]
+
         item["deposit"] = int(temp_dic["d_p_tdegarantie"].split(',')[0].replace(' ',  ''))
 
         item["utilities"] = int(temp_dic["honoraireschargelocataire"].split(',')[0].replace(' ',  ''))
 
         item["currency"]='EUR'
+
+        item["landlord_phone"] = "04 99 74 25 25"
 
         item["external_source"] = 'fdi_ici_fr_PySpider_france_fr'
 
@@ -237,11 +239,6 @@ class QuotesSpider(scrapy.Spider):
         if sub_soup.find("div", id="map"):
             item["latitude"] = sub_soup.find("div", id="map")['data-latitude']
             item["longitude"] = sub_soup.find("div", id="map")['data-longitude']
-            # location = getAddress(item["latitude"],item["longitude"])
-            # item["city"]= location.raw["address"]["municipality"]
-            # # print(location.raw)
-            # item["zipcode"]= location.raw["address"]["postcode"]
-            # item["address"] = location.address
         else:
             item["city"] = str(sub_soup.find("small", class_="text-uppercase").text).split(' ')[0]
             item["zipcode"] = re.findall('\d+',sub_soup.find("small", class_="text-uppercase").text)[0]

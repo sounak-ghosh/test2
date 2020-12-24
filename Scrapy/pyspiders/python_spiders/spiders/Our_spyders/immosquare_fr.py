@@ -7,20 +7,6 @@ from python_spiders.helper import remove_unicode_char, extract_rent_currency, fo
 import re,json
 from bs4 import BeautifulSoup
 import requests
-# import geopy
-# from geopy.geocoders import Nominatim
-
-# geolocator = Nominatim(user_agent="myGeocoder")
-
-# def get_lat_lon(_address):
-#     location = geolocator.geocode(_address)
-#     return location.latitude,location.longitude
-
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng)
-#     location = geolocator.reverse(coordinates)
-#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
@@ -170,15 +156,6 @@ class QuotesSpider(scrapy.Spider):
         match = re.findall("address:(.+),",str_soup)
         if match:
             address = (match)[0].strip('"').strip()
-            # try:
-                # latitude,longitude = get_lat_lon(address)
-                # location = getAddress(latitude,longitude)
-
-                # item["zipcode"] = location.raw["address"]["postcode"]
-                # item["latitude"] = str(latitude)
-                # item["longitude"] = str(longitude)
-            # except:
-            #     pass
             item["address"] = address
 
 
@@ -260,13 +237,14 @@ class QuotesSpider(scrapy.Spider):
             if int(eng_value.strip()) != 0:
                 item["energy_label"] = eng
 
-        if soup.find("div",class_="widget mod w30 left pl3"):
-            phone_num = soup.find("div",class_="widget mod w30 left pl3").find("span").text.strip()
-            name = soup.find("div",class_="widget mod w30 left pl3").find("p",class_="h3").text.strip().replace(phone_num,"").strip()
 
-            item["landlord_name"] = name
+        if soup.find("div",class_="w50 mod left"):
+            landlrd_name =(soup.find("div",class_="w50 mod left").text.strip().split("\n"))[1].strip()
+            item["landlrd_name"] = landlrd_name
+
+        if soup.find("span",class_="vert mobile"):
+            phone_num = soup.find("span",class_="vert mobile").text.strip()
             item["landlord_phone"] = phone_num
-
 
 
 
@@ -279,5 +257,5 @@ class QuotesSpider(scrapy.Spider):
 
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
             item["property_type"] = property_type
-            print (item)
+            # print (item)
             yield item

@@ -149,11 +149,13 @@ class QuotesSpider1(scrapy.Spider):
     def get_property_details(self, response):
         item = ListingItem()
         soup2 = BeautifulSoup(response.body)
-
+        print (response.url)
         external_link = response.meta.get('external_link')
         item["external_link"] = external_link
 
-        item["title"] = soup2.find("div", id="content_intro_header").text
+        item["title"] = soup2.find("div", id="content_intro_header").text.strip()
+        item["landlord_name"] = "L'immobilier par REMI SERAIS - Argentan"
+        item["landlord_phone"] = "02.33.36.78.78"
         description = soup2.find("div", class_="col-sm-12 content_details_description").text
         item["description"] = description
         if "garage" in description.lower() or "parking" in description.lower():
@@ -168,8 +170,9 @@ class QuotesSpider1(scrapy.Spider):
         images = []
         for img in soup2.find("ul", class_="slides").findAll("li"):
             images.append(img.find("a")['href'].replace('..', 'http://www.remiserais-immobilier.fr'))
-        item["images"]= images
-        item["external_images_count"]= len(images)
+        if images:
+            item["images"]= images
+            item["external_images_count"]= len(images)
 
         temp_dic = {}
         for li in soup2.find("div", id="content_details").findAll("li"):
@@ -212,7 +215,7 @@ class QuotesSpider1(scrapy.Spider):
 
         temp_dic = cleanKey(temp_dic)
         # print(temp_dic)
-
+        # print ("\n")
         item["external_id"] = temp_dic["r_f_rence"]
 
         property_type = temp_dic["typedebien"]
@@ -233,6 +236,9 @@ class QuotesSpider1(scrapy.Spider):
         if "pi_ces" in temp_dic:
             item["room_count"] = int(temp_dic["pi_ces"])
 
+        if "salle_s_debains" in temp_dic:
+            item["bathroom_count"] = int(temp_dic["salle_s_debains"])            
+
         if "ville" in temp_dic:
             item["city"] = temp_dic["ville"].strip()
 
@@ -245,8 +251,8 @@ class QuotesSpider1(scrapy.Spider):
         if "d_p_tdegarantie" in temp_dic:
             item["deposit"]  = getSqureMtr(temp_dic["d_p_tdegarantie"])
 
-        if "honoraireslocataire" in temp_dic:
-            item["utilities"] = getSqureMtr(temp_dic["honoraireslocataire"])
+        if "provisionsurcharges" in temp_dic:
+            item["utilities"] = getSqureMtr(temp_dic["provisionsurcharges"])
 
         if "valeurconsoannuelle_nergie" in temp_dic:
             item["energy_label"] = temp_dic["valeurconsoannuelle_nergie"]
@@ -281,7 +287,7 @@ class QuotesSpider1(scrapy.Spider):
 
 
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
-            print(item)
+            # print(item)
             yield item
 
 

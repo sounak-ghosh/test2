@@ -7,16 +7,6 @@ import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-# import geopy
-# from geopy.geocoders import Nominatim
-# from geopy.extra.rate_limiter import RateLimiter
-
-# locator = Nominatim(user_agent="myGeocoder")
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng) # "52","76"
-#     location = locator.reverse(coordinates)
-#     return location
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
@@ -205,6 +195,9 @@ class QuotesSpider(scrapy.Spider):
 
         if "salledebains" in temp_dic:
             item["bathroom_count"] = getSqureMtr(temp_dic["salledebains"])
+
+        if "sallesdebains" in temp_dic:
+            item["bathroom_count"] = getSqureMtr(temp_dic["sallesdebains"])
 
 
         if soup2.find("p",class_="h6 text-muted"):

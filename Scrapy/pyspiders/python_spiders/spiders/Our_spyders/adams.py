@@ -132,12 +132,18 @@ class QuotesSpider(scrapy.Spider):
         images = []
         for img in soup2.find("div", id="property-detail-thumbs").findAll("div", class_="item"):
             images.append(img.find("img")['src'])
-        item["images"]= images
-        item["external_images_count"]= len(images)
+        if images:
+            item["images"]= images
+
+        floor_plan = []
+        if soup2.find("img",id="ctl00_ContentPlaceHolderMain_imgFloorPlan"):
+            floor_plan = [soup2.find("img",id="ctl00_ContentPlaceHolderMain_imgFloorPlan")["src"]]
+            item["floor_plan_images"] = floor_plan
+
+        if images or floor_plan:
+            item["external_images_count"]= len(images)+len(floor_plan)
 
         for amenity in soup2.find("div", class_="property-topinfo").find("ul", class_="amenities").findAll("li"):
-            if amenity.find("i", class_="icon-apartment"):
-                item["terrace"] = True
             if amenity.find("i", class_="icon-area"):
                 item["square_meters"] = getSqureMtr(amenity.text.split('/')[0].strip())
             if amenity.find("i", class_="icon-bedrooms"):
@@ -170,10 +176,6 @@ class QuotesSpider(scrapy.Spider):
         lng = soup2.find("div", id="tabStreetView").find("iframe")['src'].replace('https://maps.google.com/maps?q=&layer=c&cbll=', '').split('&')[0].split(',')[1]
         item["latitude"] = str(lat)
         item["longitude"] = str(lng)
-        # location = getAddress(lat, lng)
-        # item["address"] = location.address
-        # item["zipcode"]= location.raw["address"]["postcode"]
-
         item["external_id"] = soup2.find("span", id="ctl00_ContentPlaceHolderMain_lblPropertyID").text
         item["external_source"] = 'adams_PySpider_france_en'
 

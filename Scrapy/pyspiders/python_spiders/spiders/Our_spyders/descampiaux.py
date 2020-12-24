@@ -7,16 +7,6 @@ import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-# import geopy
-# from geopy.geocoders import Nominatim
-# from geopy.extra.rate_limiter import RateLimiter
-
-# locator = Nominatim(user_agent="myGeocoder")
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng) # "52","76"
-#     location = locator.reverse(coordinates)
-#     return location
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
@@ -28,6 +18,18 @@ def getSqureMtr(text):
 
     if len(list_text) == 2:
         output = float(list_text[0]+"."+list_text[1])
+    elif len(list_text) == 1:
+        output = int(list_text[0])
+    else:
+        output=0
+
+    return int(output)
+
+def getPrice(text):
+    list_text = re.findall(r'\d+',text)
+
+    if len(list_text) > 1:
+        output = int(list_text[0]+list_text[1])
     elif len(list_text) == 1:
         output = int(list_text[0])
     else:
@@ -166,14 +168,16 @@ class QuotesSpider(scrapy.Spider):
             item["furnished"]=True
 
         images = []
-        for img in soup2.find("div", id="PhotoFicheBien2").findAll("img"):
-            if "data-src" in str(img):
-                images.append((img['data-src']))
-            else:
-                if "/import/0.jpg" not in str(img):
-                    images.append((img['src']))
-        item["images"]= images
-        item["external_images_count"]= len(images)
+        if soup2.find("div", id="PhotoFicheBien2"):
+            for img in soup2.find("div", id="PhotoFicheBien2").findAll("img"):
+                if "data-src" in str(img):
+                    images.append((img['data-src']))
+                else:
+                    if "/import/0.jpg" not in str(img):
+                        images.append((img['src']))
+        if images:
+            item["images"]= images
+            item["external_images_count"]= len(images)
         item["external_id"] = soup2.find("div", id="FicheDescriptifDebutTexte").find("p", class_="fichebienref").text.split(':')[1]
         
         temp_dic = {}
@@ -190,7 +194,7 @@ class QuotesSpider(scrapy.Spider):
                 temp_dic["floor"] = dic.text
             if "Surface" in dic.text:
                 temp_dic["surface"] = int(re.findall('\d+',dic.text)[0])
-            if "pièce" in dic.text:
+            if "chambre" in dic.text:
                 temp_dic["room"] = getSqureMtr(dic.text)
             if "salle de bain/eau" in dic.text:
                 temp_dic["bathroom"] = getSqureMtr(dic.text)
@@ -199,7 +203,8 @@ class QuotesSpider(scrapy.Spider):
 
         temp_dic = cleanKey(temp_dic)
 
-        item["room_count"] = temp_dic["room"]
+        if "room" in temp_dic:
+            item["room_count"] = temp_dic["room"]
 
         item["square_meters"] = temp_dic["surface"]
 
@@ -221,13 +226,13 @@ class QuotesSpider(scrapy.Spider):
 
         item["currency"]='EUR'
 
-        item["rent"] = getSqureMtr(temp_dic["loyermensuelchargescomprises"])
+        item["rent"] = getPrice(temp_dic["loyermensuelchargescomprises"])
 
-        if "d_p_tdegarantie" in temp_dic and getSqureMtr(temp_dic["honoraireschargelocatairettc"]):
-            item["deposit"] = getSqureMtr(temp_dic["d_p_tdegarantie"])
+        if "d_p_tdegarantie" in temp_dic and getSqureMtr(temp_dic["d_p_tdegarantie"]):
+            item["deposit"] = getPrice(temp_dic["d_p_tdegarantie"])
 
-        if "honoraireschargelocatairettc" in temp_dic and getSqureMtr(temp_dic["honoraireschargelocatairettc"]):
-            item["utilities"] = getSqureMtr(temp_dic["honoraireschargelocatairettc"])
+        if "dontprovisionmensuelledeschargeslocatives" in temp_dic and getSqureMtr(temp_dic["dontprovisionmensuelledeschargeslocatives"]):
+            item["utilities"] = getPrice(temp_dic["dontprovisionmensuelledeschargeslocatives"])
 
         item["landlord_name"] = soup2.find("div", id="FicheDescriptif").findAll("p")[-1].text.split('\n')[0]
 

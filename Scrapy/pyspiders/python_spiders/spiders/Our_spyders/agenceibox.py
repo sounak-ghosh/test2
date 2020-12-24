@@ -212,14 +212,6 @@ class QuotesSpider(scrapy.Spider):
         extract_text = re.findall("center:(.+)},",str_soup)
         lat_lon = extract_text[0].strip()+"}"
         lat_lon = eval(lat_lon.replace("lat",'"latitude"').replace("lng",'"longitude"'))
-        # location = getAddress(lat_lon["latitude"],lat_lon["longitude"])
-        # address = location.address
-
-
-        # if "city" in location.raw["address"]:
-        #     item["city"] = location.raw["address"]["city"]
-        # elif "town" in location.raw["address"]:
-        #     item["city"] = location.raw["address"]["town"]
 
         if soup.find("ul",class_="imageGallery notLoaded"):
             all_img = soup.find("ul",class_="imageGallery notLoaded").find_all("li")
@@ -246,6 +238,15 @@ class QuotesSpider(scrapy.Spider):
 
 
             temp_dic = cleanKey(temp_dic)
+
+            print(temp_dic)
+            print("\n")
+
+            if "ville" in temp_dic:
+                item["city"] = temp_dic["ville"]
+
+            if "nombredegarage" in temp_dic:
+                item["parking"] = True
 
             if "etage" in temp_dic:
                 item["floor"] = temp_dic["etage"]
@@ -298,7 +299,6 @@ class QuotesSpider(scrapy.Spider):
         item["square_meters"] = square_meters
         item["description"] = description
         item["external_id"] = external_id
-        # item["address"] = address
         item["latitude"] = str(lat_lon["latitude"])
         item["longitude"] = str(lat_lon["longitude"])
         item["title"] = title
@@ -310,5 +310,5 @@ class QuotesSpider(scrapy.Spider):
         item["currency"] = "EUR"
         item["external_source"] = "agenceibox_PySpider_france_fr"
 
-        print (item)
+        # print (item)
         yield item

@@ -8,17 +8,7 @@ import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-# import geopy
-# from geopy.geocoders import Nominatim
-# from geopy.extra.rate_limiter import RateLimiter
 from scrapy.selector import Selector
-
-# locator = Nominatim(user_agent="myGeocoder")
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng) # "52","76"
-#     location = locator.reverse(coordinates)
-#     return location
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
@@ -195,6 +185,8 @@ class QuotesSpider(scrapy.Spider):
             for span in soup2.find("div", id="infosfi").findAll("p", class_="data"):
                 temp_dic[span.find("span", class_="termInfos").text.strip()] = span.find("span", class_="valueInfos").text.strip()
         temp_dic = cleanKey(temp_dic)
+        print (temp_dic)
+        print("\n")
 
         item["zipcode"] = temp_dic["codepostal"]
         item["city"] = temp_dic["ville"]
@@ -233,6 +225,15 @@ class QuotesSpider(scrapy.Spider):
         if "nbdesalledebains" in temp_dic:
             item["bathroom_count"] = getSqureMtr(temp_dic["nbdesalledebains"])
 
+        if "nbdesalled_eau" in temp_dic:
+            item["bathroom_count"] = getSqureMtr(temp_dic["nbdesalled_eau"])
+
+        if "nombredegarage" in temp_dic:
+            item["parking"] = True
+
+        if "dont_tatdeslieux" in temp_dic and getSqureMtr(temp_dic["dont_tatdeslieux"]):
+            item["utilities"] = getSqureMtr(temp_dic["dont_tatdeslieux"])
+
         item["rent"] = getSqureMtr(temp_dic["loyercc__mois"])
 
         item["deposit"]  = getSqureMtr(temp_dic["d_p_tdegarantiettc"])
@@ -245,8 +246,6 @@ class QuotesSpider(scrapy.Spider):
         lng = re.findall("center: {(.+)},",str(soup2))[0].split(',')[1].split(':')[-1].strip()
         item["latitude"] = lat
         item["longitude"] = lng
-        # location = getAddress(lat, lng)
-        # item["address"] = location.address
 
         if "tudiant" in description.lower() or  "studenten" in description.lower() and "appartement" in description.lower():
             property_type = "student_apartment"
@@ -275,7 +274,7 @@ class QuotesSpider(scrapy.Spider):
 
 
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
-            print(item)
+            # print(item)
             yield item
 
 
