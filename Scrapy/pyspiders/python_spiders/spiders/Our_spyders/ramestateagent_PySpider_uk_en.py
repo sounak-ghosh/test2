@@ -7,9 +7,10 @@ from python_spiders.helper import remove_unicode_char, extract_rent_currency, fo
 import re,json
 from bs4 import BeautifulSoup
 import requests,time
+import sys
 # from geopy.geocoders import Nominatim
 # import timestring
-from word2number import w2n
+# from word2number import w2n
 
 # geolocator = Nominatim(user_agent="myGeocoder")
 
@@ -132,18 +133,32 @@ class QuotesSpider(scrapy.Spider):
 
             property_type = lo.find('strong').text
 
-            
+           
+                
+             
             price_pw = getPrice(re.findall('\d+',lo.find('span',class_='label price').text.strip())[0])
             rent = price_pw*4
-            try:
-                rec['room_count'] = int(clean_value(lo.find('i',class_='icon-bedroom').find_previous('li').text.strip()))
-            except:
-                pass
+            # try:
+            #     rec['room_count'] = int(clean_value(lo.find('i',class_='icon-bedroom').find_previous('li').text.strip()))
+            # except:
+            #     try:
+            #         room = soup.find('p',class_='photos-pad').text.split('/')
+            #         for r in room:
+            #             if 'Bedroom' in r:
+            #                 rec['room_count'] = r.split()[0].strip() 
+            #     except:
+            #         pass               
 
-            try:
-                rec['bathroom_count'] = int(clean_value(lo.find('i',class_='icon-bathroom').find_previous('li').text.strip()))
-            except:
-                pass
+            # try:
+            #     rec['bathroom_count'] = int(clean_value(lo.find('i',class_='icon-bathroom').find_previous('li').text.strip()))
+            # except:
+            #     try:
+            #         bathroom = soup.find('p',class_='photos-pad').text.split('/')
+            #         for br in bathroom:
+            #             if 'Bathroom' in br:
+            #                 rec['bathroom_count'] = br.split()[0].strip() 
+            #     except:
+            #         pass
             title = lo.find('h3').text
             rec['city'] = city
             rec['external_source'] = external_source
@@ -152,6 +167,8 @@ class QuotesSpider(scrapy.Spider):
             rec['currency'] = 'GBP'
             rec['title'] = title
             
+            
+
 
             if "tudiant" in property_type.lower() or  "studenten" in property_type.lower() and ("appartement" in property_type.lower() or "apartment" in property_type.lower()):
                 property_type = "student_apartment"
@@ -213,19 +230,46 @@ class QuotesSpider(scrapy.Spider):
             item["dishwasher"] = True
         if "lift" in desc.lower() or "elevator" in desc.lower():
             item["elevator"] = True
-
-
-
-        latlong=''
-        for sc in soup.find_all('script'):
-            if 'LatLng(' in sc.text:
-                latlong = re.findall('LatLng\((.*?)\)',sc.text)[0]
-
+        # print(">>>>>>>>>>>>>>>>>>>>>>>>>>",soup.find('p',class_='photos-pad').text.split('/'))
+        try:
+            bathroom = soup.find('p',class_='photos-pad').text.split('/')
+            for br in bathroom:
+                if 'Bathroom' in br:
+                    item['bathroom_count'] = int(br.split()[0].strip())
+        except:
+            pass
+        try:
+            room = soup.find('p',class_='photos-pad').text.split('/')
+            for r in room:
+                if 'Bedroom' in r:
+                    item['room_count'] = int(r.split()[0].strip())
+        except:
+            pass      
+        # f=open('try.html','wb')
+        # f.write(response.body)
+        latlong=None
+        for sc in response.xpath("//script[contains(text(),'LatLng')]/text()").extract():
+            if 'LatLng(' in sc:
+                latlong = re.findall('LatLng\((.*?)\)',sc)[0]
+                break
         if latlong:
             lat,lng = latlong.split(',')
             item['latitude'] = lat
             item['longitude'] = lng
-
+        # else:
+        # try:
+        #     map_rec = soup.findAll('script') 
+        #     for each in map_rec:
+        #         if 'new google.maps.LatLng' in each.text:
+        #             # req_text = each.get_text().split('new google.maps.LatLng')[1]
+        #             print("<<<<<<<<<<<<<<",each)
+        #             # req_text = each.get_text().split('new google.maps.LatLng(')[1].split(");")[0]    
+        #             # item['latitude'] = req_text.split(',')[0].strip()
+        #             # item['longitude'] = req_text.split(',')[1].strip()
+        #             # break
+        # except Exception as e:
+        #     print("--------------------->",e)
+        # sys.exit()           
             # location=getAddress(lat,lng)
             # address = location.address
 
@@ -238,15 +282,17 @@ class QuotesSpider(scrapy.Spider):
 
             # item["address"] = address
             # item["zipcode"] = location.raw["address"]["postcode"]
-
+        item["external_source"] = 'ramestateagent_PySpider_uk_en'    
+        price_pw = getPrice(soup.find('span',class_='fullprice2').text.strip())  
+        item['rent'] = price_pw*4    
         con = soup.find('i',class_='fas fa-phone')
 
         cont_no = con.find_parent('p').text.split('\n')[2].strip()
         email = con.find_parent('p').text.split('\n')[3].strip()
-
+        
         item['description'] = desc
         item['landlord_phone'] = cont_no
         item['landlord_email'] = email
-
+        item['landlord_name'] = 'ramestateagent'
         print (item)
         yield item

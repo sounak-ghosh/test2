@@ -159,7 +159,7 @@ class laforet(scrapy.Spider):
 
             # postcode = location.raw["address"]["postcode"]
             # item["zipcode"] = postcode
-
+        
 
         d = soup.find("div", class_="column col-md-12 col-8").find_all("h2")
         p = soup.find("div", class_="column col-md-12 col-8").find_all("p")
@@ -188,6 +188,8 @@ class laforet(scrapy.Spider):
             if "Adresse".lower() in value.text.lower():
                 address = p[index].text.strip()
                 item["address"] = address
+
+                item['city'] = address.split()[-1]
 
 
         all_li = soup.find("div",class_="columns details").find("ul").find_all("li")
