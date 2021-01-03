@@ -166,6 +166,7 @@ class laforet(scrapy.Spider):
                 title = ech_p.find("a",recursive =False)["title"]
                 print (external_link)
                 yield scrapy.Request(
+                    # url = 'https://www.grechimmo.fr/fiches/4-39_42782652/maison-la-londe-les-maures-6-piece-s-110-m2.html?search_id=1681040143212908&offset=0&page=3x%x',
                     url = external_link,
                     callback =self.get_property_details,
                     meta = {"property_type":property_type,"external_link":external_link,"title":title}
@@ -216,6 +217,30 @@ class laforet(scrapy.Spider):
             item["description"] = soup.find("div",class_="infos-biens-right").text.strip()
 
 
+        # item['rent'] = getSqureMtr(soup.find('span',class_='alur_loyer_price').text.replace(" ",""))
+
+        try:
+            address = response.xpath("//div[contains(text(),'Ville')]/following-sibling::div/text()").extract()
+            
+            item['address'] = address[0]
+        except:
+            pass
+        try:
+            zip_c = response.xpath("//div[contains(text(),'Code postal')]/following-sibling::div/text()").extract() 
+            item['zipcode'] = zip_c[0]
+        except:
+            pass
+
+        item['utilities'] = getSqureMtr(soup.find('span',class_='alur_location_hono_etat_lieux').text)
+
+        fur = response.xpath("//div[contains(text(),'Meublé : ')]/following-sibling::div/text()").extract()
+        if fur:
+            if fur[0] == 'Oui':
+                item['furnished'] = True
+
+        item['landlord_name'] = 'Grech Immobilier'
+        item['landlord_email'] = 'contact@grechimmo.com'
+        
         if soup.find("ul",class_="detail-panel"):
             temp_dic = {}
             all_det = soup.find("ul",class_="detail-panel").find_all("div",class_="infos-bien")
@@ -226,7 +251,7 @@ class laforet(scrapy.Spider):
                     temp_dic.update({ky:vals})
 
             temp_dic = cleanKey(temp_dic)
-            
+            # print(temp_dic)
             if "ville" in temp_dic:
               item["city"] = temp_dic["ville"]
 
@@ -240,7 +265,10 @@ class laforet(scrapy.Spider):
               item["utilities"] = getSqureMtr(temp_dic["provisionsurcharges"])
 
             if "d_p_tdegarantie" in temp_dic:
-              item["deposit"] = getSqureMtr(temp_dic["d_p_tdegarantie"])
+              item["deposit"] = getSqureMtr(temp_dic["d_p_tdegarantie"].replace(" ",""))
+
+            if "loyerchargescomprises" in temp_dic:
+                item['rent'] = getSqureMtr(temp_dic["loyerchargescomprises"].replace(" ",""))
 
             if "nombrepi_ces" in temp_dic:
                 item["room_count"] = getSqureMtr(temp_dic["nombrepi_ces"])
