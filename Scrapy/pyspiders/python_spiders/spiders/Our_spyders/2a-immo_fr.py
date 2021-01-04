@@ -2,7 +2,8 @@
 # Author: Sounak Ghosh
 import scrapy
 from ..items import ListingItem
-from ..helper import currency_parser, extract_number_only, remove_white_spaces, remove_unicode_char
+from ..helper import currency_parser, extract_number_only, remove_white_spaces, remove_unicode_char,format_date
+# import geopy
 # import geopy
 # from geopy.geocoders import Nominatim
 # geolocator = Nominatim(user_agent="myGeocoder")
@@ -21,7 +22,8 @@ def getSqureMtr(text):
         output=0
 
     return int(output)
-
+def num_there(s):
+    return any(i.isdigit() for i in s)
 
 # def getAddress(lat,lng):
 #     coordinates = str(lat)+","+str(lng)
@@ -54,7 +56,7 @@ class HenroimmoSpider(scrapy.Spider):
                 url=property_item,
                 callback=self.get_details
             )
-
+    
     def get_details(self, response):
         item = ListingItem()
         item['external_source'] = "2a-immo.fr_PySpider_france_fr"
@@ -97,6 +99,9 @@ class HenroimmoSpider(scrapy.Spider):
         # item['address'] = getAddress(item['latitude'],item['longitude'])
         # item['city'] = item['address'].split(",")[-1].strip()
         # item['zipcode'] = item['address'].split(",")[-2].strip()
+        available = response.xpath("//label[text()='Disponibilité']/following-sibling::text()").extract()[0]
         
-        print (item)
+        if num_there(available):
+            item['available_date'] = format_date(available)
+        
         yield item

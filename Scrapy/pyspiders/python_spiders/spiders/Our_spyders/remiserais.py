@@ -284,7 +284,7 @@ class QuotesSpider1(scrapy.Spider):
                 item["swimming_pool"] = True
             if temp_dic["piscine"] == "Non":
                 item["swimming_pool"] = False
-
+        item['address'] = soup2.find('span',class_='alur_location_ville').text
 
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
             # print(item)

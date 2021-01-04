@@ -139,7 +139,10 @@ class QuotesSpider(scrapy.Spider):
         item["external_id"] = sub_soup.find("div", {"class": "col-md-2"}).find("h1").text.split(' ')[-1].split('°')[-1]
         
         item["external_source"] = 'immobilier_PySpider_france_fr'
-
+        # ut = response.xpath("//h3[text()='Provision pour charges :']/following-sibling::strong[1]").extract()
+        # print(">>>>>>>>",ut)
+        item['utilities'] = getSqureMtr(response.xpath("//h3[text()='Provision pour charges :']/following-sibling::strong[1]").extract()[0])
+        item['square_meters'] = getSqureMtr(response.xpath("//li[contains(text(),'m²')]").extract()[0])
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
             print(item)
             yield item

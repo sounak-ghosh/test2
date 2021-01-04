@@ -125,7 +125,7 @@ class laforet(scrapy.Spider):
     allowed_domains = ['www.beresfordresidential.com']
     start_urls = ['www.beresfordresidential.com']
     execution_type = 'testing'
-    country = 'france'
+    country = 'united_kingdom'
     locale ='en'
 
     def start_requests(self):
@@ -214,7 +214,18 @@ class laforet(scrapy.Spider):
 
         if data['bedrooms'] == '':
             item["room_count"] = int(data['bedrooms'])
-
+        try:
+            item["room_count"] = int(response.xpath("//li[contains(text(),'Bedrooms')]/text()").extract()[0].replace("Bedrooms","").strip())
+        except:
+            pass
+        try:    
+            sq = response.xpath("//div[@class='titles']//text()").extract()
+            for s in sq:
+                if 'sqm' in s:
+                    item['square_meters']   = getSqureMtr(s)
+                    break
+        except:
+            pass
         # location = getAddress(item["latitude"], item["longitude"])
         # if "city" in location.raw["address"]:
         #     item["city"] = location.raw["address"]["city"]
@@ -222,7 +233,7 @@ class laforet(scrapy.Spider):
         #     item["zipcode"] = location.raw["address"]["postcode"]
 
         item["address"] = data["display_address"]
-
+        
         available_date = soup.find('div', attrs={'id': 'propertyDetails'}).find('p').text.strip()
         if 'Property available on:' in available_date:
             available_date = available_date.replace('Property available on:', '').strip()

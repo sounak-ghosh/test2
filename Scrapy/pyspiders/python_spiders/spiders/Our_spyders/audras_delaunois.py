@@ -159,7 +159,7 @@ class laforet(scrapy.Spider):
 
             # postcode = location.raw["address"]["postcode"]
             # item["zipcode"] = postcode
-
+        
 
         d = soup.find("div", class_="column col-md-12 col-8").find_all("h2")
         p = soup.find("div", class_="column col-md-12 col-8").find_all("p")
@@ -188,6 +188,10 @@ class laforet(scrapy.Spider):
             if "Adresse".lower() in value.text.lower():
                 address = p[index].text.strip()
                 item["address"] = address
+            try:
+                item['city'] = title.split("·")[0]
+            except:
+                pass    
 
 
         all_li = soup.find("div",class_="columns details").find("ul").find_all("li")
@@ -200,24 +204,35 @@ class laforet(scrapy.Spider):
                 value = temp_det[1].strip()
                 temp_dic[key] = value
         temp_dic = cleanKey(temp_dic)
-
+        print(">>>>>>>>>>>",temp_dic)
         if "disponibilit" in temp_dic:
             if num_there(temp_dic["disponibilit"]):
                 date = temp_dic["disponibilit"].replace("Le ","").strip()
                 date = format_date(date)
                 item["available_date"] = date
 
-        if "surfacehabitable" in temp_dic:
-            area = temp_dic["surfacehabitable"]
+        if "surfacehabitable" in temp_dic or 'Surface habitable' in temp_dic:
+            try:
+                area = temp_dic["Surface habitable"]
+            except:
+                area = temp_dic["surfacehabitable"]
+                    
             area = getSqureMtr(area)
             item["square_meters"] = area
 
-        if "d_p_tdegarantie" in temp_dic:
-            deposit = getSqureMtr(temp_dic["d_p_tdegarantie"])
+        if "d_p_tdegarantie" in temp_dic or "Dépôt de garantie" in temp_dic:
+            try:
+                deposit = getSqureMtr(temp_dic["Dépôt de garantie"].replace(" ","")) 
+                
+            except:
+                deposit = getSqureMtr(temp_dic["d_p_tdegarantie"].replace(" ",""))   
             item["deposit"]=deposit
 
-        if "loyerchargescomprises" in temp_dic:
-            rent = getSqureMtr(temp_dic["loyerchargescomprises"])
+        if "loyerchargescomprises" in temp_dic or "Loyer charges comprises" in temp_dic:
+            try:
+                rent = getSqureMtr(temp_dic["Loyer charges comprises"].replace(" ","")) 
+            except:
+                rent = getSqureMtr(temp_dic["loyerchargescomprises"].replace(" ",""))   
             item["rent"] = rent
 
         if "dontprovisionsurcharges" in temp_dic:

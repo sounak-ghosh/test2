@@ -181,7 +181,7 @@ class QuotesSpider(scrapy.Spider):
         external_link = response.url
         print(external_link)
         item["external_link"] = external_link
-
+        item['external_id'] = external_link.split("=")[-1]
         external_source = 'pmestates_com_PySpider_london_en'
         rec = {}
         address = soup2.find('h1').text
@@ -199,7 +199,7 @@ class QuotesSpider(scrapy.Spider):
             property_type = 'studio'
         else:
             property_type = 'NA'
-        currency = 'EUR'
+        currency = 'GBP'
 
         email = soup2.find('a',href=re.compile('info@')).text
 
@@ -229,7 +229,7 @@ class QuotesSpider(scrapy.Spider):
             item['zipcode'] = zipcode
 
         if int(rent):
-            item['rent'] = int(rent)
+            item['rent'] = int(rent)*4
         if int(room_count):
             item['room_count'] = int(room_count)
         item['city'] = city

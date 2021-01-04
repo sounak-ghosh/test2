@@ -97,7 +97,7 @@ class auditaSpider(scrapy.Spider):
     allowed_domains = ['birchletting.com']
     start_urls = ['birchletting.com']
     execution_type = 'testing'
-    country = 'uk'
+    country = 'united_kingdom'
     locale ='en'
 
     def start_requests(self):

@@ -110,7 +110,8 @@ class QuotesSpider(scrapy.Spider):
         item["room_count"] = getSqureMtr(response.meta.get('room'))
 
         item["bathroom_count"] = getSqureMtr(response.meta.get('bathroom'))
-        
+        if 'furnished' in response.body.decode('utf-8'):
+            item['furnished'] = True
         images = []
         for img in soup2.findAll("div", class_="houseslider__image"):
             try:
@@ -142,10 +143,18 @@ class QuotesSpider(scrapy.Spider):
         item["property_type"] = property_type
 
         item["square_meters"] = getSqureMtr(soup2.find("div", class_="houseview__facts").find("dl", class_="factlist factlist--2").find("dd").text)
-
+        item["square_meters"] = round(item["square_meters"]/10.764,2)
         item["currency"]='GBP' 
         item["external_source"] = 'Ivylettings_PySpider_united_kingdom'
 
+        item['city'] = soup2.find("div",class_='container houseview__section houseview__section--header').find('small').text.strip()
+        try:
+            item['address'] =soup2.find('dl',class_='factlist factlist--2').findAll('dd')[-1].text.strip()
+        except:
+            pass  
+        item['landlord_name'] = 'ivylettings' 
+        item['landlord_email'] = 'reservations@ivylettings.com'  
+        item['landlord_phone'] = '+44 20 7349 7015'   
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
             print(item)
             yield item
