@@ -3,16 +3,9 @@
 import scrapy
 from ..items import ListingItem
 from ..helper import currency_parser, extract_number_only, remove_white_spaces, remove_unicode_char
-# import geopy
-# from geopy.geocoders import Nominatim
-# geolocator = Nominatim(user_agent="myGeocoder")
 import json
-import sys
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng)
-#     location = geolocator.reverse(coordinates)
-#     return location.address
+from bs4 import BeautifulSoup
+import sys,re
 
 class HenroimmoSpider(scrapy.Spider):
     name = 'eson2_co_uk_PySpider_unitedkingdom_en'
@@ -34,7 +27,6 @@ class HenroimmoSpider(scrapy.Spider):
         listings = response.xpath("//h2[@class='posttitle']/a/@href").extract()
         listings = list(dict.fromkeys(listings))
         for property_item in listings:
-            # property_item = 'https://www.2a-immo.fr'+property_item
             print("---------------->",property_item)
             yield scrapy.Request(
                 url=property_item,
@@ -43,9 +35,12 @@ class HenroimmoSpider(scrapy.Spider):
 
     def get_details(self, response):
         item = ListingItem()
+        soup = BeautifulSoup(response.body,"html.parser")
         item['external_source'] = "eson2_co_uk_PySpider_unitedkingdom_en"
         item['external_link'] = response.url
         item['title'] = response.xpath("//h1[@class='prop-title']/text()").extract_first().strip()
+        item['address'] = item['title']
+        item['city'] = 'London'
    
         item['images'] = response.xpath("//li[contains(@style,'background-image')]/a/@href").extract()
         item['images'] = list(dict.fromkeys(item['images']))
@@ -66,7 +61,16 @@ class HenroimmoSpider(scrapy.Spider):
         try:
             item['bathroom_count'] =   int(response.xpath("//p[contains(text(),'Bathroom')]/text()").extract_first().replace('Bathrooms','').replace('Bathroom','').strip())
         except:
+            if soup.find("span",class_="property-bath"):
+                text = soup.find("span",class_="property-bath").text.strip()
+                totBath = re.findall(r'\d+',text)[0]
+                item['bathroom_count'] = int(totBath)
             pass
+
+        balcony_text = soup.find("div",class_="details-grey-box clearfix").text.strip()
+        if "balcony" in balcony_text.lower():
+            item["balcony"] = True
+
         description = response.xpath("//div[@class='prop-single-content']//text()").extract()
         description = "".join([x for x in description if x.strip()])
         item['description'] = remove_white_spaces(description)

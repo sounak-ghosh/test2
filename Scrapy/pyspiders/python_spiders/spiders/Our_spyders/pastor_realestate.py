@@ -7,32 +7,15 @@ from python_spiders.helper import remove_unicode_char, extract_rent_currency, fo
 import re,json
 from bs4 import BeautifulSoup
 import requests
-# import geopy
-# from geopy.geocoders import Nominatim
-# import timestring
 from datetime import datetime
 
-geolocator = Nominatim(user_agent="myGeocoder")
 
 def strToDate(text):
     if "/" in text:
         date = datetime.strptime(text, '%d/%m/%Y').strftime('%Y-%m-%d')
     elif "-" in text:
         date = datetime.strptime(text, '%Y-%m-%d').strftime('%Y-%m-%d')
-    # else:
-    #     date = str(timestring.Date(text)).replace("00:00:00","").strip()
     return date
-
-
-# def get_lat_lon(_address):
-#     location = geolocator.geocode(_address)
-#     return location.latitude,location.longitude
-
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng)
-#     location = geolocator.reverse(coordinates)
-#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
@@ -135,15 +118,6 @@ class QuotesSpider(scrapy.Spider):
             lon = extract_lon[0]
             item["latitude"] = str(lat)
             item["longitude"] = str(lon)
-            # location=getAddress(lat,lon)
-
-            # if "city" in location.raw["address"]:
-            #     item["city"] = location.raw["address"]["city"]
-            # elif "town" in location.raw["address"]:
-            #     item["city"] = location.raw["address"]["town"]
-            # elif "village" in location.raw["address"]:
-            #     item["city"] = location.raw["address"]["village"]
-            # item["zipcode"] = location.raw["address"]["postcode"]
 
  
         title = soup.find("div", class_="col-md-12").find("h1").text.strip()
@@ -151,6 +125,9 @@ class QuotesSpider(scrapy.Spider):
 
         address = soup.find("div", class_="col-md-12").find("h2").text.strip()
         item["address"] = address
+        item["city"] = address.split(",")[-2]
+        item["zipcode"] = address.split(",")[-1]
+
 
         if soup.find("div", class_="col-md-12").find("p", class_="item-price"):
             rent = getPrice(soup.find("div", class_="col-md-12").find("p", class_="item-price").text)
@@ -168,6 +145,16 @@ class QuotesSpider(scrapy.Spider):
 
         desc = details.find("p").text.strip()
         item["description"] = desc
+
+        list_text = re.findall(r'\d+',desc)
+
+        # date_text = desc.split(".")[-1].split("Available")[-1].strip()
+        # if num_there(date_text):
+        #     item["available_date"] = format_date(date_text)
+
+        if int(list_text[0]) > 100:
+            item["square_meters"] = int(list_text[0])
+
         if "garage" in desc.lower() or "parking" in desc.lower() or "autostaanplaat" in desc.lower():
             item["parking"] = True
         if "terras" in desc.lower() or "terrace" in desc.lower():

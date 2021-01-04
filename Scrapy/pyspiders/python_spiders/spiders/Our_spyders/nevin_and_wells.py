@@ -153,6 +153,7 @@ def get_subDetails(ech_prop):
     address =  ech_prop["displayAddress"]
     dic["address"] = address
     dic["zipcode"] = address.split(",")[-1]
+    dic["city"] = address.split(",")[-2]
     
     if "apartment" in ech_prop["propertySubType"].lower() or "flat" in ech_prop["propertySubType"].lower():
         property_type = "apartment"
@@ -170,6 +171,7 @@ def get_subDetails(ech_prop):
     dic["longitude"] = str(ech_prop["location"]["longitude"])
     dic["rent"] = ech_prop["price"]["amount"]
     dic["currency"] = ech_prop["price"]["currencyCode"]
+    dic["landlord_name"] = "Nevin and Wells Residential"
     dic["landlord_phone"] = ech_prop["customer"]["contactTelephone"]
     dic["title"] = ech_prop["propertyTypeFullDescription"]
     
@@ -233,7 +235,6 @@ class auditaSpider(scrapy.Spider):
                 item[k] = v
             except:
                 pass
-
         extract_data = re.findall("window.PAGE_MODEL = (.+)}}}",response.body.decode("utf-8"))
         e_p_json_dic =json.loads(extract_data[0]+"}}}")
         desc = e_p_json_dic["propertyData"]["text"]["description"]
