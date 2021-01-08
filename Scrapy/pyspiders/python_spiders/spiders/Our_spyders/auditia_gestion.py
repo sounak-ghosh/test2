@@ -6,7 +6,6 @@ from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
 import re
 from bs4 import BeautifulSoup
-import requests
 from datetime import datetime
 
 def strToDate(text):
@@ -89,7 +88,7 @@ def clean_key(text):
     if isinstance(text,str):
         text = ''.join([i if ord(i) < 128 else ' ' for i in text])
         text = text.lower()
-        text = ''.join([c if 97 <= ord(c) <= 122 or 48 <= ord(c) <= 57 else '_'                                                                                         for c in text ])
+        text = ''.join([c if 97 <= ord(c) <= 122 or 48 <= ord(c) <= 57 else '_' for c in text ])
         text = re.sub(r'_{1,}', '_', text)
         text = text.strip("_")
         text = text.strip()
@@ -201,19 +200,29 @@ class auditaSpider(scrapy.Spider):
         item["external_link"] = response.meta.get('external_link')
         item["rent"] = response.meta.get('rent')
         item["property_type"] = response.meta.get('property_type')
-        item["external_id"] = response.meta.get('external_id')
         item["title"] = response.meta.get('title')
         item["external_source"] = "auditia_gestion_PySpider_france_fr"
         item["currency"]='EUR'
 
-        if "room_count" in response.meta:
-            room_count = response.meta.get('room_count')
-        if "square_meters" in response.meta:
-            room_count = response.meta.get('square_meters')
-
+        if "room_count" in dict(response.meta):
+            item["room_count"] = response.meta.get('room_count')
+        if "square_meters" in dict(response.meta):
+            item["square_meters"] = response.meta.get('square_meters')
 
         soup = BeautifulSoup(response.body)
 
+        if soup.find("h4",class_="ville"):
+            address = soup.find("h4",class_="ville").text.strip()
+            city = address.split("(")[0].strip()
+            zipcode = address.split("(")[-1].strip(")")
+            item["city"] = city
+            item["zipcode"] = zipcode
+            item["address"] = address
+
+
+        if soup.find("p",class_="refAnnonce"):
+            ref_text = soup.find("p",class_="refAnnonce").text.split("ref.")[-1].strip()
+            item["external_id"] = ref_text
 
         if soup.find("p",class_="descriptif"):
             description = soup.find("p",class_="descriptif").text.strip()
@@ -240,11 +249,16 @@ class auditaSpider(scrapy.Spider):
                 if deposit:
                     item["deposit"] = deposit
 
-            if description.split("LOYER HORS CHARGES"):
-                utilities=int(re.findall(r'\d+',description.split("LOYER HORS CHARGES")[-1].split("+")[-1])[0])
-                if utilities:
-                    item["utilities"] = utilities
+            if len(description.split("LOYER HORS CHARGES")) > 1:
+                if len(description.split("LOYER HORS CHARGES")[-1].split("CHARGES :")[-1]) > 1:
+                    utilities=int(re.findall(r'\d+',description.split("LOYER HORS CHARGES")[-1].split("CHARGES :")[-1])[0])
+                    if utilities:
+                        item["utilities"] = utilities
 
+            elif len(description.split("CHARGES :")) > 1:
+                utilities = int(re.findall(r'\d+',description.split("CHARGES :")[-1])[0])
+                if utilities:
+                        item["utilities"] = utilities
 
             if "garage" in description.lower() or "parking" in description.lower() or "autostaanplaat" in description.lower():
                 item["parking"]=True

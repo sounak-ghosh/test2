@@ -9,16 +9,7 @@ import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-# import geopy
-# from geopy.geocoders import Nominatim
-# from geopy.extra.rate_limiter import RateLimiter
 
-# locator = Nominatim(user_agent="myGeocoder")
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng) # "52","76"
-#     location = locator.reverse(coordinates)
-#     return location
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
@@ -48,7 +39,7 @@ def getPrice(text):
             output = int(list_text[0])
         else:
             output=0
-    else:
+    elif "." in text:
         if len(list_text) > 1:
             output = float(list_text[0]+"."+list_text[1])
         elif len(list_text) == 1:
@@ -132,12 +123,11 @@ class QuotesSpider(scrapy.Spider):
 
         json_response = json.loads(response.body)
         prop_items = json_response["items"]
-       
+
         for prop in prop_items:
 
             external_id = prop.get("property")["id"]
             external_link = 'https://www.pickardproperties.co.uk/property-details/' + prop.get("property")["uri"]
-            print(external_link)
             title = prop.get("property")["title"]
             address = prop.get("property")["address"]
             zipcode = prop.get("property")["postcode"]
@@ -147,6 +137,7 @@ class QuotesSpider(scrapy.Spider):
             date_available = prop.get("property")["date_available"]
             lat = prop.get("property")["latitude"]
             lng = prop.get("property")["longitude"]
+
             yield scrapy.Request(
                 url=external_link, 
                 callback=self.get_property_details, 
@@ -178,11 +169,16 @@ class QuotesSpider(scrapy.Spider):
             item["rent"] = getSqureMtr(response.meta.get('rent'))
         if response.meta.get('room_count'):
             item["room_count"] = response.meta.get('room_count')
-        # item["date_available"] = response.meta.get('date_available')
         item["latitude"] = response.meta.get('lat')
         item["longitude"] = response.meta.get('lng')
         item["currency"]='EUR'
+        item["landlord_phone"] = "8164306"
+        item["landlord_name"] = "Pickard Properties"
 
+
+        if soup2.find("i",alt="Bathrooms"):
+            bath_count =  int(soup2.find("i",alt="Bathrooms").find_next("span").text.strip())
+            item["bathroom_count"] = bath_count
 
         if "rent" not in item:
             if soup2.find("i",class_="p-calendar").find_next("span"):
@@ -211,7 +207,7 @@ class QuotesSpider(scrapy.Spider):
 
         for dep in soup2.find("div", class_="property-spec-boxes block-grid-lg-2 block-grid-md-1 block-grid-sm-1 block-grid-xs-2").findAll("div", class_="block-grid-item"):
             if re.findall("(.+)deposit",str(dep.text.strip())):
-                item["deposit"] = getSqureMtr(re.findall("(.+)deposit",str(dep.text.strip()))[0])
+                item["deposit"] = getPrice(re.findall("(.+)deposit",str(dep.text.strip()))[0])
 
         description = soup2.find("div", class_="more-property").text.strip()
         item["description"] = description

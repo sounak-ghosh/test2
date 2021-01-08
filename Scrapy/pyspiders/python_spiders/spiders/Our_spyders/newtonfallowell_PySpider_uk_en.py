@@ -6,22 +6,14 @@ from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
 import re,json
 from bs4 import BeautifulSoup
-import requests,time
-# from geopy.geocoders import Nominatim
-# import timestring
+import time
 from word2number import w2n
 
-geolocator = Nominatim(user_agent="myGeocoder")
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
     zipcode, city = zip_city.split(" ")
     return zipcode, city
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng)
-#     location = geolocator.reverse(coordinates)
-#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
@@ -72,8 +64,6 @@ def strToDate(text):
         date = datetime.strptime(text, '%d/%m/%Y').strftime('%Y-%m-%d')
     elif "-" in text:
         date = datetime.strptime(text, '%Y-%m-%d').strftime('%Y-%m-%d')
-    # else:
-    #     date = str(timestring.Date(text)).replace("00:00:00","").strip()
     return date
 
 
@@ -128,12 +118,7 @@ class laforet(scrapy.Spider):
 
         rent = getPrice(soup.find("section",class_="background-default property-header").find("div",class_="property-price-availability flex-grow-1").find("span",class_="amount").text)
         if rent:
-            item["rent"] = rent
-
-        # if num_there(soup.find("section",class_="background-default property-header").find("div",class_="property-price-availability flex-grow-1").find("div",class_="availability").text):
-        #     date = soup.find("section",class_="background-default property-header").find("div",class_="property-price-availability flex-grow-1").find("div",class_="availability").text.replace("Available from:","").strip()
-        #     date = strToDate(date)
-        #     item["available_date"] = date
+            item["rent"] = rent*4
 
         if soup.find("section",class_="background-default property-header").find("div",class_="property-meta").find("span",title="Bedrooms"):
             room = soup.find("section",class_="background-default property-header").find("div",class_="property-meta").find("span",title="Bedrooms").find("span").text
@@ -152,18 +137,29 @@ class laforet(scrapy.Spider):
             bathroom = soup.find("section",class_="background-default property-header").find("div",class_="property-meta").find("span",title="Bathrooms").find("span").text
             if int(bathroom):
                 item["bathroom_count"] = int(bathroom)
-            # print(bathroom)
 
         if soup.find("div", id="property-overview"):
             overview = soup.find("div", id="property-overview").find("div",class_="accordion-content").find("ul").find_all("li")
             for ech_over in overview:
                 if "deposit" in ech_over.text.lower():
-                    deposit = getPrice(ech_over.text)
+                    deposit = getSqureMtr(ech_over.text)
                     if deposit:
                         item["deposit"] = deposit
 
                 if (("unfurnished" or "un-furnished") not in ech_over.text.lower()) and "furnished" in ech_over.text.lower():
-                    furniture = True
+                    item["furnished"] = True
+
+        if soup.find("div",id="property-features-accordion"):
+            features = soup.find("div",id="property-features-accordion").find("ul").find_all("li")
+            for ech_ftr in features:
+                if "deposit" in ech_ftr.text.lower():
+                    deposit = getSqureMtr(ech_ftr.text)
+                    if deposit:
+                        item["deposit"] = deposit
+
+                if (("unfurnished" or "un-furnished") not in ech_ftr.text.lower()) and "furnished" in ech_ftr.text.lower():
+                    item["furnished"] = True
+
 
         desc = ""
         description = soup.find("div", id="property-description").find("div",class_="readmore").find_all("p")
@@ -201,7 +197,6 @@ class laforet(scrapy.Spider):
             images_list.append(im.find("a")["href"])
         if images_list:
             item["images"]=images_list
-            # print(images_list)
 
         plan_images_list = []
         if soup.find("div",class_="floor-plans-container"):    
@@ -224,26 +219,20 @@ class laforet(scrapy.Spider):
         lat = soup.find("div", id="property-map")["data-lat"]
         lon = soup.find("div", id="property-map")["data-lng"]
 
-        # location=getAddress(lat,lon)
-        # address = location.address
-        # item["address"] = address
         item["latitude"] = lat
         item["longitude"] = lon
 
-        # if "city" in location.raw["address"]:
-        #     item["city"] = location.raw["address"]["city"]
-        # elif "town" in location.raw["address"]:
-        #     item["city"] = location.raw["address"]["town"]
-        # elif "village" in location.raw["address"]:
-        #     item["city"] = location.raw["address"]["village"]
-        # if "postcode" in location.raw["address"]:
-        #     item["zipcode"] = location.raw["address"]["postcode"]
-
         title = soup.find("h1", class_="property-address").text.strip()
+        city = title.split(",")[-2]
+        zipcode = title.split(",")[-1]
+        item["city"] = city
+        item["zipcode"] = zipcode
+        item["landlord_name"]="Newton Fallowell"
+        item["address"] = title
         item["title"] = title
         item["external_link"] = response.url
         item["external_source"] = "newtonfallowell_co_uk_PySpider_uk_en"
         item["property_type"] = "apartment"
-        item["currency"] = "GBT"
-        print (item)
+        item["currency"] = "GBP"
+        # print (item)
         yield item

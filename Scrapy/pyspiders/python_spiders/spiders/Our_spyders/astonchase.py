@@ -9,16 +9,6 @@ import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-# import geopy
-# from geopy.geocoders import Nominatim
-# from geopy.extra.rate_limiter import RateLimiter
-
-# locator = Nominatim(user_agent="myGeocoder")
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng) # "52","76"
-#     location = locator.reverse(coordinates)
-#     return location
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
@@ -238,13 +228,17 @@ class QuotesSpider(scrapy.Spider):
                 item['washing_machine'] = True
             if 'dishwasher' in tt.text.lower():
                 item['dishwasher'] = True
-        for ss in sou.find_all('script'):
-            if 'longi' in ss.text.lower():
-                dic =  json.loads(ss.text)
-                item['zipcode'] = dic['address']['postalCode']
-                item['city'] = dic['address']['addressLocality']
-                item['latitude'] = dic['geo']['latitude']
-                item['longitude'] = dic['geo']['longitude']
+
+        json_text = "".join(str(sou.find("script",type="application/ld+json")).split())
+        match = re.findall(r'>(.*)<',json_text)
+
+        if match:
+            dic = json.loads(match[0])
+            item['zipcode'] = dic['address']['postalCode']
+            item['city'] = dic['address']['addressLocality']
+            item['latitude'] = str(dic['geo']['latitude'])
+            item['longitude'] = str(dic['geo']['longitude'])
+
         if sou.find('div',class_='callout-content'):
             item["landlord_name"] = sou.find('div',class_='callout-content').find_all('a')[0].text
             item["landlord_phone"] = sou.find('div',class_='callout-content').find_all('a')[1].text
@@ -265,200 +259,5 @@ class QuotesSpider(scrapy.Spider):
         if description:
             item['description'] = description
 
-
         print (item)
         yield(item)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        # rec = {}
-        # address = soup2.find('h1').text
-
-        # rent,room_count = re.findall('\d+',clean_value(soup2.find('h2').text.replace(',','')))
-
-        # property_type = ''
-        # if 'house' in clean_value(soup2.find('h2').text.replace(',','')).lower():
-        #     property_type = 'house'
-        # if 'apartment' in clean_value(soup2.find('h2').text.replace(',','')).lower():
-        #     property_type = 'apartment'
-        # if 'studio' in clean_value(soup2.find('h2').text.replace(',','')).lower():
-        #     property_type = 'studio'
-        # if 'studio' in clean_value(soup2.find('h2').text.replace(',','')).lower():
-        #     property_type = 'studio'
-        # else:
-        #     property_type = ''
-        # square_meters = 0
-        # currency = 'EUR'
-
-        # email = soup2.find('a',href=re.compile('info@')).text
-
-        # contact = (re.findall('\d{11}',soup2.find('a',href=re.compile('info@')).find_previous('td').text.replace(' ','')))[0]
-
-        # landlo = soup2.find('a',href=re.compile('info@')).find_previous('td').find('strong').text
-
-        # city = address.split(',')[-1]
-
-        # ss = None
-        # try:
-        #     ss = geolocator.geocode(city)
-        # except:
-        #     pass
-
-        # if ss:
-        #     item['latitude'] = str(ss.latitude)
-        #     item['longitude'] = str(ss.longitude)
-
-        # s = None
-        # try:
-        #     s = geolocator.reverse((rec['latitude'],rec['longitude']))
-        # except:
-        #     pass
-        # if s:
-        #     zipcode = s.raw['address'].get('postcode','').strip()
-        #     item['zipcode'] = zipcode
-
-        # item['city'] = city
-        # item['address'] = address
-        # item['rent'] = int(rent)
-        # item['room_count'] = int(room_count)
-        # item['property_type'] = property_type
-        # item['square_meters'] = square_meters
-        # item['currency'] = currency
-        # item['external_link'] =external_link
-        # item['external_source'] = external_source
-        # item['landlord_name'] = landlo
-        # item['landlord_email'] = email
-        # item['landlord_phone'] = contact
-
-        # img = set()
-        # for im in soup2.find_all('img',attrs={'name':re.compile('TI')}):
-        #     img.add('http://pmestates.com/'+im['src'])
-        # if img:
-        #     images = list(img)
-        #     external_images_count = len(img)
-        #     item['images'] = images
-        #     item['external_images_count'] = external_images_count
-
-        # desc = clean_value(soup2.find('h1').find_parent('tr').find_parent('tr').find_parent('tr').find_next_sibling('tr').text)
-        # item['description'] = desc
-        # print (item)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        # item["external_id"] = response.meta.get('external_id')
-        # item["title"] = response.meta.get('title')
-        # item["address"] = response.meta.get('address')
-        # item["zipcode"] = response.meta.get('zipcode')
-        # item["city"] = response.meta.get('city')
-        # if getSqureMtr(response.meta.get('rent')):
-        #     item["rent"] = getSqureMtr(response.meta.get('rent'))
-        # if response.meta.get('room_count'):
-        #     item["room_count"] = response.meta.get('room_count')
-        # # item["date_available"] = response.meta.get('date_available')
-        # item["latitude"] = response.meta.get('lat')
-        # item["longitude"] = response.meta.get('lng')
-        # item["currency"]='EUR'
-
-
-        # if "rent" not in item:
-        #     if soup2.find("i",class_="p-calendar").find_next("span"):
-        #         text_price = soup2.find("i",class_="p-calendar").find_next("span").text.strip()
-        #         if getPrice(text_price) and "pcm" in text_price.lower():
-        #             item["rent"] = getPrice(text_price)
-        #         elif getPrice(text_price) and "pppw" in text_price.lower():
-        #             item["rent"] = getPrice(text_price)*4
-
-        # images = []
-        # for img in soup2.findAll("div", class_="block-grid-item property-image-thumbnail-container"):
-        #     images.append('https://www.pickardproperties.co.uk'+img.find("a")['href'].strip())
-        # if images:
-        #     item["images"]= images
-
-        # floor_image = []
-        # if soup2.find("div",id="floor-plan"):
-        #     url_text = soup2.find("div",id="floor-plan").find("a")["href"]
-        #     floor_image = ["https://www.pickardproperties.co.uk"+url_text]
-        #     item["floor_plan_images"] = floor_image
-        # if floor_image or images:
-        #     item["external_images_count"]= len(images)+len(floor_image)
-
-        # if soup2.find("div", id="epc"):
-        #     item["energy_label"] = soup2.find("div", id="epc").find("a")['href'].split('_')[-1].replace('.png', '')[:2]
-
-        # for dep in soup2.find("div", class_="property-spec-boxes block-grid-lg-2 block-grid-md-1 block-grid-sm-1 block-grid-xs-2").findAll("div", class_="block-grid-item"):
-        #     if re.findall("(.+)deposit",str(dep.text.strip())):
-        #         item["deposit"] = getSqureMtr(re.findall("(.+)deposit",str(dep.text.strip()))[0])
-
-        # description = soup2.find("div", class_="more-property").text.strip()
-        # item["description"] = description
-        # if "swimming" in description.lower():
-        #     item["swimming_pool"] = True
-        # if "furnish" in description.lower():
-        #     item["furnished"]=True
-        # if "parking" in description.lower():
-        #     item["parking"] = True
-        # if "balcony" in description.lower():
-        #     item["balcony"]=True
-        # if "lift" in description.lower() or "elevator" in description.lower():
-        #     item["elevator"]=True
-
-        # if "flat" in description.lower() or "apartment" in description.lower():
-        #     property_type = "apartment"
-        # elif "house" in description.lower() or "maisonette" in description.lower() or "bungalow" in description.lower():
-        #     property_type = "house" 
-        # else:
-        #     property_type = "NA"
-        # item["property_type"] = property_type
-
-        # item["external_source"] = 'pickardproperties_PySpider_england_en'
-
-        # if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
-        #     print(item)
-        #     yield item

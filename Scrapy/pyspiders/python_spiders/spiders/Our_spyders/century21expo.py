@@ -5,7 +5,6 @@ import js2xml
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-
 import ssl,requests,json,time,csv,random
 import re
 from bs4 import BeautifulSoup
@@ -14,15 +13,6 @@ from multiprocessing import Process, Pool
 import random
 import os
 from datetime import datetime
-# import geopy
-# from geopy.geocoders import Nominatim
-
-# locator = Nominatim(user_agent="myGeocoder")
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng)
-#     location = locator.reverse(coordinates)
-#     return location
 
 def strToDate(text):
     if "/" in text:
@@ -54,6 +44,8 @@ class UpgradeimmoSpider(scrapy.Spider):
 
     def parse(self, response, **kwargs):
         all_data = json.loads(response.body)
+        print (response.url)
+        
 
         count = 0
         for j_data in all_data["data"]:
@@ -78,12 +70,15 @@ class UpgradeimmoSpider(scrapy.Spider):
                 p_type = "NA"
 
             if j_data['type'] in ["APARTMENT","HOUSE"]:
-                # print (count)
 
                 if j_data['type'] == "APARTMENT":
                     type_txt = "appartement"
                 else:
                     type_txt = "maison"
+
+                # if "surface" in j_data and "habitableSurfaceArea" in j_data["surface"] and j_data["surface"]["habitableSurfaceArea"]:
+                #     item["square_meters"]
+
 
                 item["external_link"] ='https://www.century21.be/fr/properiete/a-louer/'+type_txt+'/'+ p_city + '/'+properties_id
                 item["property_type"] = j_data["type"].lower()
@@ -112,9 +107,6 @@ class UpgradeimmoSpider(scrapy.Spider):
 
                 if "location" in j_data:
                     item["latitude"],item["longitude"] = str(j_data['location']['latitude']),str(j_data['location']['longitude'])
-
-                    # location = getAddress(item["latitude"],item["longitude"])
-                    # item["address"] = location.address
                 
                 if "address" not in item:
                     try:
@@ -212,37 +204,15 @@ class UpgradeimmoSpider(scrapy.Spider):
                 except:
                     pass
 
-                print (agency_url)
-
-
                 agency_res = requests.get(agency_url)
                 js_d = json.loads(agency_res.content.decode("utf-8"))
 
                 if "data" in js_d and "name" in js_d['data']:
                     item["landlord_name"] = js_d['data']['name']
-                    print (True)
                 
                 if "data" in js_d and "email" in js_d['data']:        
                     item["landlord_email"] = js_d['data']['email']
-                    print (True)
                 if "data" in js_d and "phoneNumber" in js_d['data']:        
                     item["landlord_phone"] = js_d['data']['phoneNumber']
-                    print (True)
+                print (item)
                 yield item
-
-    # def get_property_details(self, response):
-
-    #     js_d = json.loads(response.body)
-    #     print (response.meta.get("agency_url"),">>>>>",js_d)
-    #     item = response.meta.get("item")
-    
-    #     if "data" in js_d and "name" in js_d['data']:
-    #         item["landlord_name"] = js_d['data']['name']
-        
-    #     if "data" in js_d and "email" in js_d['data']:        
-    #         item["landlord_email"] = js_d['data']['email']
-        
-    #     if "data" in js_d and "phoneNumber" in js_d['data']:        
-    #         item["landlord_phone"] = js_d['data']['phoneNumber']
-
-    #     yield item

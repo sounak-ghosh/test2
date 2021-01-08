@@ -14,15 +14,6 @@ from multiprocessing import Process, Pool
 import random
 import os
 from datetime import datetime
-# import geopy
-# from geopy.geocoders import Nominatim
-
-# locator = Nominatim(user_agent="myGeocoder")
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng)
-#     location = locator.reverse(coordinates)
-#     return location
 
 def strToDate(text):
     if "/" in text:
@@ -54,6 +45,8 @@ class UpgradeimmoSpider(scrapy.Spider):
 
     def parse(self, response, **kwargs):
         all_data = json.loads(response.body)
+
+        print (response.url)
 
         count = 0
         for j_data in all_data["data"]:
@@ -113,8 +106,6 @@ class UpgradeimmoSpider(scrapy.Spider):
                 if "location" in j_data:
                     item["latitude"],item["longitude"] = str(j_data['location']['latitude']),str(j_data['location']['longitude'])
 
-                    # location = getAddress(item["latitude"],item["longitude"])
-                    # item["address"] = location.address
                 
                 if "address" not in item:
                     try:
@@ -229,19 +220,3 @@ class UpgradeimmoSpider(scrapy.Spider):
 
                 yield item
 
-    # def get_property_details(self, response):
-
-    #     js_d = json.loads(response.body)
-    #     print (response.meta.get("agency_url"),">>>>>",js_d)
-    #     item = response.meta.get("item")
-    
-    #     if "data" in js_d and "name" in js_d['data']:
-    #         item["landlord_name"] = js_d['data']['name']
-        
-    #     if "data" in js_d and "email" in js_d['data']:        
-    #         item["landlord_email"] = js_d['data']['email']
-        
-    #     if "data" in js_d and "phoneNumber" in js_d['data']:        
-    #         item["landlord_phone"] = js_d['data']['phoneNumber']
-
-    #     yield item
