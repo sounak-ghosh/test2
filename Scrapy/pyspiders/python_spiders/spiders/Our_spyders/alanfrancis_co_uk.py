@@ -70,11 +70,11 @@ def cleanKey(data):
 
 
 class QuotesSpider(scrapy.Spider):
-    name = 'alanfrancis_co_uk_PySpider_unitedkingdom_en'
+    name = 'alanfrancis_co_uk_PySpider_united_kingdom_en'
     allowed_domains = ['www.alanfrancis.co.uk']
     start_urls = ['www.alanfrancis.co.uk']
     execution_type = 'testing'
-    country = 'unitedkingdom'
+    country = 'united_kingdom'
     locale ='en'
 
     def start_requests(self):
@@ -206,7 +206,7 @@ class QuotesSpider(scrapy.Spider):
         if floor_plan_list or image_list:
             item["external_images_count"] = len(floor_plan_list)+len(image_list)
 
-        item["external_source"] = "alanfrancis_co_uk_PySpider_unitedkingdom_en"
+        item["external_source"] = "alanfrancis_co_uk_PySpider_united_kingdom_en"
         item["landlord_name"] = "Alan Francis Estate Agents"
         item["landlord_phone"] = "01908 675 747"
         item["landlord_email"] = "lettings@alanfrancis.co.uk"

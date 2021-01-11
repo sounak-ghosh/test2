@@ -204,6 +204,16 @@ class laforet(scrapy.Spider):
         else:
             property_type = "NA"
 
+        address1 = response.xpath("//p[@class='comment']/text()").extract()
+        item['address'] = address1[0]
+
+        rev_address = address1[0].split()[::-1]
+        rev_address = [x for x in rev_address if x.strip()]
+        for r in rev_address:
+            if num_there(r):
+                item['zipcode'] = r
+                break
+        item['city'] = rev_address[0]        
 
 
         photo_links = []
@@ -244,6 +254,7 @@ class laforet(scrapy.Spider):
                 temp_dic.update({str(row).split('<li>')[1].split('<span>')[0].strip(): row.find('span').text.strip()})
 
         temp_dic = cleanKey(temp_dic)
+        print(temp_dic)
         if "disponiblele" in temp_dic and num_there(temp_dic["disponiblele"]):
             if "/2020" not in temp_dic["disponiblele"]:
                 item["available_date"] = format_date(temp_dic["disponiblele"]+"20")
@@ -262,7 +273,8 @@ class laforet(scrapy.Spider):
         if "pi_ces" in temp_dic and getSqureMtr(temp_dic["pi_ces"]):
             item["room_count"] = getSqureMtr(temp_dic["pi_ces"])
 
-
+        if 'd_p_tdegarantie' in temp_dic:
+            item['deposit'] = getPrice(temp_dic['d_p_tdegarantie'])
         if soup.find("img",alt="Énergie - Consommation conventionnelle"):
             text = soup.find("img",alt="Énergie - Consommation conventionnelle")["src"].split("/")[-1].strip()
             item["energy_label"] = text+" kWhEP/m².an"

@@ -261,7 +261,9 @@ class laforet(scrapy.Spider):
             item["latitude"] = latitude
             item["longitude"] = longitude
 
-
+        if 'oui' in response.xpath("//span[text()='meublé :']/following-sibling::span/text()").extract():
+            item['furnished']=True
+        item['description'] = ' '.join(response.xpath("//div[@id='FicheDescriptifDebutTexte']/p/text()").extract())
         item["landlord_phone"] = "04 72 77 15 77"
         item["landlord_name"] = "GALYO"
         item["external_source"] = "galyo_fr_PySpider_france_fr"

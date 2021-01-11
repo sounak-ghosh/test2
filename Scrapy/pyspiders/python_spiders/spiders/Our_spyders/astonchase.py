@@ -122,11 +122,11 @@ def traverse( data):
 
 
 class QuotesSpider(scrapy.Spider):
-    name = "astonchase_PySpider_london_en"
+    name = "astonchase_PySpider_united_kingdom_en"
     allowed_domains = ['www.astonchase.com']
     start_urls = ['www.astonchase.com']
     execution_type = 'testing'
-    country = 'london'
+    country = 'united_kingdom'
     locale ='en'
 
     def start_requests(self):
@@ -159,7 +159,7 @@ class QuotesSpider(scrapy.Spider):
                 li = div.find_previous('li')
                 rec = {}
                 external_link = 'https://www.astonchase.com'+li.find('h5').find('a')['href']
-                external_source = 'astonchase_PySpider_london_en'
+                external_source = 'astonchase_PySpider_united_kingdom_en'
                 address = li.find('h5').text
                 if li.find('i',class_="icon-bedrooms"):
                     room_count = int(li.find('i',class_="icon-bedrooms").find_previous('span').text)

@@ -182,7 +182,7 @@ class auditaSpider(scrapy.Spider):
     allowed_domains = ['www.rightmove.co.uk']
     start_urls = ['www.rightmove.co.uk']
     execution_type = 'testing'
-    country = 'uk'
+    country = 'united_kingdom'
     locale ='en'
 
     def start_requests(self):

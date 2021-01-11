@@ -79,11 +79,11 @@ def strToDate(text):
 
 
 class QuotesSpider(scrapy.Spider):
-    name = 'ramestateagent_PySpider_uk_en'
+    name = 'ramestateagent_PySpider_united_kingdom_en'
     allowed_domains = ['www.ramestateagent.com']
     start_urls = ['www.ramestateagent.com']
     execution_type = 'testing'
-    country = 'uk'
+    country = 'united_kingdom'
     locale ='en'
 
 
@@ -282,7 +282,7 @@ class QuotesSpider(scrapy.Spider):
 
             # item["address"] = address
             # item["zipcode"] = location.raw["address"]["postcode"]
-        item["external_source"] = 'ramestateagent_PySpider_uk_en'    
+        item["external_source"] = 'ramestateagent_PySpider_united_kingdom_en'    
         price_pw = getPrice(soup.find('span',class_='fullprice2').text.strip())  
         item['rent'] = price_pw*4    
         con = soup.find('i',class_='fas fa-phone')

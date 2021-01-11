@@ -67,11 +67,11 @@ def cleanKey(data):
 
 
 class laforet(scrapy.Spider):
-    name = 'snestates_PySpider_uk_en'
+    name = 'snestates_PySpider_united_kingdom_en'
     allowed_domains = ['www.snestates.com']
     start_urls = ['www.snestates.com']
     execution_type = 'testing'
-    country = 'uk'
+    country = 'united_kingdom'
     locale ='en'
 
 
@@ -186,7 +186,7 @@ class laforet(scrapy.Spider):
         item["landlord_name"] = "SN ESTATES LONDON LTD"
         item["landlord_phone"] = "02070961297"
         item["landlord_email"] = "sales@snestates.com"
-        item["external_source"] = "snestates_PySpider_uk_en"
+        item["external_source"] = "snestates_PySpider_united_kingdom_en"
         item["currency"] = "GBP"
         item["title"] = response.meta["address"]
         item["address"] = response.meta["address"]

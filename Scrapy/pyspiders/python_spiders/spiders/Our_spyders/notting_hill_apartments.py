@@ -86,11 +86,11 @@ def cleanKey(data):
 
 
 class auditaSpider(scrapy.Spider):
-    name = 'Nottinghillapartments_PySpider_united_kingdom'
+    name = 'Nottinghillapartments_PySpider_united_kingdom_en'
     allowed_domains = ['nottinghillapartments.com']
     start_urls = ['nottinghillapartments.com']
     execution_type = 'testing'
-    country = 'uk'
+    country = 'united_kingdom'
     locale ='en'
 
     def start_requests(self):
@@ -100,7 +100,7 @@ class auditaSpider(scrapy.Spider):
 
     def parse(self, response, **kwargs):
         soup = BeautifulSoup(response.body)
-
+        
         all_prop = soup.find_all("div", class_="prop-info")
         
         global el
@@ -137,15 +137,16 @@ class auditaSpider(scrapy.Spider):
         soup = BeautifulSoup(response.body,"html.parser")
         print(response.url)
         item["external_link"] = response.url
-
+        
         rent = soup.find("div", class_="clearfix padding30").find("span", class_="prop-price pull-right serif italic").text
-        rent_month = int((getSqureMtr(rent)/7)*30)
+        rent_month = int(getSqureMtr(rent))*4
         # print(rent_month)
         item["rent"] = rent_month
 
         title = soup.find("div", class_="clearfix padding30").find("h2", class_="prop-title pull-left margin0").text
         # print(title)
         item["title"] = title
+        item["external_id"] = item["title"].split()[-1]
 
         all_h2_title = soup.find_all("h2", class_="prop-title pull-left margin0")
         for ech_h2 in all_h2_title:
@@ -159,12 +160,17 @@ class auditaSpider(scrapy.Spider):
             temp_dic[ech_li.find("span", class_="pull-left").text] = ech_li.find("span", class_="qty pull-right").text
         temp_dic = cleanKey(temp_dic)
         # print(temp_dic)
+        item["property_type"] = "apartment"
 
         # {'id': 'FLAT-\xadLG71-11', 'propertytype': '1 Bedroom', 'bedrooms': '1 ', 'bathrooms': '1 ', 'parking': 'On street (permit req)', 'heating': 'Central heating', 'location': 'Notting Hill'}
+        
         if "id" in temp_dic:
             reference_id = temp_dic["id"]
             # print(reference_id) #extra - nikalna hai
             item["external_id"] = reference_id
+        if 'propertytype' in  temp_dic:
+            if 'studio' in temp_dic["propertytype"].lower():
+                item["property_type"] =  'studio'  
 
         if "bedrooms" in temp_dic:
             if num_there(temp_dic["bedrooms"]):
@@ -202,7 +208,10 @@ class auditaSpider(scrapy.Spider):
             item["dishwasher"] = True
         if "lift" in desc.lower() or "elevator" in desc.lower():
             item["elevator"] = True
-
+        if 'furnished' in response.body.decode('utf-8'):
+            item['furnished'] = True
+        if 'Parking' in response.body.decode('utf-8'):
+            item['parking'] = True    
 
         image_list = []
         for im in soup.find("ul", class_="slides").find_all("li"):
@@ -223,8 +232,8 @@ class auditaSpider(scrapy.Spider):
         item["zipcode"] = zipcode
 
         try:
-            location = geolocator.geocode(address)
-            lat=location.latitude
+            # location = geolocator.geocode(address)
+            # lat=location.latitude
             # print(lat)
             item["latitude"] = str(lat)
             lon=location.longitude
@@ -236,8 +245,8 @@ class auditaSpider(scrapy.Spider):
         item["landlord_name"] = "Notting Hill Apartments"
         item["landlord_phone"] = "+44 (0)20 7221 2288"
         item["landlord_email"] = "info@nottinghillapartments.com"
-        item["property_type"] = "apartment"
+        
         item["currency"] = "GBP"
-        item["external_source"] = "Nottinghillapartments_PySpider_united_kingdom"
+        item["external_source"] = "Nottinghillapartments_PySpider_united_kingdom_en"
         print(item)
         yield(item)

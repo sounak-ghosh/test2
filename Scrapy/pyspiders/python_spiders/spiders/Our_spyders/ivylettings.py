@@ -63,8 +63,8 @@ class QuotesSpider(scrapy.Spider):
     allowed_domains = ['www.ivylettings.com']
     start_urls = ['www.ivylettings.com']
     execution_type = 'testing'
-    country = 'french'
-    locale ='fr'
+    country = 'united_kingdom'
+    locale ='en'
 
     def start_requests(self):
         url = 'https://www.ivylettings.com/umbraco/Apartment/Search/GetResults?minPrice=0&maxPrice=0&bedrooms=&bathrooms=&features=&sleeps=&area=&searchText=&orderByField=nodeName&orderByDescending=false'

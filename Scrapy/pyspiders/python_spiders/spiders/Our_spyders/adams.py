@@ -127,7 +127,11 @@ class QuotesSpider(scrapy.Spider):
 
         item["title"] = soup2.find("h1", id="banner-title").text.strip()
 
-        item["rent"] = getSqureMtr(soup2.find("div", class_="price").text.replace(',', ''))
+        
+        if 'pw' in soup2.find("div", class_="price").text:
+            item["rent"] = getSqureMtr(soup2.find("div", class_="price").text.replace(',', ''))*4
+        else:
+            item["rent"] = getSqureMtr(soup2.find("div", class_="price").text.replace(',', ''))
 
         images = []
         for img in soup2.find("div", id="property-detail-thumbs").findAll("div", class_="item"):
@@ -150,6 +154,8 @@ class QuotesSpider(scrapy.Spider):
                 item["room_count"] = int(amenity.text.strip())
             if amenity.find("i", class_="icon-bathrooms"):
                 item["bathroom_count"] = int(amenity.text.strip())
+
+        item['address'] = soup2.find('h1',id='banner-title').text.strip()
 
         description = soup2.find("div", id="tabDescription").text.strip()
         item["description"] = description

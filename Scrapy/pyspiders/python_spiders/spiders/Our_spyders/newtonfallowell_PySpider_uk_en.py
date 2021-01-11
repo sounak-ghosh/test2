@@ -68,11 +68,11 @@ def strToDate(text):
 
 
 class laforet(scrapy.Spider):
-    name = 'newtonfallowell_co_uk_PySpider_uk_en'
+    name = 'newtonfallowell_co_uk_PySpider_united_kingdom_en'
     allowed_domains = ['www.newtonfallowell.co.uk']
     start_urls = ['www.newtonfallowell.co.uk']
     execution_type = 'testing'
-    country = 'uk'
+    country = 'united_kingdom'
     locale ='en'
 
 
@@ -231,7 +231,7 @@ class laforet(scrapy.Spider):
         item["address"] = title
         item["title"] = title
         item["external_link"] = response.url
-        item["external_source"] = "newtonfallowell_co_uk_PySpider_uk_en"
+        item["external_source"] = "newtonfallowell_co_uk_PySpider_united_kingdom_en"
         item["property_type"] = "apartment"
         item["currency"] = "GBP"
         # print (item)

@@ -121,7 +121,7 @@ def traverse( data):
         return data
 
 class laforet(scrapy.Spider):
-    name = 'beresford_residential_PySpider_france_en'
+    name = 'beresford_residential_PySpider_united_kingdom_en'
     allowed_domains = ['www.beresfordresidential.com']
     start_urls = ['www.beresfordresidential.com']
     execution_type = 'testing'
@@ -241,7 +241,7 @@ class laforet(scrapy.Spider):
 
         item["landlord_phone"] = "020 7358 7979"
         item["landlord_name"] = "Beresford Residential"
-        item["external_source"] = "beresford_residential_PySpider_france_en"
+        item["external_source"] = "beresford_residential_PySpider_united_kingdom_en"
         item["currency"] = "EUR"
         item["property_type"] = "apartment"
 

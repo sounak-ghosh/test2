@@ -192,7 +192,14 @@ class laforet(scrapy.Spider):
                 item['city'] = title.split("·")[0]
             except:
                 pass    
-
+            try:
+               zp = address.split()[::-1]
+               for z in zp:
+                if num_there(z):
+                    item['zipcode'] = z
+                    break
+            except:
+                pass    
 
         all_li = soup.find("div",class_="columns details").find("ul").find_all("li")
         temp_dic = {}

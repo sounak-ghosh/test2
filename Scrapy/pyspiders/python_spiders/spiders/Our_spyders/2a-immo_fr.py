@@ -31,7 +31,7 @@ def num_there(s):
 #     return location.address
 
 class HenroimmoSpider(scrapy.Spider):
-    name = '2a-immo.fr_PySpider_france_fr'
+    name = '2aimmo_fr_PySpider_france_fr'
     allowed_domains = ['2a-immo.fr']
     start_urls = ['https://www.2a-immo.fr/']
     execution_type = 'testing'
@@ -59,7 +59,7 @@ class HenroimmoSpider(scrapy.Spider):
     
     def get_details(self, response):
         item = ListingItem()
-        item['external_source'] = "2a-immo.fr_PySpider_france_fr"
+        item['external_source'] = "2aimmo_fr_PySpider_france_fr"
         item['external_link'] = response.url
         property_tp = response.xpath("//div[@class='container']//h1/text()").extract_first()
         if 'Appartement' in property_tp:
@@ -74,7 +74,7 @@ class HenroimmoSpider(scrapy.Spider):
         item['rent'] = getSqureMtr(response.xpath("//div[@class='price']//text()").extract()[0])#.split("€")[0]
         
         
-        item['currency'] = 'EURO'
+        item['currency'] = 'EUR'
         if getSqureMtr(response.xpath("//label[contains(text(),'Nombre de pièces')]/following-sibling::text()").extract_first()):
             item['room_count'] = getSqureMtr(response.xpath("//label[contains(text(),'Nombre de pièces')]/following-sibling::text()").extract_first())
         description = ''.join(response.xpath("//div[@class='content rendered-content']/p/text()").extract())

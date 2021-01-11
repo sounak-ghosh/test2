@@ -132,11 +132,11 @@ def traverse( data):
 
 
 class QuotesSpider(scrapy.Spider):
-    name = "pmestates_com_PySpider_london_en"
+    name = "pmestates_com_PySpider_united_kingdom_en"
     allowed_domains = ['pmestates.com']
     start_urls = ['pmestates.com']
     execution_type = 'testing'
-    country = 'london'
+    country = 'united_kingdom'
     locale ='en'
 
     def start_requests(self):
@@ -182,7 +182,7 @@ class QuotesSpider(scrapy.Spider):
         print(external_link)
         item["external_link"] = external_link
         item['external_id'] = external_link.split("=")[-1]
-        external_source = 'pmestates_com_PySpider_london_en'
+        external_source = 'pmestates_com_PySpider_united_kingdom_en'
         rec = {}
         address = soup2.find('h1').text
 

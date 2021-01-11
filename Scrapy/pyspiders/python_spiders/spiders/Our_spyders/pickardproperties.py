@@ -73,11 +73,11 @@ def cleanKey(data):
 
 
 class QuotesSpider(scrapy.Spider):
-    name = "pickardproperties_PySpider_england_en"
+    name = "pickardproperties_PySpider_united_kingdom_en"
     allowed_domains = ['www.pickardproperties.co.uk']
     start_urls = ['www.pickardproperties.co.uk']
     execution_type = 'testing'
-    country = 'england'
+    country = 'united_kingdom'
     locale ='en'
 
     def start_requests(self):
@@ -230,7 +230,7 @@ class QuotesSpider(scrapy.Spider):
             property_type = "NA"
         item["property_type"] = property_type
 
-        item["external_source"] = 'pickardproperties_PySpider_england_en'
+        item["external_source"] = 'pickardproperties_PySpider_united_kingdom_en'
 
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
             print(item)

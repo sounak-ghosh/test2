@@ -76,11 +76,11 @@ def strToDate(text):
 
 
 class spiderQoutes(scrapy.Spider):
-    name = 'liferesidential_PySpider_uk_en'
+    name = 'liferesidential_PySpider_united_kingdom_en'
     allowed_domains = ['liferesidential.co.uk']
     start_urls = ['liferesidential.co.uk']
     execution_type = 'testing'
-    country = 'uk'
+    country = 'united_kingdom'
     locale ='en'
 
 
@@ -210,7 +210,7 @@ class spiderQoutes(scrapy.Spider):
         item["landlord_name"] = inform.find("h2",class_="office-name").text
         item["landlord_phone"] = inform.find("a",class_="plain-link").text
         item["landlord_email"] = inform.find("a",class_="dont-break-out").text
-        item["external_source"] = "liferesidential_PySpider_uk_en"
+        item["external_source"] = "liferesidential_PySpider_united_kingdom_en"
         item["external_link"] = response.url
         item["currency"] = "GBP"
         print (item)

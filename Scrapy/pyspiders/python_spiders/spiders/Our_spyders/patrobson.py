@@ -58,11 +58,11 @@ def cleanKey(data):
         return data
 
 class QuotesSpider(scrapy.Spider):
-    name = "patrobson_com_PySpider_unitedkingdom_en"#com
+    name = "patrobson_com_PySpider_united_kingdom_en"#com
     allowed_domains = ['www.patrobson.com']
     start_urls = ['www.patrobson.com']
     execution_type = 'testing'
-    country = 'United Kingdom'
+    country = 'united_kingdom'
     locale ='en'
 
     def start_requests(self):
@@ -168,7 +168,7 @@ class QuotesSpider(scrapy.Spider):
             item["external_images_count"]= len(images) + len(floor_image)
 
         item["currency"]='GBP'
-        item["external_source"] = 'patrobson_com_PySpider_unitedkingdom_en'
+        item["external_source"] = 'patrobson_com_PySpider_united_kingdom_en'
         
         item["landlord_phone"] = "01912090100"
         # item["landlord_email"] = "info@cubixestateagents.co.uk"

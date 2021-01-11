@@ -58,11 +58,11 @@ def cleanKey(data):
 
 
 class QuotesSpider(scrapy.Spider):
-    name = "arwpropertysolutions_PySpider_england_uk"
+    name = "arwpropertysolutions_PySpider_uk"
     allowed_domains = ['www.arwpropertysolutions.co.uk']
     start_urls = ['www.arwpropertysolutions.co.uk']
     execution_type = 'testing'
-    country = 'england'
+    country = 'united_kingdom'
     locale ='uk'
 
     def start_requests(self):
@@ -168,7 +168,7 @@ class QuotesSpider(scrapy.Spider):
 
 
         item["currency"]='EUR'
-        item["external_source"] = 'arwpropertysolutions_PySpider_england_uk'
+        item["external_source"] = 'arwpropertysolutions_PySpider_united_kingdom_en'
 
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
             print(item)

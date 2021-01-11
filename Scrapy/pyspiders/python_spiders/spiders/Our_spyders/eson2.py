@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 import sys,re
 
 class HenroimmoSpider(scrapy.Spider):
-    name = 'eson2_co_uk_PySpider_unitedkingdom_en'
+    name = 'eson2_co_uk_PySpider_united_kingdom_en'
     allowed_domains = ['eson2.co.uk']
     start_urls = ['https://eson2.co.uk/']
     execution_type = 'testing'
@@ -36,7 +36,7 @@ class HenroimmoSpider(scrapy.Spider):
     def get_details(self, response):
         item = ListingItem()
         soup = BeautifulSoup(response.body,"html.parser")
-        item['external_source'] = "eson2_co_uk_PySpider_unitedkingdom_en"
+        item['external_source'] = "eson2_co_uk_PySpider_united_kingdom_en"
         item['external_link'] = response.url
         item['title'] = response.xpath("//h1[@class='prop-title']/text()").extract_first().strip()
         item['address'] = item['title']
