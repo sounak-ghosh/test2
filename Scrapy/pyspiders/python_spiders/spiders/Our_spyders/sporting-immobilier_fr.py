@@ -68,14 +68,21 @@ class HenroimmoSpider(scrapy.Spider):
         print (response.xpath("//h1[@class='entry-title']/span/text()").extract()[-1])
         item['rent'] = getSqureMtr(response.xpath("//h1[@class='entry-title']/span/text()").extract()[-1].split("–")[1])
         
+        ad_text = response.xpath("//h1[@class='entry-title']/span[contains(text(),'(')]/text()").extract()
+        if ad_text:
+            item['address'] = ad_text[0]
+            item['city'] = ad_text[0].split("(")[0].strip()
+            item['zipcode']= ad_text[0].split("(")[-1].replace(")","")
         
-        item['currency'] = 'EURO'
+        item['currency'] = 'EUR'
         if getSqureMtr(response.xpath("//h1[@class='entry-title']/text()").extract_first()):
             item['room_count'] = getSqureMtr(response.xpath("//h1[@class='entry-title']/text()").extract_first())#.split(" ")[-2]
         description = ''.join(response.xpath("//div[@class='bloc-content']//p//text()").extract())
         item['description'] = remove_white_spaces(description)
-        if 'parking' in description:
+        if 'parking' in description or 'Parking' in description:
             item['parking'] = True
+        if 'terrace' in description or 'Terrasse' in description or 'terrasse' in description:
+            item['terrace'] = True      
         sq_met =  response.xpath("//h1[@class='entry-title']//span/text()").extract()[-1].split("–")[0] 
         if getSqureMtr(extract_number_only(remove_unicode_char(sq_met))):
             item['square_meters'] = getSqureMtr(extract_number_only(remove_unicode_char(sq_met)))
