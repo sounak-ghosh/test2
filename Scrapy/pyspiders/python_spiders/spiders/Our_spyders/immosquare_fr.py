@@ -148,6 +148,7 @@ class QuotesSpider(scrapy.Spider):
        
     def get_property_details(self, response, **kwargs):
         item = ListingItem()
+        # print(response.body)
         soup = BeautifulSoup(response.body,"html.parser")
         str_soup = str(soup)
 
@@ -239,14 +240,21 @@ class QuotesSpider(scrapy.Spider):
 
 
         if soup.find("div",class_="w50 mod left"):
-            landlrd_name =(soup.find("div",class_="w50 mod left").text.strip().split("\n"))[1].strip()
-            item["landlrd_name"] = landlrd_name
+            try:
+                landlrd_name =(soup.find("div",class_="w50 mod left").text.strip().split("\n"))[1].strip()
+                item["landlord_name"] = landlrd_name
+            except:
+                landlrd_name = response.xpath("//h3[contains(text(),'Contact')]/ancestor::div[contains(@class,'negociateur')]/text()").extract()
+                item["landlord_name"] = landlrd_name  
 
         if soup.find("span",class_="vert mobile"):
-            phone_num = soup.find("span",class_="vert mobile").text.strip()
-            item["landlord_phone"] = phone_num
-
-
+            try:
+                phone_num = soup.find("span",class_="vert mobile").text.strip()
+                item["landlord_phone"] = phone_num
+            except:
+                pass    
+        if item["landlord_email"] :
+            item["landlord_email"] = item["landlord_name"].lower().replace(" ",".")+"@immosqare.fr"
 
         item["currency"] = "EUR"
         item["external_source"] = "immosquare_fr_PySpider_france_fr"
