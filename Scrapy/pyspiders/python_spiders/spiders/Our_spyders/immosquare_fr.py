@@ -253,7 +253,7 @@ class QuotesSpider(scrapy.Spider):
                 item["landlord_phone"] = phone_num
             except:
                 pass    
-        if item["landlord_email"] :
+        if item["landlord_name"] :
             item["landlord_email"] = item["landlord_name"].lower().replace(" ",".")+"@immosqare.fr"
 
         item["currency"] = "EUR"
