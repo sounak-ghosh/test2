@@ -6,23 +6,11 @@ from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
 import re,json
 from bs4 import BeautifulSoup
-import requests
-# import geopy
-# from geopy.geocoders import Nominatim
-
-
-
-# geolocator = Nominatim(user_agent="myGeocoder")
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
     zipcode, city = zip_city.split(" ")
     return zipcode, city
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng)
-#     location = geolocator.reverse(coordinates)
-#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
@@ -173,16 +161,8 @@ class laforet(scrapy.Spider):
             lat_lng = eval(match[0].split(",{")[0].replace("(",""))
             latitude = str(lat_lng[0])
             longitude = str(lat_lng[1])
-
-            # location = getAddress(latitude,longitude)
-            # item["address"] = location.address
             item["latitude"] = latitude
             item["longitude"] = longitude
-
-            # if "city" in location.raw["address"]:
-            #     item["city"]=location.raw["address"]["city"]
-            # if "postcode" in location.raw["address"]:
-            #     item["zipcode"]=location.raw["address"]["postcode"]
 
 
         title = soup.find('div', attrs={'class': 'title'}).find('h1').text.strip()
@@ -254,10 +234,11 @@ class laforet(scrapy.Spider):
                 temp_dic.update({str(row).split('<li>')[1].split('<span>')[0].strip(): row.find('span').text.strip()})
 
         temp_dic = cleanKey(temp_dic)
-        print(temp_dic)
         if "disponiblele" in temp_dic and num_there(temp_dic["disponiblele"]):
             if "/2020" not in temp_dic["disponiblele"]:
                 item["available_date"] = format_date(temp_dic["disponiblele"]+"20")
+            elif "/21" in temp_dic["disponiblele"][-3:]:
+                item["available_date"] = format_date(temp_dic["disponiblele"].replace("/21","/2021"))
             else:
                 item["available_date"] = format_date(temp_dic["disponiblele"])
 
@@ -291,5 +272,5 @@ class laforet(scrapy.Spider):
 
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
             item["property_type"] = property_type
-            print (item)
+            # print (item)
             yield item

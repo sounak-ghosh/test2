@@ -4,20 +4,9 @@ import scrapy
 import js2xml
 import re
 from bs4 import BeautifulSoup
-import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-# import geopy
-# from geopy.geocoders import Nominatim
-# from geopy.extra.rate_limiter import RateLimiter
-
-# locator = Nominatim(user_agent="myGeocoder")
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng) # "52","76"
-#     location = locator.reverse(coordinates)
-#     return location
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
@@ -80,7 +69,7 @@ def cleanKey(data):
         return data
 
 class QuotesSpider(scrapy.Spider):
-    name = "finders_co_uk_PySpider_unitedkingdom_en"
+    name = "finders_co_uk_PySpider_united_kingdom_en"
     allowed_domains = ['www.finders.co.uk']
     start_urls = ['www.finders.co.uk']
     execution_type = 'testing'
@@ -103,20 +92,17 @@ class QuotesSpider(scrapy.Spider):
 
         soup = BeautifulSoup(response.body,"html.parser")
 
-
         divs = soup.find("div",id="search_results")
         list_property = divs.find_all("div",class_="property")
-
 
         for index,items in enumerate(list_property):
             title_tag = items.find("p",class_ = "propertytitle none")
             if title_tag:
                 dic["title"] = title_tag.text.strip()
-
+                dic["address"] = dic["title"].replace(dic["title"].split("-")[0],"").strip()
             
             price = items.find("strong").text
             dic["rent"] = getPrice(price)
-
 
             ul_detaiils = items.find("ul",class_ = "details none").find_all("li")
 
@@ -127,18 +113,23 @@ class QuotesSpider(scrapy.Spider):
 
 
             temp_dic = cleanKey(temp_dic)
-            
+            # print(temp_dic)
             if "propertytype" in temp_dic:
-                dic["property_type"] = temp_dic["propertytype"]
+                if temp_dic["propertytype"] == "house":
+                    dic["property_type"] = temp_dic["propertytype"].lower().strip()
+                else:
+                    dic["property_type"] = "apartment"
             if "ref" in temp_dic:
                 dic["external_id"] = temp_dic["ref"]
             if "availabledate" in temp_dic and num_there(temp_dic["availabledate"]):
                 dic["available_date"] = format_date(temp_dic["availabledate"])
+            elif "availabledate" in temp_dic:
+                dic["available_date"] = "immediately"
 
 
-            if "furnishing" in temp_dic and temp_dic["furnishing"].lower() == "unfurnished":
+            if "furnishing" in temp_dic and "unfurnished" in temp_dic["furnishing"].lower():
                 dic["furnished"] = False
-            elif "furnishing" in temp_dic and (temp_dic["furnishing"].lower() == "furnished" or temp_dic["furnishing"].lower() == "flexible"):
+            elif "furnishing" in temp_dic and "furnished" in (temp_dic["furnishing"].lower()  or "flexible" in temp_dic["furnishing"].lower()):
                 dic["furnished"] = True
 
             if "bedrooms" in temp_dic and num_there(temp_dic["bedrooms"]):
@@ -158,7 +149,6 @@ class QuotesSpider(scrapy.Spider):
                 )
             
     def get_property_details(self,response,**kwargs):
-
         item = ListingItem()
 
         soup = BeautifulSoup(response.body,"html.parser")
@@ -171,7 +161,15 @@ class QuotesSpider(scrapy.Spider):
 
         dtls = soup.find("p",class_="location_details_introduction_full").text
 
+        if soup.find("input",id="maplat"):
+            item["latitude"] = soup.find("input",id="maplat")["value"]
+        if soup.find("input",id="maplng"):
+            item["longitude"] = soup.find("input",id="maplng")["value"]
+
         item["description"] = dtls
+        item["currency"] = "GBP"
+        item["landlord_phone"] = "01865 311011"
+        item["landlord_name"] = "Finders Keepers"
         item["external_source"] = "finders_co_uk_PySpider_unitedkingdom_en"
         pic = soup.find("div",class_="image_block fleft")
         picture = pic.find_all("div",class_="item")

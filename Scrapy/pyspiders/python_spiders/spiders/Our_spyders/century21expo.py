@@ -69,18 +69,16 @@ class UpgradeimmoSpider(scrapy.Spider):
             else:
                 p_type = "NA"
 
-            if j_data['type'] in ["APARTMENT","HOUSE"]:
+            if j_data['type'] in ["APARTMENT","HOUSE"] and j_data["status"] not in ["RENTED"]:
 
                 if j_data['type'] == "APARTMENT":
                     type_txt = "appartement"
                 else:
                     type_txt = "maison"
 
-                # if "surface" in j_data and "habitableSurfaceArea" in j_data["surface"] and j_data["surface"]["habitableSurfaceArea"]:
-                #     item["square_meters"]
-
 
                 item["external_link"] ='https://www.century21.be/fr/properiete/a-louer/'+type_txt+'/'+ p_city + '/'+properties_id
+                print (item["external_link"])
                 item["property_type"] = j_data["type"].lower()
                 item["city"] = j_data['address']['city'].lower().replace(' ','-')
 

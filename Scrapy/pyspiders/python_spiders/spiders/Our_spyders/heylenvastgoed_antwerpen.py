@@ -13,11 +13,6 @@ def extract_city_zipcode(_address):
     zipcode, city = zip_city.split(" ")
     return zipcode, city
 
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng)
-#     location = geolocator.reverse(coordinates)
-#     return location
-
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
 
@@ -131,7 +126,7 @@ class UpgradeimmoSpider(scrapy.Spider):
 
     def parse(self, response, **kwargs):
 
-        soup1 = BeautifulSoup(response.body)
+        soup1 = BeautifulSoup(response.body,"html.parser")
         for li in soup1.find('section',id='properties__list').find('ul').find_all('li',recursive=False):
             if not li.find('a',class_='property-contents'):
                 continue
@@ -159,12 +154,13 @@ class UpgradeimmoSpider(scrapy.Spider):
         item = ListingItem()
 
         external_link = response.meta.get('external_link')
+        print (external_link)
         room_count = response.meta.get('room_count')
         rent = response.meta.get('rent')
         city = response.meta.get('city')
         property_type = response.meta.get('property_type')
         temp_dic = {}
-        soup2 = BeautifulSoup(response.body)
+        soup2 = BeautifulSoup(response.body,"html.parser")
 
         item["external_link"] = external_link
         item["city"] = city
@@ -178,14 +174,11 @@ class UpgradeimmoSpider(scrapy.Spider):
                         if ech_div.find("dt") and ech_div.find("dd"):
                             temp_dic[ech_div.find("dt").text] = ech_div.find("dd").text.strip()
 
-
-
-
-
         temp_dic = cleanKey(temp_dic)
-
         if "beschikbaarheid" in temp_dic and num_there(temp_dic["beschikbaarheid"]):
-            item["available_date"] = temp_dic["beschikbaarheid"]
+            item["available_date"] = format_date(temp_dic["beschikbaarheid"])
+        elif "beschikbaarheid" in temp_dic and "Onmiddellijk".lower() in temp_dic["beschikbaarheid"].lower().strip():
+            item["available_date"] = "immediately"
 
         if "kosten" in temp_dic:
             text_list = re.findall('\d+',temp_dic["kosten"])
@@ -217,6 +210,8 @@ class UpgradeimmoSpider(scrapy.Spider):
             item["bathroom_count"]=getSqureMtr(temp_dic["badkamers"])   
 
 
+        if "bathroom_count" not in item and soup2.find("li",class_="bathrooms fader-element fading faded"):
+            item["bathroom_count"] = int(soup2.find("li",class_="bathrooms fader-element fading faded").text.strip())
 
 
 
@@ -225,16 +220,15 @@ class UpgradeimmoSpider(scrapy.Spider):
         if soup2.find('i',class_='icon area-big'):
             sq_mt = sq_mt = re.findall('\d+',soup2.find('i',class_='icon area-big').find_previous('li').text)[0]
 
-        item["address"]= soup2.find('section',id='property__title').find('div',class_='address').text.replace('Adres:','')
+        address = soup2.find('section',id='property__title').find('div',class_='address').text.replace('Adres:','')
+        zipcode =  address.split(",")[-1].strip().split(" ")[0].strip()
+
+        item["zipcode"] = zipcode
+        item["address"]= address
 
         item["title"]= soup2.find('section',id='property__title').find('div',class_='name').text
 
         item["description"]= soup2.find('div',id='description').text
-        ss=None
-        try:
-            ss = geolocator.geocode(city)
-        except:
-            pass
             
         if int(sq_mt):
             item["square_meters"]= int(sq_mt)
@@ -265,18 +259,9 @@ class UpgradeimmoSpider(scrapy.Spider):
 
     
         item["external_source"]='heylenvastgoed_antwerpen_PySpider_belgium_nl'
-
-        if ss:
-            item["latitude"]= str(ss.latitude)
-            item["longitude"]= str(ss.longitude)
-
-
-
-            # location = getAddress(rec["latitude"],rec["longitude"])
-            # item["zipcode"]= location.raw["address"]["postcode"]
-
             
-        item["landlord_phone"]= soup2.find('ul',id='sub__nav').find('a',class_=re.compile('mobile')).text
+        if soup2.find("a",class_="icon mobile-w text"):
+            item["landlord_phone"]= soup2.find("a",class_="icon mobile-w text").text.strip()
         item["landlord_email"]= soup2.find('ul',id='sub__nav').find('a',class_=re.compile('mail')).text
         item["landlord_name"]= 'Heylen Vastgoed Herentals'
 
@@ -296,5 +281,6 @@ class UpgradeimmoSpider(scrapy.Spider):
 
 
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
+            item["property_type"] = property_type
             print (item)
             yield item

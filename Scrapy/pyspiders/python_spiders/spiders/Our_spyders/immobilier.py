@@ -39,7 +39,7 @@ class QuotesSpider(scrapy.Spider):
             callback=self.sub_request)
 
     def sub_request(self, response):
-        bsoup = BeautifulSoup(response.body)
+        bsoup = BeautifulSoup(response.body,"html.parser")
         imax = int(re.findall('\d+',bsoup.find("div", id="selection").find("span", id="nb-res").text)[0])
 
         i = 0
@@ -59,7 +59,7 @@ class QuotesSpider(scrapy.Spider):
 
 
     def parse(self, response):
-        soup = BeautifulSoup(response.body)
+        soup = BeautifulSoup(response.body,"html.parser")
         links = []
         for link in soup.find_all("a"):
             links.append(link["href"].replace('\/', '/')[2:-2])
@@ -74,14 +74,16 @@ class QuotesSpider(scrapy.Spider):
         item = ListingItem()
 
         external_link = response.meta.get('external_link')
+        print (external_link)
         item["external_link"] = external_link
 
-        sub_soup = BeautifulSoup(response.body)
-
-        city = sub_soup.find("div", {"class" : "row"}).find("ul").find("li").text
-        item["city"] = city
+        sub_soup = BeautifulSoup(response.body,"html.parser")
+        if sub_soup.find("div", {"class" : "row"}).find("ul").find("li"):
+            city = sub_soup.find("div", {"class" : "row"}).find("ul").find("li").text
+            item["city"] = city
 
         item["title"] = sub_soup.find("div", {"class" : "row"}).find("h2").text
+        item["address"] = item["title"].replace(item["title"].split("-")[-1],"").strip()
 
         item["rent"] = getSqureMtr(sub_soup.find("strong", {"class" : "price"}).text.replace(',', '.').split(' ')[0].split('\xa0')[0])
         
@@ -103,12 +105,11 @@ class QuotesSpider(scrapy.Spider):
         item["external_images_count"]= len(images)
 
         item["currency"]='EUR'
-
+        property_type = "apartment"
         for li in sub_soup.find("div", {"class" : "row"}).find("ul").findAll("li"):
             if "Maison" in li.text:
                 property_type = "house"
                 item["property_type"] = property_type
-                item["room_count"] = int(sub_soup.find("div", {"class" : "row"}).find("h2").text[-1])
             if "Terrasse" in li.text:
                 item["terrace"] = True
             if "balcon" in li.text:
@@ -139,12 +140,14 @@ class QuotesSpider(scrapy.Spider):
         item["external_id"] = sub_soup.find("div", {"class": "col-md-2"}).find("h1").text.split(' ')[-1].split('°')[-1]
         
         item["external_source"] = 'immobilier_PySpider_france_fr'
-        # ut = response.xpath("//h3[text()='Provision pour charges :']/following-sibling::strong[1]").extract()
-        # print(">>>>>>>>",ut)
-        item['utilities'] = getSqureMtr(response.xpath("//h3[text()='Provision pour charges :']/following-sibling::strong[1]").extract()[0])
-        item['square_meters'] = getSqureMtr(response.xpath("//li[contains(text(),'m²')]").extract()[0])
+        
+        # print (response.xpath("//h3[text()='Provision pour charges :']/following-sibling::strong[1]").extract())
+        if response.xpath("//h3[text()='Provision pour charges :']/following-sibling::strong[1]").extract():
+            item['utilities'] = getSqureMtr(response.xpath("//h3[text()='Provision pour charges :']/following-sibling::strong[1]").extract()[0])
+        if response.xpath("//li[contains(text(),'m²')]").extract():
+            item['square_meters'] = getSqureMtr(response.xpath("//li[contains(text(),'m²')]").extract()[0])
         if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
-            print(item)
+            # print(item)
             yield item
 
 
