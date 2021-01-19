@@ -6,21 +6,11 @@ from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
 import re,json
 from bs4 import BeautifulSoup
-import requests
-# import geopy
-# from geopy.geocoders import Nominatim
-
-# geolocator = Nominatim(user_agent="myGeocoder")
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
     zipcode, city = zip_city.split(" ")
     return zipcode, city
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng)
-#     location = geolocator.reverse(coordinates)
-#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
@@ -150,11 +140,12 @@ class laforet(scrapy.Spider):
         soup = BeautifulSoup(response.body,"html.parser")
         property_ = soup.find('div', attrs={'id': 'properties'}).find_all('div', attrs={'class': 'propList-inner'})
         for row in property_:
-            external_link='https://www.beresfordresidential.com' + row.find('div', attrs={'class': 'row-fluid'}).find('a').get('href')
-            yield scrapy.Request(
-                url=external_link,
-                callback=self.get_property_details
-                )
+            if not row.find("img",class_= "property-status"):
+                external_link='https://www.beresfordresidential.com' + row.find('div', attrs={'class': 'row-fluid'}).find('a').get('href')
+                yield scrapy.Request(
+                    url=external_link,
+                    callback=self.get_property_details
+                    )
 
     def get_property_details(self, response, **kwargs):
 
@@ -226,11 +217,6 @@ class laforet(scrapy.Spider):
                     break
         except:
             pass
-        # location = getAddress(item["latitude"], item["longitude"])
-        # if "city" in location.raw["address"]:
-        #     item["city"] = location.raw["address"]["city"]
-        # if "postcode" in location.raw["address"]:
-        #     item["zipcode"] = location.raw["address"]["postcode"]
 
         item["address"] = data["display_address"]
         
