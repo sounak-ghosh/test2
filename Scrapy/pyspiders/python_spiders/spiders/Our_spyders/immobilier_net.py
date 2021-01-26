@@ -6,20 +6,12 @@ from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
 import re,json
 from bs4 import BeautifulSoup
-import requests,time
-# from geopy.geocoders import Nominatim
-
-# geolocator = Nominatim(user_agent="myGeocoder")
+import time
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
     zipcode, city = zip_city.split(" ")
     return zipcode, city
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng)
-#     location = geolocator.reverse(coordinates)
-#     return location
 
 def getSqureMtr(text):
     list_text = re.findall(r'\d+',text)
@@ -94,7 +86,6 @@ class laforet(scrapy.Spider):
                 )
 
     def get_page_details(self,response,**kwargs):
-
         soup = BeautifulSoup(response.body,"html.parser")
         all_property = soup.find_all("div",class_="col-md-12 enginebackground")
 
@@ -110,7 +101,7 @@ class laforet(scrapy.Spider):
         item = ListingItem()
         soup = BeautifulSoup(response.body,"html.parser")
         str_soup = str(soup)
-
+        print (response.url)
 
         item["landlord_name"] = "AFDI Martinique"
         item["landlord_phone"] = "0596 70 1000"
@@ -120,21 +111,22 @@ class laforet(scrapy.Spider):
         item["external_link"] = response.url
         item["title"] = soup.find("h2",class_="page-header").text.split("\n")[0].strip()
         # item["square_meters"] = getSqureMtr(soup.find("h2",class_="page-header").find("a",href=False).text)
+        # print (soup.find("div",class_="upper-content"))
+        # property_type = soup.find("h2",class_="page-header").text.split("\n")[0].strip()
 
-        property_type = soup.find("h2",class_="page-header").text.split("\n")[0].strip()
-
-        if "tudiant" in property_type.lower() or  "studenten" in property_type.lower() and "appartement" in property_type.lower():
-            property_type = "student_apartment"
-        elif "appartement" in property_type.lower():
-            property_type = "apartment"
-        elif "woning" in property_type.lower() or "maison" in property_type.lower() or "huis" in property_type.lower() or "house" in property_type.lower():
-            property_type = "house"
-        elif "chambre" in property_type.lower() or "kamer" in property_type.lower() or "room" in property_type.lower():
-            property_type = "room"
-        elif "studio" in property_type.lower():
-            property_type = "studio"
-        else:
-            property_type = "NA"
+        # print (property_type)
+        # if "tudiant" in property_type.lower() or  "studenten" in property_type.lower() and "appartement" in property_type.lower():
+        #     property_type = "student_apartment"
+        # elif "appartement" in property_type.lower():
+        #     property_type = "apartment"
+        # elif "woning" in property_type.lower() or "maison" in property_type.lower() or "huis" in property_type.lower() or "house" in property_type.lower():
+        #     property_type = "house"
+        # elif "chambre" in property_type.lower() or "kamer" in property_type.lower() or "room" in property_type.lower():
+        #     property_type = "room"
+        # elif "studio" in property_type.lower():
+        #     property_type = "studio"
+        # else:
+        #     property_type = "NA"
 
 
 
@@ -227,8 +219,6 @@ class laforet(scrapy.Spider):
         if ("nombredeparkingint_rieur" in temp_dic1 and temp_dic1["nombredeparkingint_rieur"]) or ("nombredeparkingext_rieur" in temp_dic1 and temp_dic1["nombredeparkingext_rieur"]):
             item["parking"] = True
 
-
-        if property_type in ["apartment", "house", "room", "property_for_sale", "student_apartment", "studio"]:
-            item["property_type"] = property_type
-            print (item)
-            yield item
+        item["property_type"] = "apartment"
+        print (item)
+        yield item
