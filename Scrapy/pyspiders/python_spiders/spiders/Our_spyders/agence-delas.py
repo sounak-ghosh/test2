@@ -4,7 +4,6 @@ import js2xml
 import re
 import json
 from bs4 import BeautifulSoup
-import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
@@ -105,7 +104,7 @@ class QuotesSpider(scrapy.Spider):
     allowed_domains = ['www.agence-delas.fr', 'www.delas-montelimar.com', 'www.delas-aubenas.com']
     start_urls = ['www.agence-delas.fr']
     execution_type = 'testing'
-    country = 'french'
+    country = 'france'
     locale ='fr'
 
     

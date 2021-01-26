@@ -219,6 +219,7 @@ class laforet(scrapy.Spider):
             pass
 
         item["address"] = data["display_address"]
+        item["city"] = item["address"].split(",")[-1].strip()
         
         available_date = soup.find('div', attrs={'id': 'propertyDetails'}).find('p').text.strip()
         if 'Property available on:' in available_date:

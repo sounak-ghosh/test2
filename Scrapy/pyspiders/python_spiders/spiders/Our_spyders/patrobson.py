@@ -5,20 +5,9 @@ import re
 import math
 import json
 from bs4 import BeautifulSoup
-import requests
 from ..loaders import ListingLoader
 from ..items import ListingItem
 from python_spiders.helper import remove_unicode_char, extract_rent_currency, format_date
-# import geopy
-# from geopy.geocoders import Nominatim
-# from geopy.extra.rate_limiter import RateLimiter
-
-# locator = Nominatim(user_agent="myGeocoder")
-
-# def getAddress(lat,lng):
-#     coordinates = str(lat)+","+str(lng) # "52","76"
-#     location = locator.reverse(coordinates)
-#     return location
 
 def extract_city_zipcode(_address):
     zip_city = _address.split(", ")[1]
@@ -91,6 +80,9 @@ class QuotesSpider(scrapy.Spider):
         item["external_link"] = external_link
 
         item["title"] = soup1.find("div", class_="title").find("h1").text.strip()
+        item["address"] = soup1.find("div", class_="title").find("h1").text.strip()
+        splt_txt = item["address"].split(",")[-1].split("/")[-1]
+        item["city"] = splt_txt.strip()
         price = getSqureMtr(soup1.find("span", class_="price test").text.strip().replace(',', ''))
         if type_ == "week":
             item["rent"] = price*4
