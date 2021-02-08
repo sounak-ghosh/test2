@@ -101,7 +101,7 @@ class laforet(scrapy.Spider):
         item = ListingItem()
         soup = BeautifulSoup(response.body,"html.parser")
         str_soup = str(soup)
-        print (response.url)
+       
 
         item["landlord_name"] = "AFDI Martinique"
         item["landlord_phone"] = "0596 70 1000"
@@ -110,23 +110,7 @@ class laforet(scrapy.Spider):
         item["currency"] = "EUR"
         item["external_link"] = response.url
         item["title"] = soup.find("h2",class_="page-header").text.split("\n")[0].strip()
-        # item["square_meters"] = getSqureMtr(soup.find("h2",class_="page-header").find("a",href=False).text)
-        # print (soup.find("div",class_="upper-content"))
-        # property_type = soup.find("h2",class_="page-header").text.split("\n")[0].strip()
-
-        # print (property_type)
-        # if "tudiant" in property_type.lower() or  "studenten" in property_type.lower() and "appartement" in property_type.lower():
-        #     property_type = "student_apartment"
-        # elif "appartement" in property_type.lower():
-        #     property_type = "apartment"
-        # elif "woning" in property_type.lower() or "maison" in property_type.lower() or "huis" in property_type.lower() or "house" in property_type.lower():
-        #     property_type = "house"
-        # elif "chambre" in property_type.lower() or "kamer" in property_type.lower() or "room" in property_type.lower():
-        #     property_type = "room"
-        # elif "studio" in property_type.lower():
-        #     property_type = "studio"
-        # else:
-        #     property_type = "NA"
+    
 
 
 
@@ -220,5 +204,5 @@ class laforet(scrapy.Spider):
             item["parking"] = True
 
         item["property_type"] = "apartment"
-        print (item)
+        
         yield item

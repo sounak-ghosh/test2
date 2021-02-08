@@ -132,7 +132,7 @@ class QuotesSpider1(scrapy.Spider):
                     max_page = int(re.findall('\d+',page.text)[0])
 
         for i in range(1,max_page+1):
-            sub_url = 'http://www.remiserais-immobilier.fr/annonces/transaction/Location.html?manufacturers_id=transaction&&page={}'.format(i)
+            sub_url = 'http://www.remiserais-immobilier.fr/catalog/advanced_search_result.php?action=update_search&search_id=1689955977249599&C_28_search=EGAL&C_28_type=UNIQUE&C_28=Location&C_27_search=EGAL&C_27_type=TEXT&C_27=2%2C1&C_27_tmp=1&C_30_search=COMPRIS&C_30_type=NUMBER&C_30_MIN=&C_30_MAX=&C_65_search=CONTIENT&C_65_type=TEXT&C_65=&&page={}'.format(i)
             yield scrapy.Request(
                 url=sub_url, 
                 callback=self.get_external_link)
